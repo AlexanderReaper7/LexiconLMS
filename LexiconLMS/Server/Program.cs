@@ -1,13 +1,14 @@
 using LexiconLMS.Server.Data;
-using LexiconLMS.Server.Models;
+using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace LexiconLMS;
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ public class Program
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         builder.Services.AddIdentityServer()
@@ -36,6 +38,12 @@ public class Program
         {
             app.UseMigrationsEndPoint();
             app.UseWebAssemblyDebugging();
+
+            // ----------------------------------------
+            // NOTE: Uncomment the following line to delete the database each time on startup
+            // Leave this commented out when committing to git
+            // ----------------------------------------
+            await app.SeedDataAsync();
         }
         else
         {
