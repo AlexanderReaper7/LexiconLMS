@@ -1,0 +1,27 @@
+﻿using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Components;
+using static System.Net.WebRequestMethods;
+using System.Text.Json;
+using LexiconLMS.Client.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+
+namespace LexiconLMS.Client.Components
+{
+    public partial class ActivityList
+    {
+        [Inject]
+        public IActivityDataService? ActivityDataService { get; set; }
+
+        public List<Activity> ActivityLst { get; set; } = new List<Activity>();
+
+        public bool Error = false;
+        public string responseData = string.Empty;
+
+        protected override async Task OnInitializedAsync()
+        {
+            ActivityLst = await ActivityDataService.GetActivities();
+
+            await base.OnInitializedAsync();
+        }
+    }
+}
