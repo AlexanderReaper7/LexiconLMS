@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconLMS.Server", "LexiconLMS\Server\LexiconLMS.Server.csproj", "{09D2A957-F270-4205-8A46-15652A0FCDB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexiconLMS.Server", "LexiconLMS\Server\LexiconLMS.Server.csproj", "{09D2A957-F270-4205-8A46-15652A0FCDB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconLMS.Client", "LexiconLMS\Client\LexiconLMS.Client.csproj", "{276D3E25-1131-422D-838D-A3167EDAEEB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexiconLMS.Client", "LexiconLMS\Client\LexiconLMS.Client.csproj", "{276D3E25-1131-422D-838D-A3167EDAEEB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconLMS.Shared", "LexiconLMS\Shared\LexiconLMS.Shared.csproj", "{0D5EA4A5-5082-4F2F-8894-CBF6F4DD6910}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexiconLMS.Shared", "LexiconLMS\Shared\LexiconLMS.Shared.csproj", "{0D5EA4A5-5082-4F2F-8894-CBF6F4DD6910}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

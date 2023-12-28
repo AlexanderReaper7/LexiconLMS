@@ -1,4 +1,5 @@
 using LexiconLMS.Client;
+using LexiconLMS.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -24,6 +25,7 @@ public class Program
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
         builder.Services.AddSingleton<ICourseDataService, CourseDataService>();
+        builder.Services.AddSingleton<IGenericDataService, GenericDataService>();
 
         await builder.Build().RunAsync();
     }
