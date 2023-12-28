@@ -20,6 +20,11 @@ public class Program
 
         builder.Services.AddApiAuthorization();
 
+        var apiBaseAddress = "https://localhost:7150";
+        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
+
+        builder.Services.AddSingleton<ICourseDataService, CourseDataService>();
+
         await builder.Build().RunAsync();
     }
 }

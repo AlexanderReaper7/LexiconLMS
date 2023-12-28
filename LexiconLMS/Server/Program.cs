@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 
 namespace LexiconLMS;
 public class Program
@@ -30,6 +31,8 @@ public class Program
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
+        builder.Services.AddSwaggerGen(); 
+
 
         var app = builder.Build();
 
@@ -38,7 +41,8 @@ public class Program
         {
             app.UseMigrationsEndPoint();
             app.UseWebAssemblyDebugging();
-
+            app.UseSwagger();
+            app.UseSwaggerUI();  
             // ----------------------------------------
             // NOTE: Uncomment the following line to delete the database each time on startup
             // Leave this commented out when committing to git

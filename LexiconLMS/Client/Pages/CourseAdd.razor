@@ -1,0 +1,43 @@
+﻿<h3>Add Course</h3>
+
+<section class="course-edit">
+
+    <EditForm Model="@Course" OnValidSubmit="@HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">
+                        <InputText id="Name" @bind-Value="Course.Name" class="form-control col-md-8"></InputText>
+                        <ValidationMessage For="@(() => Course.Name)" />
+                    </td>
+                    <td scope="row">
+                        <InputDate id="StartDate" @bind-Value="Course.StartDate" class="form-control col-md-8"></InputDate>
+                    </td>
+                    <td scope="row">
+                        <InputDate id="EndDate" @bind-Value="Course.EndDate" class="form-control col-md-8"></InputDate>
+                    </td>
+                    <td scope="row">
+                        <InputText id="Description" @bind-Value="Course.Description" class="form-control col-md-8"></InputText>
+                        <ValidationMessage For="@(() => Course.Description)" />
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <a href="@($"listofcourses")" class="btn btn-outline-primary">Back to Course list</a>&nbsp;
+        <button type="submit" class="btn btn-primary me-1">Add Course</button>
+    </EditForm>
+</section>
