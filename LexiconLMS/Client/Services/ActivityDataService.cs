@@ -39,16 +39,16 @@ namespace LexiconLMS.Client.Services
 
         public async Task<Activity> GetActivitiy(Guid Id)
         {
-            var json = JsonSerializer.Serialize(Id);
-            var httpContent = new StringContent(json, _mediaTypeHeaderValue);
-            var response = await _httpClient.PostAsync("/activity/getactivity/", httpContent);
+            //var json = JsonSerializer.Serialize(Id);
+            //var httpContent = new StringContent(json, _mediaTypeHeaderValue);
+            //var response = await _httpClient.PostAsync("/activity/getactivity/", httpContent);
 
             string apiUrl = $"/activity/{Id}";
             var response1 = await _httpClient.GetAsync(apiUrl);
 
-            if (response.IsSuccessStatusCode)
+            if (response1.IsSuccessStatusCode)
             {
-                var responseData = await response.Content.ReadAsStringAsync();
+                var responseData = await response1.Content.ReadAsStringAsync();
 
                 var options = new JsonSerializerOptions
                 {
@@ -56,7 +56,7 @@ namespace LexiconLMS.Client.Services
                     PropertyNameCaseInsensitive = true,
                 };
 
-                //var result = ta
+               
                 return (Activity)JsonSerializer.Deserialize<Activity>(responseData, options);
             }
             else
