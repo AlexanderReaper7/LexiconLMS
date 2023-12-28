@@ -56,7 +56,6 @@ namespace LexiconLMS.Client.Services
                     PropertyNameCaseInsensitive = true,
                 };
 
-                var result = ta
                 return (Activity)JsonSerializer.Deserialize<Activity>(responseData, options);
             }
             else

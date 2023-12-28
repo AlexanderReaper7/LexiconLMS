@@ -61,7 +61,7 @@ namespace LexiconLMS.Client.Services
         public async Task<List<Course>> GetCourses()
         {
 
-            var response = await _httpClient.GetAsync("/courses");
+            var response = await _httpClient.GetAsync("/api/Courses");
 
             if (response.IsSuccessStatusCode)
             {

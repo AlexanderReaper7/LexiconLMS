@@ -1,4 +1,5 @@
 using LexiconLMS.Client;
+using LexiconLMS.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,7 +21,7 @@ public class Program
 
         builder.Services.AddApiAuthorization();
 
-        var apiBaseAddress = "https://localhost:7150";
+        var apiBaseAddress = "https://localhost:7043";
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
         builder.Services.AddSingleton<ICourseDataService, CourseDataService>();
