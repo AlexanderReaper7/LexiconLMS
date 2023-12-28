@@ -72,7 +72,7 @@ public static class DbInitializer
         foreach (var user in users)
         {
             j++;
-            await userManager.CreateAsync(user, "!123qwe");
+            await userManager.CreateAsync(user, "!123qwE");
             await userManager.AddToRoleAsync(user, (j < teacherCount ? Roles[0].Name : Roles[1].Name)!);
         }
 
