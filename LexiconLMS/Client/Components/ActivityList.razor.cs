@@ -4,13 +4,14 @@ using static System.Net.WebRequestMethods;
 using System.Text.Json;
 using LexiconLMS.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using LexiconLMS.Client.Helpers;
 
 namespace LexiconLMS.Client.Components
 {
     public partial class ActivityList
     {
         [Inject]
-        public IActivityDataService? ActivityDataService { get; set; }
+        public IGenericDataService? ActivityDataService { get; set; }
 
         public List<Activity> ActivityLst { get; set; } = new List<Activity>();
 
@@ -19,7 +20,7 @@ namespace LexiconLMS.Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            ActivityLst = await ActivityDataService.GetActivities();
+            ActivityLst = (List<Activity>)await ActivityDataService.GetAsync<IEnumerable<Activity>>(UriHelper.GetActivitiesUri());
 
             await base.OnInitializedAsync();
         }

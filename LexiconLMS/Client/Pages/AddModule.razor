@@ -1,0 +1,81 @@
+﻿@page "/moduleadd/{courseId:guid}"
+@using LexiconLMS.Shared.Entities
+
+<section class="card p-3 col-md-8 col-lg-6">
+
+	@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+	{
+		<p class="alert alert-danger">@ErrorMessage</p>
+	}
+
+	<h3>Add Module</h3>
+
+	<EditForm Model="@Module" OnValidSubmit="@HandleValidSubmit">
+
+		<DataAnnotationsValidator></DataAnnotationsValidator>
+		<div class="d-lg-table">
+			<div class="row d-lg-table-row mb-3 mb-lg-0">
+				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+					<label for="name" class="col-form-labelo">Name: </label>
+				</div>
+				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+					<InputText id="name" class="form-control" @bind-Value="@Module.Name" placeholder="Name"></InputText>
+					<ValidationMessage class="offset-md-3" For="@(() => Module.Name)" />
+				</div>
+			</div>
+
+			<div class="row d-lg-table-row mb-3 mb-lg-0">
+				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+					<label for="description" class="col-form-labelo">Description: </label>
+				</div>
+				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+					<InputText id="description" class="form-control" @bind-Value="@Module.Description" placeholder="Description"></InputText>
+					<ValidationMessage class="offset-md-3" For="@(() => Module.Description)" />
+				</div>
+			</div>
+
+			<div class="row d-lg-table-row mb-3 mb-lg-0">
+				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+					<label for="start-date" class="col-form-label">Start date: </label>
+				</div>
+				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+					<InputDate id="start-date" class="form-control" @bind-Value="@Module.StartDate" placeholder="Start date"></InputDate>
+				</div>
+			</div>
+
+			<div class="row d-lg-table-row mb-3 mb-lg-0">
+				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+					<label for="end-date" class="col-form-label">End date: </label>
+				</div>
+				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+					<InputDate id="end-date" class="form-control" @bind-Value="@Module.EndDate" placeholder="End date"></InputDate>
+				</div>
+			</div>
+
+			<div class="row d-lg-table-row mb-3 mb-lg-0">
+				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+					<label for="country" class="col-form-label w-auto">Activities: </label>
+				</div>
+				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+					<button class="btn btn-primary">Add activity</button>
+				</div>
+			</div>
+		</div>
+
+		<button type="submit" class="btn btn-success me-1">Save module</button>
+
+		 @if (Module.Id != default)
+		{
+			<button type="button" class="btn btn-danger my-1" @onclick="@DeleteModule">
+			Delete
+			</button>
+		}
+
+		@* <button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {navigationManager.NavigateTo("/");})">Back</button> *@
+
+	</EditForm>
+
+
+</section>
+
+

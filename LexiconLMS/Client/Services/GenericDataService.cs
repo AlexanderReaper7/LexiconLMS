@@ -17,7 +17,6 @@ public class GenericDataService : IGenericDataService
     public GenericDataService(HttpClient httpClient)
     {
         this.client = httpClient;
-        client.BaseAddress = new Uri("https://localhost:7157");
         // client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
         client.Timeout = new TimeSpan(0, 0, 5);
     }

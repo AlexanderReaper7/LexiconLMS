@@ -91,15 +91,7 @@ namespace LexiconLMS.Server.Controllers
               return Problem("Entity set 'ApplicationDbContext.Modules'  is null.");
           }
             _context.Modules.Add(@module);
-            try
-            {
             await _context.SaveChangesAsync();
-
-            }
-            catch(Exception ex)
-            {
-                return Problem(ex.Message);
-            }
 
             return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
         }
