@@ -8,7 +8,7 @@ using System.Net.WebSockets;
 
 namespace LexiconLMS.Client.Pages
 {
-    public partial class AddModule
+    public partial class ModuleAdd
     {
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
@@ -33,7 +33,7 @@ namespace LexiconLMS.Client.Pages
 			try
 			{
 				Module.CourseId = CourseId!.Value;
-				if (await ModuleDataService.AddModule(Module))
+				if (await ModuleDataService.AddAsync(Module))
 				{
 					NavigationManager.NavigateTo("/");
 				}
