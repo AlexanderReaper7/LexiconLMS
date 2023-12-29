@@ -10,18 +10,18 @@ namespace LexiconLMS.Client.Components
 {
     public partial class ActivityList
     {
+       
+        //public IGenericDataService? ActivityDataService { get; set; }
         [Inject]
-        public IGenericDataService? ActivityDataService { get; set; }
+        public IGenericDataService? GenericDataService { get; set; }
 
         public List<Activity> ActivityLst { get; set; } = new List<Activity>();
-
-        public bool Error = false;
-        public string responseData = string.Empty;
+  
 
         protected override async Task OnInitializedAsync()
         {
-            string path = "/activities";
-            ActivityLst = await GenericDataService.GetAsync(path);
+
+            ActivityLst = await GenericDataService.GetAsync<List<Activity>>(UriHelper.GetActivitiesUri());
 
             await base.OnInitializedAsync();
         }
