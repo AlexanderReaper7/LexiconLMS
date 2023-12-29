@@ -42,12 +42,12 @@ public class Program
             app.UseMigrationsEndPoint();
             app.UseWebAssemblyDebugging();
             app.UseSwagger();
-            app.UseSwaggerUI();  
+            app.UseSwaggerUI();
             // ----------------------------------------
             // NOTE: Uncomment the following line to delete the database each time on startup
             // Leave this commented out when committing to git
             // ----------------------------------------
-            await app.SeedDataAsync();
+            // await app.SeedDataAsync();
         }
         else
         {

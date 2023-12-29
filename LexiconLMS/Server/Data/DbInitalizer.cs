@@ -46,6 +46,9 @@ public static class DbInitializer
     /// </summary>
     private static string[] CourseNames = { "C#", "Javascript", "HTML/CSS" };
 
+    private const string DefaultPassword = "!123qweASD";
+
+    private static int courseCount = 0;
     /// <summary>
     /// Creates a course with modules, activities and users
     /// </summary>
@@ -55,24 +58,34 @@ public static class DbInitializer
         // --- Add Users ---
         // create the default users
         var users = new List<ApplicationUser>();
+        // Increment the course count for the testing accounts
+        courseCount++;
         // Teachers
+        // add the testing teacher
+        users.Add(CreateSeeded($"teacher{courseCount}@test.com", "teacher", courseCount.ToString()));
         int teacherCount = Faker.Random.Int(1, 3);
         for (int i = 0; i < teacherCount; i++)
         {
             users.Add(GenerateUser());
         }
+        // add the testing acc to count
+        teacherCount++;
         // Students
+        // add the testing student
+        users.Add(CreateSeeded($"student{courseCount}@test.com", "student", courseCount.ToString()));
         int studentCount = Faker.Random.Int(3, 11);
         for (int i = 0; i < studentCount; i++)
         {
             users.Add(GenerateUser());
         }
+        // add the testing acc to count
+        // studentCount++;
         // add the users to userManager
         int j = 0;
         foreach (var user in users)
         {
             j++;
-            await userManager.CreateAsync(user, "!123qwE");
+            await userManager.CreateAsync(user, DefaultPassword);
             await userManager.AddToRoleAsync(user, (j < teacherCount ? Roles[0].Name : Roles[1].Name)!);
         }
 
@@ -102,13 +115,28 @@ public static class DbInitializer
         var firstname = Faker.Name.FirstName();
         var lastname = Faker.Name.LastName();
         var email = Faker.Internet.Email(firstname, lastname);
-        var user = new ApplicationUser
+        return CreateSeeded(email, firstname, lastname);
+    }
+
+    /// <summary>
+    /// Creates a new ApplicationUser.
+    /// Intended to be used for seeding data.
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="firstName"></param>
+    /// <param name="lastName"></param>
+    private static ApplicationUser CreateSeeded(string email, string firstName, string lastName)
+    {
+        return new ApplicationUser
         {
-            UserName = $"{firstname} {lastname}",
+            FirstName = firstName,
+            LastName = lastName,
+            UserName = email,
+            NormalizedUserName = userManager.NormalizeName(email),
             Email = email,
+            NormalizedEmail = userManager.NormalizeEmail(email),
             EmailConfirmed = true,
         };
-        return user;
     }
 
     /// <summary>
@@ -154,7 +182,7 @@ public static class DbInitializer
     /// List of example activity types
     /// </summary>
     private static readonly List<ActivityType> ActivityTypes = new List<ActivityType>
-        {
+    {
             new ActivityType { Name = "E-Learning" },
             new ActivityType { Name = "Lecture" },
             new ActivityType { Name = "Practice session" },
@@ -164,7 +192,8 @@ public static class DbInitializer
     /// <summary>
     /// List of assignment name/description pairs examples
     /// </summary>
-    private static readonly List<(string, string)> AssignmentNameDescriptionPairs = new List<(string, string)> { 
+    private static readonly List<(string, string)> AssignmentNameDescriptionPairs = new List<(string, string)>
+    { 
         ("Garage 1.0", "Initiera Garage"),
         ("Mankind", "HTML and CSS"),
         ("Coffeshop", "Recursion"),
@@ -209,5 +238,4 @@ public static class DbInitializer
         }
         return activities;
     }
-
 }
