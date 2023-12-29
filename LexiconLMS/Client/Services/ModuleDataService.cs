@@ -18,7 +18,7 @@ namespace LexiconLMS.Client.Services
 		}
 
 		public async Task<Module?> GetAsync() => await dataService.GetAsync<Module>(UriHelper.GetModulesUri());
-		public async Task<Module?> GetAsync(Guid id) => await dataService.GetAsync<Module>(UriHelper.GetModuleUri(id));
+		public async Task<Module?> GetAsync(Guid id, bool includeActivities = false) => await dataService.GetAsync<Module>(UriHelper.GetModuleUri(id, includeActivities));
 
 		public async Task<bool> AddAsync(Module module) => await dataService.AddAsync(UriHelper.GetModulesUri(), module);
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using LexiconLMS.Server.Mappings;
 
 namespace LexiconLMS;
 public class Program
@@ -31,8 +32,8 @@ public class Program
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
-        builder.Services.AddSwaggerGen(); 
-
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddAutoMapper(typeof(ActivitiesMappings));
 
         var app = builder.Build();
 

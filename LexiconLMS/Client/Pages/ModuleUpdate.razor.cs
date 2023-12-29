@@ -16,7 +16,7 @@ namespace LexiconLMS.Client.Pages
         public NavigationManager NavigationManager { get; set; } = default!;
 
         [Inject]
-        public IModuleDataService ModuleDataService { get; set; } = default!;
+        public IGenericDataService GenericDataService { get; set; } = default!;
 
         [Parameter]
         public Guid? ModuleId { get; set; }
@@ -37,7 +37,7 @@ namespace LexiconLMS.Client.Pages
 				return;
 			}
 
-			Module = await ModuleDataService.GetAsync(ModuleId.Value)?? Module;
+			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(ModuleId.Value))?? Module;
 			LoadActivities = true;
 			if (Module == null)
 			{
@@ -56,7 +56,7 @@ namespace LexiconLMS.Client.Pages
 			}
 			try
 			{
-				if (await ModuleDataService.UpdateAsync(Module))
+				if (await GenericDataService.UpdateAsync(UriHelper.GetModuleUri(Module.Id), Module))
 				{
 					Message = "Module saved";
 				}
@@ -79,7 +79,7 @@ namespace LexiconLMS.Client.Pages
 				{
 					return;
 				}
-				if (await ModuleDataService.DeleteAsync(Module.Id))
+				if (await GenericDataService.DeleteAsync(UriHelper.GetModuleUri(Module.Id)))
 				{
 					NavigationManager.NavigateTo("/");
 				}

@@ -5,6 +5,7 @@ using static System.Net.WebRequestMethods;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Net.WebSockets;
+using LexiconLMS.Client.Helpers;
 
 namespace LexiconLMS.Client.Pages
 {
@@ -14,7 +15,7 @@ namespace LexiconLMS.Client.Pages
         public NavigationManager NavigationManager { get; set; } = default!;
 
         [Inject]
-        public IModuleDataService ModuleDataService { get; set; } = default!;
+        public IGenericDataService GenericDataService { get; set; } = default!;
 
         [Parameter]
         public Guid? CourseId { get; set; }
@@ -33,7 +34,7 @@ namespace LexiconLMS.Client.Pages
 			try
 			{
 				Module.CourseId = CourseId!.Value;
-				if (await ModuleDataService.AddAsync(Module))
+				if (await GenericDataService.AddAsync(UriHelper.GetModulesUri(), Module))
 				{
 					NavigationManager.NavigateTo("/");
 				}

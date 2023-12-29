@@ -4,9 +4,9 @@
     {
         public static string ModulesBaseUri => "api/modules/";
 
-        public static string GetModuleUri<T>(T moduleId)
+        public static string GetModuleUri<T>(T moduleId, bool includeActivities = false)
         {
-            return ModulesBaseUri + moduleId!.ToString();
+            return ModulesBaseUri + moduleId!.ToString() + $"?includeActivities={includeActivities}";
         }
 
         public static string GetModulesUri()
