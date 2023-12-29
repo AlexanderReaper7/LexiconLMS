@@ -19,7 +19,8 @@ namespace LexiconLMS.Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            ActivityLst = await ActivityDataService.GetActivities();
+            string path = "/activities";
+            ActivityLst = await GenericDataService.GetAsync(path);
 
             await base.OnInitializedAsync();
         }
