@@ -25,10 +25,10 @@ namespace LexiconLMS.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-          if (_context.Courses == null)
-          {
-              return NotFound();
-          }
+            if (_context.Courses == null)
+            {
+                return NotFound();
+            }
             return await _context.Courses.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace LexiconLMS.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(Guid id)
         {
-          if (_context.Courses == null)
-          {
-              return NotFound();
-          }
+            if (_context.Courses == null)
+            {
+                return NotFound();
+            }
             var course = await _context.Courses.FindAsync(id);
 
             if (course == null)
@@ -86,10 +86,10 @@ namespace LexiconLMS.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-          if (_context.Courses == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
-          }
+            if (_context.Courses == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
+            }
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
 
