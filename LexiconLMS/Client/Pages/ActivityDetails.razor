@@ -1,5 +1,33 @@
-﻿<h3>ActivityDetails</h3>
+﻿@page "/activitydetails/{activityId:guid}"
 
-@code {
+<h3>Activity</h3>
 
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
 }
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Activity Name</th>
+            <th scope="col">Activity Type</th>
+            <th scope="col">Starttime</th>
+            <th scope="col">Endtime</th>
+            <th scope="col">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td scope="row">@Activity.Name</td>
+            <td scope="row">@Activity.Type</td>
+            <td scope="row">@Activity.StartDate</td>
+            <td scope="row">@Activity.EndDate</td>
+            <td scope="row">@Activity.Description</td>
+        </tr>
+    </tbody>
+</table>
+<a href="@($"activitieslist")" class="btn btn-outline-primary">Back to Activity list</a>
+

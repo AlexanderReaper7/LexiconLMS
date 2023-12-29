@@ -1,6 +1,11 @@
 ﻿@using LexiconLMS.Shared.Entities
-<h3>ModulesList</h3>
 
+@if (List == null || List.Count == 0)
+{
+    <p><em>No modules</em><p>
+}
+else
+{
 <table class="table">
     <thead>
     <tr>
@@ -11,18 +16,18 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var module in Modules)
+    @foreach (var module in List)
     {
         <tr>
             <td scope="row">@module.Name</td>
             <td scope="row">@module.StartDate</td>
             <td scope="row">@module.EndDate</td>
             <td scope="row">
-                <a href="@($"coursedetails/{module.Id}")" class="btn btn-outline-primary">Details</a>
+                <a href="@($"moduledetails/{module.Id}")" class="btn btn-outline-primary">Details</a>
                 <AuthorizeView Roles="Teacher">
                     <Authorized>
-                        <a href="@($"courseupdate/{module.Id}")" class="btn btn-outline-primary">Update</a>
-                        <a href="@($"coursedelete/{module.Id}")" class="btn btn-outline-primary">Delete</a>
+                        <a href="@($"moduleupdate/{module.Id}")" class="btn btn-outline-primary">Update</a>
+                        <a href="@($"moduledelete/{module.Id}")" class="btn btn-outline-primary">Delete</a>
                     </Authorized>
                 </AuthorizeView>
             </td>
@@ -30,9 +35,8 @@
     }
     </tbody>
 </table>
-
+})
 @code {
     [Parameter]
-    public List<Module> Modules { get; set; }
-
+    public List<Module>? List { get; set; }
 }

@@ -27,8 +27,4 @@
     <ProjectReference Include="..\Shared\LexiconLMS.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
-
 </Project>

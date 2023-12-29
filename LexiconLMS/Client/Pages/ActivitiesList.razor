@@ -2,4 +2,35 @@
 @using LexiconLMS.Client.Components;
 <h3>List of Activities</h3>
 
-<ActivityList> </ActivityList>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Activity Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var activity in ActivityLst)
+        {
+            <tr>
+                <td scope="row">@activity.Id</td>
+                <td scope="row">@activity.Name</td>
+                <td scope="row">@activity.StartDate</td>
+                <td scope="row">@activity.EndDate</td>
+                <td scope="row">
+                    <a href="@($"activitydetails/{activity.Id}")" class="btn btn-outline-primary">Details</a>
+                    <AuthorizeView Roles="Teacher">
+                        <Authorized>
+                            <a href="@($"activityUpdate/{activity.Id}")" class="btn btn-outline-primary">Update</a>
+                            <a href="@($"activityDelete/{activity.Id}")" class="btn btn-outline-primary">Delete</a>
+                        </Authorized>
+                    </AuthorizeView>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
