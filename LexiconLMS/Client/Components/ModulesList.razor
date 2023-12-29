@@ -1,0 +1,38 @@
+﻿@using LexiconLMS.Shared.Entities
+<h3>ModulesList</h3>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var module in Modules)
+    {
+        <tr>
+            <td scope="row">@module.Name</td>
+            <td scope="row">@module.StartDate</td>
+            <td scope="row">@module.EndDate</td>
+            <td scope="row">
+                <a href="@($"coursedetails/{module.Id}")" class="btn btn-outline-primary">Details</a>
+                <AuthorizeView Roles="Teacher">
+                    <Authorized>
+                        <a href="@($"courseupdate/{module.Id}")" class="btn btn-outline-primary">Update</a>
+                        <a href="@($"coursedelete/{module.Id}")" class="btn btn-outline-primary">Delete</a>
+                    </Authorized>
+                </AuthorizeView>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<Module> Modules { get; set; }
+
+}

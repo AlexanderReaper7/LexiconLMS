@@ -1,0 +1,23 @@
+﻿@page "/course/{guid}"
+@using LexiconLMS.Shared.Entities
+@using Microsoft.EntityFrameworkCore
+@using LexiconLMS.Client.Services
+@inject GenericDataService DataService
+
+<h3>Course Details</h3>
+
+@* <ModulesList Modules=""/> *@
+
+@code {
+    [Parameter]
+    public Guid Guid { get; set; }
+
+    public Course Course { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Course = await DataService.GetAsync<Course>($"api/course/{Guid}");
+    }
+
+    
+}

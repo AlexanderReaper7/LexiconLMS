@@ -3,21 +3,25 @@ using System.Text.Json;
 
 namespace LexiconLMS.Client.Services;
 
-public class GenericDataService
+public interface IGenericDataService
+{
+    protected const string json = "application/json";
+    Task<T?> GetAsync<T>(string path, string contentType = json);
+}
+
+public class GenericDataService : IGenericDataService
 {
     private readonly HttpClient client;
-    private const string json = "application/json";
 
 
     public GenericDataService(HttpClient httpClient)
     {
         this.client = httpClient;
-        client.BaseAddress = new Uri("https://localhost:7157");
         // client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
         client.Timeout = new TimeSpan(0, 0, 5);
     }
 
-    public async Task<T?> GetAsync<T>(string path, string contentType = json)
+    public async Task<T?> GetAsync<T>(string path, string contentType = IGenericDataService.json)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, path);
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
