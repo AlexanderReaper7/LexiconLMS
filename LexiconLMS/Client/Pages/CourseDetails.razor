@@ -21,7 +21,7 @@
     protected override async Task OnInitializedAsync()
     {
         Course = await DataService.GetAsync<Course>(UriHelper.GetCourseUri(Guid));
-        Modules = await DataService.GetAsync<List<Module>>(UriHelper.GetModulesUri(Guid));
+        Modules = await DataService.GetAsync<List<Module>>(UriHelper.GetModuleUri(Guid));
     }
 
     
