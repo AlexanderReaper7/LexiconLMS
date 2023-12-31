@@ -4,103 +4,43 @@ using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using LexiconLMS.Client.Pages;
+using Microsoft.AspNetCore.Components;
+using LexiconLMS.Client.Helpers;
 
 namespace LexiconLMS.Client.Services
 {
     public class CourseDataService : ICourseDataService
     {
-        HttpClient _httpClient;
-        MediaTypeHeaderValue _mediaTypeHeaderValue;
-        public CourseDataService()
+        private IGenericDataService _GService;
+
+        public CourseDataService(HttpClient httpClient, IGenericDataService GService)
         {
-            _httpClient = new HttpClient();
-            _mediaTypeHeaderValue = new MediaTypeHeaderValue("application/json");
+            _GService = GService;
         }
         public async Task<bool> AddCourse(Course Course)
         {
-            var json = JsonSerializer.Serialize(Course);
-            var httpContent = new StringContent(json, _mediaTypeHeaderValue);
-            var response = await _httpClient.PostAsync("/course/add", httpContent);
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                return true;
-            }
-
-            return false;
+            return await _GService.AddAsync(path: UriHelper.GetCoursesUri(), Course);            
         }
 
-        public void DeleteCourse(Guid Id)
+        public async Task<bool> DeleteCourse(Guid Id)
         {
-            throw new NotImplementedException();
+            return await _GService.DeleteAsync(UriHelper.GetCourseUri(Id));
         }
 
         public async Task<Course> GetCourse(Guid Id)
         {
-            var json = JsonSerializer.Serialize(Id);
-            var httpContent = new StringContent(json, _mediaTypeHeaderValue);
-            var response = await _httpClient.PostAsync("/course/getcourse", httpContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNameCaseInsensitive = true,
-                };
-
-                return (Course)JsonSerializer.Deserialize<Course>(responseData, options);
-            }
-            else
-            {
-                return null;
-            }
+            return await _GService.GetAsync<Course>(UriHelper.GetCourseUri(Id));
         }
 
         public async Task<List<Course>> GetCourses()
         {
-
-            var response = await _httpClient.GetAsync("/api/Courses");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNameCaseInsensitive = true,
-                };
-
-                return (List<Course>)JsonSerializer.Deserialize<IEnumerable<Course>>(responseData, options);
-            }
-            else
-            {
-                return null;
-            }
+            return await _GService.GetAsync<List<Course>>(UriHelper.GetCoursesUri());
         }
 
         public async Task<bool> UpdateCourse(Course updatedCourse)
         {
-            var course = GetCourse(updatedCourse.Id).Result;
-            if (course != null)
-            {
-                course.Name = updatedCourse.Name;
-                course.StartDate = updatedCourse.StartDate;
-                course.EndDate = updatedCourse.EndDate;
-                course.Description = updatedCourse.Description;
-
-                var json = JsonSerializer.Serialize(course);
-                var httpContent = new StringContent(json, _mediaTypeHeaderValue);
-                var response = await _httpClient.PostAsync("/course/update", httpContent);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return await _GService.UpdateAsync(UriHelper.GetCourseUri(updatedCourse.Id), updatedCourse);
         }
     }
 }

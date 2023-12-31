@@ -65,6 +65,7 @@ namespace LexiconLMS.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -74,11 +75,11 @@ namespace LexiconLMS.Server.Controllers
                 }
                 else
                 {
+                    return BadRequest();
                     throw;
                 }
             }
-
-            return NoContent();
+                       
         }
 
         // POST: api/Courses
@@ -111,9 +112,9 @@ namespace LexiconLMS.Server.Controllers
             }
 
             _context.Courses.Remove(course);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return NoContent();
+            return Ok();
         }
 
         private bool CourseExists(Guid id)

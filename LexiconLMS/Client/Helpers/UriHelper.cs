@@ -26,7 +26,7 @@
 			return ActivitiesBaseUri;
 		}
 
-		public static string CoursesBaseUri => "api/courses/";
+		public static string CoursesBaseUri => "api/Courses/";
 
 		public static string GetCourseUri<T>(T courseId)
 		{

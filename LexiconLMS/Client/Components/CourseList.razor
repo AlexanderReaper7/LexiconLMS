@@ -1,16 +1,12 @@
-﻿
-@page "/page"
-@using LexiconLMS.Client.Services
-
-@inject GenericDataService GService
+﻿@page "/listofcourses"
 
 <h3>Course List</h3>
 
  <AuthorizeView Roles="Teacher">
-            <Authorized>
-                <a href="@($"courseadd")" class="btn btn-outline-primary">Add new Course</a>
-            </Authorized>
-        </AuthorizeView>
+    <Authorized>
+        <a href="@($"courseadd")" class="btn btn-outline-primary">Add new Course</a>
+    </Authorized>
+</AuthorizeView>
 
         <table class="table">
             <thead>

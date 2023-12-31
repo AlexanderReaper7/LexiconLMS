@@ -22,8 +22,8 @@ public class Program
 
         builder.Services.AddApiAuthorization();
 
-        //var apiBaseAddress = "https://localhost:7043";
-        //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
+        var apiBaseAddress = "https://localhost:7043";
+        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
         builder.Services.AddScoped<ICourseDataService, CourseDataService>();
         builder.Services.AddScoped<IGenericDataService, GenericDataService>();

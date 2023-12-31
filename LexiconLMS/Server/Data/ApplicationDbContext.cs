@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Options;
+using System.Reflection.Metadata;
 
 namespace LexiconLMS.Server.Data;
 public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
@@ -18,5 +19,20 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<ActivityType> ActivityTypes { get; set; } = null!;
     public DbSet<Course> Courses { get; set; } = null!;
     public DbSet<Module> Modules { get; set; } = null!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Course>()
+        .HasMany(e => e.Modules)
+        .WithOne(e => e.Course)
+        .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Course>()
+       .HasMany(e => e.Users)
+       .WithOne(e => e.Course)
+       .OnDelete(DeleteBehavior.SetNull);
+
+        base.OnModelCreating(modelBuilder);
+    }
 
 }

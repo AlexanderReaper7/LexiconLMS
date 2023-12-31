@@ -1,9 +1,15 @@
-﻿using LexiconLMS.Client.Services;
+﻿using LexiconLMS.Client.Components;
+using LexiconLMS.Client.Services;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Components;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Client.Pages
 {
+    //[Authorize(Roles = "Teacher")]
     public partial class CourseUpdate
     {
         [Inject]
@@ -13,23 +19,23 @@ namespace LexiconLMS.Client.Pages
         public NavigationManager NavigationManager { get; set; }
 
         [Parameter]
-        public Guid? CourseId { get; set; }
+        public string? CourseId { get; set; }
 
         public Course Course { get; set; } = new Course();
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            if (CourseId.HasValue)
+            if (!string.IsNullOrEmpty(CourseId))
             {
-                Course = CourseDataService.GetCourse(CourseId.Value).Result;
+                Course = await CourseDataService.GetCourse(Guid.Parse(CourseId));
             }
 
-            base.OnInitialized();
+            base.OnInitializedAsync();
         }
 
         protected async Task HandleValidSubmit()
         {
-            CourseDataService.UpdateCourse(Course);
+            if(await CourseDataService.UpdateCourse(Course))
             NavigationManager.NavigateTo($"listofcourses");
         }
     }

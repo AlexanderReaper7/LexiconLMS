@@ -14,12 +14,9 @@ namespace LexiconLMS.Client.Components
 
         public List<Course> CourseLst { get; set; } = new List<Course>();
 
-        public bool Error = false;
-        public string responseData = string.Empty;
-
         protected override async Task OnInitializedAsync()
         {
-            CourseLst = await GService.GetAsync<Task<List<Course>>>(path: $"/api/Courses").Result; //CourseDataService.GetCourses().Result;
+            CourseLst = await CourseDataService.GetCourses();
 
             await base.OnInitializedAsync();
         }

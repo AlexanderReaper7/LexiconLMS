@@ -1,4 +1,9 @@
-﻿
+﻿@page "/courseupdate/{CourseId}"
+
+@using Microsoft.AspNetCore.Authorization
+
+@* @attribute [Authorize(Roles = "Teacher")] *@
+
 <h3>Update a Course</h3>
 
 <EditForm Model="@Course" OnValidSubmit="@HandleValidSubmit">
