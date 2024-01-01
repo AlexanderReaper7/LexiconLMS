@@ -27,7 +27,7 @@
                     <td scope="row">@course.StartDate</td>
                     <td scope="row">@course.EndDate</td>
                     <td scope="row">
-                        <a href="@($"coursedetails/{course.Id}")" class="btn btn-outline-primary">Details</a>
+                    <a href="@($"course/{course.Id}")" class="btn btn-outline-primary">Details</a>
                         <AuthorizeView Roles="Teacher">
                             <Authorized>
                                 <a href="@($"courseupdate/{course.Id}")" class="btn btn-outline-primary">Update</a>

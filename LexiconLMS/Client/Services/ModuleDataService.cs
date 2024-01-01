@@ -25,5 +25,7 @@ namespace LexiconLMS.Client.Services
 		public async Task<bool> UpdateAsync(Module module) => await dataService.UpdateAsync(UriHelper.GetModuleUri(module.Id), module);
 
 		public async Task<bool> DeleteAsync(Guid id) => await dataService.DeleteAsync(UriHelper.GetModuleUri(id));
-	}
+
+        public async Task<List<Module>> GetModulesByCourseId(Guid id) => await dataService.GetAsync<List<Module>>($"modulesbycourse/{id}");
+    }
 }

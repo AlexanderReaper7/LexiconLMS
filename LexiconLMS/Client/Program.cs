@@ -28,6 +28,8 @@ public class Program
         builder.Services.AddScoped<ICourseDataService, CourseDataService>();
         builder.Services.AddScoped<IGenericDataService, GenericDataService>();
         builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
+        builder.Services.AddScoped<IModuleDataService, ModuleDataService>();
+        builder.Services.AddScoped<IApplicationUserDataService, ApplicationUserDataService>(); 
 
         await builder.Build().RunAsync();
     }

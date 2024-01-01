@@ -38,8 +38,19 @@ namespace LexiconLMS.Server.Controllers
 			return await _context.Modules.ToListAsync();
 		}
 
-		// GET: api/Modules/5
-		[HttpGet("{id}")]
+        // GET: api/Modules
+        [HttpGet("/modulesbycourse/{id}")]
+        public async Task<ActionResult<IEnumerable<Module>>> GetModules(Guid id)
+        {
+            if (_context.Modules == null)
+            {
+                return NotFound();
+            }
+            return await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
+        }
+
+        // GET: api/Modules/5
+        [HttpGet("{id}")]
 		public async Task<ActionResult<Module>> GetModule(Guid id, bool includeActivities = false)
 		{
 			if (_context.Modules == null)
