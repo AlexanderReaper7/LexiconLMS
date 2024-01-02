@@ -1,5 +1,6 @@
 ﻿@page "/activitydetails/{activityId:guid}"
 
+
 <h3>Activity</h3>
 
 @if (!string.IsNullOrEmpty(ErrorMessage))
@@ -29,5 +30,8 @@
         </tr>
     </tbody>
 </table>
+<button type="button" class="btn btn-danger my-1" @onclick="@DeleteActivity">
+    Delete
+</button>
 <a href="@($"activitieslist")" class="btn btn-outline-primary">Back to Activity list</a>
 

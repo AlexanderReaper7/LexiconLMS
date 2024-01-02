@@ -45,5 +45,28 @@ namespace LexiconLMS.Client.Pages
 			await base.OnInitializedAsync();
 		}
 
+		private async Task DeleteActivity()
+		{
+			try
+			{
+				if (Activity == null)
+				{
+					return;
+				}
+				if (await GenericDataService.DeleteAsync(UriHelper.GetActivityUri(ActivityId)))
+				{
+					NavigationManager.NavigateTo("/");
+				}
+				else
+				{
+					ErrorMessage = "Could not delete Module";
+				}
+			}
+			catch (Exception ex)
+			{
+				ErrorMessage = ex.Message;
+			}
+		}
+
 	}
 }
