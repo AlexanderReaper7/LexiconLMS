@@ -92,7 +92,8 @@ namespace LexiconLMS.Server.Controllers
           {
               return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
           }
-            _context.Activities.Add(activity);
+			_context.Entry(activity).State = EntityState.Unchanged;
+			_context.Activities.Add(activity);
             try
             {
                 await _context.SaveChangesAsync();
