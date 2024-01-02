@@ -24,7 +24,7 @@ namespace LexiconLMS.Client.Services
         {
             var json = JsonSerializer.Serialize(activity);
             var httpContent = new StringContent(json, _mediaTypeHeaderValue);
-            var response = await http.PostAsync("/activity/add", httpContent);
+            var response = await http.PostAsync("/activityadd", httpContent);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return true;

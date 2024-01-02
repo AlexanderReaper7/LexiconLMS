@@ -19,10 +19,8 @@ namespace LexiconLMS.Client.Pages
 
         [Inject]
         public IGenericDataService GenericDataService { get; set; } = default!;
-
-     
-
-        [Parameter]
+	
+		[Parameter]
         public Guid? ModuleId { get; set; }
 
         public Activity Activity { get; set; } = new Activity();
@@ -39,12 +37,15 @@ namespace LexiconLMS.Client.Pages
             try
             {
                 Activity.ModuleId = ModuleId!.Value;
+			 	Activity.Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(ModuleId));
                 if (await GenericDataService.AddAsync(UriHelper.GetActivitiesUri(), Activity))
-                {
+		
+				{
                     NavigationManager.NavigateTo("/");
                 }
                 else
                 {
+
                     ErrorMessage = "Could not add activity";
                 }
             }

@@ -12,7 +12,7 @@
 		<p class="alert alert-success">@Message</p>
 	}
 
-	<h3>Update Module</h3>
+	<h3>Update Activity</h3>
 
 	<EditForm Model="@Activity" OnValidSubmit="@HandleValidSubmit">
 
@@ -25,6 +25,16 @@
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
 					<InputText id="name" class="form-control" @bind-Value="@Activity.Name" placeholder="Name"></InputText>
 					<ValidationMessage class="offset-md-3" For="@(() => Activity.Name)" />
+				</div>
+			</div>
+
+			<div class="row d-lg-table-row mb-3 mb-lg-0">
+				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+					<label for="name" class="col-form-labelo">Name: </label>
+				</div>
+				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+					<InputText id="name" class="form-control" @bind-Value="@Activity.Type.Name" placeholder="Activity Type"></InputText>
+					<ValidationMessage class="offset-md-3" For="@(() => Activity.Type.Name)" />
 				</div>
 			</div>
 
@@ -65,6 +75,7 @@
 		<button type="button" class="btn btn-danger my-1" @onclick="@DeleteActivity">
 			Delete
 		</button>
+		<a href="@($"activitieslist")" class="btn btn-outline-primary">Back to Activity list</a>
 
 		@* <button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {navigationManager.NavigateTo("/");})">Back</button> *@
 

@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text.Json;
 using static System.Net.WebRequestMethods;
 using LexiconLMS.Client.Helpers;
+using System.Reflection;
+using Module = LexiconLMS.Shared.Entities.Module;
 
 namespace LexiconLMS.Client.Pages
 {
@@ -22,6 +24,8 @@ namespace LexiconLMS.Client.Pages
 
 		public Activity Activity { get; set; } = new Activity();
 
+		public Module Module { get; set; } = new Module();
+
 		public string ErrorMessage { get; set; } = string.Empty;
 
 		public string Message { get; set; } = string.Empty;
@@ -36,8 +40,9 @@ namespace LexiconLMS.Client.Pages
 			}
 
 			Activity = await GenericDataService.GetAsync<Activity>(UriHelper.GetActivityUri(ActivityId)) ?? Activity;
+			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(Activity.ModuleId)) ?? Module;
 
-			if (Activity == null)
+            if (Activity == null)
 			{
 				ErrorMessage = "Activity not found";
 				return;

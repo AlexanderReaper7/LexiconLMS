@@ -40,9 +40,11 @@ namespace LexiconLMS.Server.Controllers
           {
               return NotFound();
           }
-            var activity = await _context.Activities.FindAsync(id);
 
-            if (activity == null)
+            var activity = await _context.Activities.Include(a => a.Type).FirstOrDefaultAsync(a => a.Id == id);
+
+
+			if (activity == null)
             {
                 return NotFound();
             }
@@ -91,8 +93,12 @@ namespace LexiconLMS.Server.Controllers
               return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
           }
             _context.Activities.Add(activity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
 
+            catch(Exception ex) { var exception = ex; }
             return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
         }
 
