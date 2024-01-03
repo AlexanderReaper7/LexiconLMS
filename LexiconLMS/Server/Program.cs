@@ -25,7 +25,10 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         builder.Services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => {
+                options.IdentityResources["openid"].UserClaims.Add("role");
+                options.ApiResources.Single().UserClaims.Add("role");
+            });
 
         builder.Services.AddAuthentication()
             .AddIdentityServerJwt();
@@ -48,7 +51,7 @@ public class Program
             // NOTE: Uncomment the following line to delete the database each time on startup
             // Leave this commented out when committing to git
             // ----------------------------------------
-            // await app.SeedDataAsync();
+            await app.SeedDataAsync();
         }
         else
         {

@@ -2,7 +2,18 @@
 {
     public static class UriHelper
     {
-        public static string ModulesBaseUri => "api/modules/";
+		private const string modulePrefix = "/module";
+		private const string addSuffix = "add";
+		private const string updateSuffix = "update";
+		private const string deleteSuffix = "delete";
+		private const string detailsSuffix = "details";
+
+		public const string ModuleDetails = $"{modulePrefix}{detailsSuffix}/{{moduleId:guid}}";
+		public const string ModuleUpdate = $"{modulePrefix}{updateSuffix}/{{moduleId:guid}}";
+		public const string ModuleAdd = $"{modulePrefix}{addSuffix}/{{courseId:guid}}";
+		public const string ModuleDelete = $"{modulePrefix}{deleteSuffix}/{{moduleId:guid}}";
+
+		public static string ModulesBaseUri => "api/modules/";
 
         public static string GetModuleUri<T>(T moduleId, bool includeActivities = false)
         {
@@ -14,6 +25,23 @@
             return ModulesBaseUri;
         }
 
+		public static string GetModuleAddUri<T>(T courseId)
+		{
+			return $"{modulePrefix}{addSuffix}/{courseId}";
+		}
+		public static string GetModuleUpdateUri<T>(T moduleId)
+		{
+			return $"{modulePrefix}{updateSuffix}/{moduleId}";
+		}
+		public static string GetModuleDeleteUri<T>(T moduleId)
+		{
+			return $"{modulePrefix}{deleteSuffix}/{moduleId}";
+		}
+		public static string GetModuleDetailsUri<T>(T moduleId)
+		{
+			return $"{modulePrefix}{detailsSuffix}/{moduleId}>";
+		}
+
 		public static string ActivitiesBaseUri => "api/activities/";
 
 		public static string GetActivityUri<T>(T activityId)
@@ -21,8 +49,20 @@
 			return ActivitiesBaseUri + activityId!.ToString();
 		}
 
-		public static string GetActivitiesUri()
+		public static string GetActivitiesUri(string? moduleId = null)
 		{
+			string query = string.Empty;
+
+            if (moduleId is not null)
+            {
+				query = $"moduleId={moduleId}";
+            }
+
+			if (query != "")
+			{
+				return ActivitiesBaseUri + $"?{query}";
+			}
+
 			return ActivitiesBaseUri;
 		}
 

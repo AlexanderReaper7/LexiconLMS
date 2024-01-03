@@ -22,7 +22,7 @@ namespace LexiconLMS.Client.Pages
 
         public Module Module { get; set; } = new Module();
 
-        public string ErrorMessage { get; set; }
+		public string ErrorMessage { get; set; } = string.Empty;
 
 		protected override void OnInitialized()
 		{

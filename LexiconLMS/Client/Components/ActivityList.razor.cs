@@ -15,13 +15,12 @@ namespace LexiconLMS.Client.Components
         [Inject]
         public IGenericDataService? GenericDataService { get; set; }
 
-        public List<Activity> ActivityLst { get; set; } = new List<Activity>();
+		[Parameter]
+		public IEnumerable<Activity>? ActivityLst { get; set; } = null;
   
 
         protected override async Task OnInitializedAsync()
         {
-
-            ActivityLst = await GenericDataService.GetAsync<List<Activity>>(UriHelper.GetActivitiesUri());
 
             await base.OnInitializedAsync();
         }

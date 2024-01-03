@@ -10,115 +10,126 @@ using LexiconLMS.Shared.Entities;
 
 namespace LexiconLMS.Server.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ActivitiesController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class ActivitiesController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
 
-        public ActivitiesController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public ActivitiesController(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-        // GET: api/Activities
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Activity>>> GetActivities()
-        {
-          if (_context.Activities == null)
-          {
-              return NotFound();
-          }
-            return await _context.Activities.ToListAsync();
-        }
+		// GET: api/Activities
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<Activity>>> GetActivities(Guid? moduleId = null)
+		{
+			if (_context.Activities == null)
+			{
+				return NotFound();
+			}
 
-        // GET: api/Activities/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
-        {
-          if (_context.Activities == null)
-          {
-              return NotFound();
-          }
-            var activity = await _context.Activities.FindAsync(id);
+			var query = _context.Activities.Include(a => a.Type).AsQueryable();
 
-            if (activity == null)
-            {
-                return NotFound();
-            }
+			if (moduleId != null)
+			{
+				query = query.Where(a => a.ModuleId == moduleId);
+			}
 
-            return activity;
-        }
 
-        // PUT: api/Activities/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutActivity(Guid id, Activity activity)
-        {
-            if (id != activity.Id)
-            {
-                return BadRequest();
-            }
+            return await query.ToListAsync();
+		}
 
-            _context.Entry(activity).State = EntityState.Modified;
+		// GET: api/Activities/5
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Activity>> GetActivity(Guid id)
+		{
+			if (_context.Activities == null)
+			{
+				return NotFound();
+			}
+			var activity = await _context.Activities.FindAsync(id);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ActivityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+			if (activity == null)
+			{
+				return NotFound();
+			}
 
-            return NoContent();
-        }
+			return activity;
+		}
 
-        // POST: api/Activities
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
-        {
-          if (_context.Activities == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
-          }
-            _context.Activities.Add(activity);
-            await _context.SaveChangesAsync();
+		// PUT: api/Activities/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutActivity(Guid id, Activity activity)
+		{
+			if (id != activity.Id)
+			{
+				return BadRequest();
+			}
 
-            return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
-        }
+			_context.Entry(activity).State = EntityState.Modified;
 
-        // DELETE: api/Activities/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActivity(Guid id)
-        {
-            if (_context.Activities == null)
-            {
-                return NotFound();
-            }
-            var activity = await _context.Activities.FindAsync(id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!ActivityExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
 
-            _context.Activities.Remove(activity);
-            await _context.SaveChangesAsync();
+			return NoContent();
+		}
 
-            return NoContent();
-        }
+		// POST: api/Activities
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+		{
+			if (_context.Activities == null)
+			{
+				return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
+			}
+			_context.Entry(activity.Type).State = EntityState.Unchanged;
+			_context.Activities.Add(activity);
 
-        private bool ActivityExists(Guid id)
-        {
-            return (_context.Activities?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-    }
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+		}
+
+		// DELETE: api/Activities/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteActivity(Guid id)
+		{
+			if (_context.Activities == null)
+			{
+				return NotFound();
+			}
+			var activity = await _context.Activities.FindAsync(id);
+			if (activity == null)
+			{
+				return NotFound();
+			}
+
+			_context.Activities.Remove(activity);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		private bool ActivityExists(Guid id)
+		{
+			return (_context.Activities?.Any(e => e.Id == id)).GetValueOrDefault();
+		}
+	}
 }
