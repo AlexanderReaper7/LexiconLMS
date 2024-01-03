@@ -3,10 +3,15 @@
 @using Microsoft.EntityFrameworkCore
 @using LexiconLMS.Client.Services
 @using LexiconLMS.Client.Helpers
+@using Microsoft.AspNetCore.Authorization
 
 <h3>Course Details</h3>
 
 <ActivitiesSchedule/>
+<AuthorizeView Roles="Teacher">
+    <Authorized>
 <ModulesList List="Modules"/>
+    </Authorized>
+</AuthorizeView>
 <StudentList StudentLst="Students" Course="Course" />
 
