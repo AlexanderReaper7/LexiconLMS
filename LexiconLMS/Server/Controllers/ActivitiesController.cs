@@ -41,20 +41,22 @@ namespace LexiconLMS.Server.Controllers
             return await query.ToListAsync();
 		}
 
-		// GET: api/Activities/5
-		[HttpGet("{id}")]
-		public async Task<ActionResult<Activity>> GetActivity(Guid id)
-		{
-			if (_context.Activities == null)
-			{
-				return NotFound();
-			}
-			var activity = await _context.Activities.FindAsync(id);
+        // GET: api/Activities/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        {
+          if (_context.Activities == null)
+          {
+              return NotFound();
+          }
+
+            var activity = await _context.Activities.Include(a => a.Type).FirstOrDefaultAsync(a => a.Id == id);
+
 
 			if (activity == null)
-			{
-				return NotFound();
-			}
+            {
+                return NotFound();
+            }
 
 			return activity;
 		}
@@ -90,22 +92,25 @@ namespace LexiconLMS.Server.Controllers
 			return NoContent();
 		}
 
-		// POST: api/Activities
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPost]
-		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
-		{
-			if (_context.Activities == null)
-			{
-				return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
-			}
-			_context.Entry(activity.Type).State = EntityState.Unchanged;
+        // POST: api/Activities
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+        {
+          if (_context.Activities == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
+          }
+			_context.Entry(activity).State = EntityState.Unchanged;
 			_context.Activities.Add(activity);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
 
-			await _context.SaveChangesAsync();
-
-			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
-		}
+            catch(Exception ex) { var exception = ex; }
+            return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+        }
 
 		// DELETE: api/Activities/5
 		[HttpDelete("{id}")]

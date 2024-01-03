@@ -1,7 +1,7 @@
 ﻿@page "/activitydetails/{activityId:guid}"
 
 
-<h3>Activity</h3>
+<h3>Activity Details</h3>
 
 @if (!string.IsNullOrEmpty(ErrorMessage))
 {
@@ -15,6 +15,7 @@
         <tr>
             <th scope="col">Activity Name</th>
             <th scope="col">Activity Type</th>
+            <th scope="col">Module</th>
             <th scope="col">Starttime</th>
             <th scope="col">Endtime</th>
             <th scope="col">Description</th>
@@ -23,7 +24,8 @@
     <tbody>
         <tr>
             <td scope="row">@Activity.Name</td>
-            <td scope="row">@Activity.Type</td>
+            <td scope="row">@Activity.Type.Name</td>
+            <td scope="row">@Module.Name</td>
             <td scope="row">@Activity.StartDate</td>
             <td scope="row">@Activity.EndDate</td>
             <td scope="row">@Activity.Description</td>
@@ -33,5 +35,7 @@
 <button type="button" class="btn btn-danger my-1" @onclick="@DeleteActivity">
     Delete
 </button>
+<a href="@($"activityUpdate/{Activity.Id}")" class="btn btn-outline-primary">Update</a>
 <a href="@($"activitieslist")" class="btn btn-outline-primary">Back to Activity list</a>
+
 
