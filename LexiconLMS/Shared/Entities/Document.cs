@@ -7,7 +7,7 @@ public class Document
     public string Description { get; set; } = string.Empty;
     public DateTime UploadDate { get; set; }
     public string Path { get; set; } = string.Empty;
-    public ApplicationUser Uploader { get; set; }
+    public ApplicationUser? Uploader { get; set; }
 }
 
 public class ModuleDocument : Document
@@ -17,7 +17,7 @@ public class ModuleDocument : Document
 
 public class ActivityDocument : Document
 {
-    
+    public Guid ActivityId { get; set; }
 }
 
 public class CourseDocument : Document

@@ -2,6 +2,11 @@
 @using LexiconLMS.Client.Components;
 <h3>List of Activities</h3>
 
+@* <AuthorizeView Roles="Teacher">
+    <Authorized> *@
+        <a href="@($"activityadd")" class="btn btn-outline-primary">Add new Activity</a>
+@*     </Authorized>
+</AuthorizeView> *@
 
 <table class="table">
     <thead>
