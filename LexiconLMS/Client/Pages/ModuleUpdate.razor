@@ -1,4 +1,5 @@
-﻿@page "/moduleupdate/{moduleId:guid}"
+﻿@attribute [Route(UriHelper.ModuleUpdate)]
+
 @using LexiconLMS.Shared.Entities
 
 <section class="card p-3">
@@ -56,7 +57,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row mb-3">
+		@* <div class="row mb-3">
 			<div>
 				<hr />
 				<h3>Activities: </h3>
@@ -69,7 +70,7 @@
 					</div>
 				}
 			</div>
-		</div>
+		</div> *@
 
 		<button type="submit" class="btn btn-success me-1">Save module</button>
 

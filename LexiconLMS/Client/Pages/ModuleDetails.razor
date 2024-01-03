@@ -1,0 +1,58 @@
+﻿@attribute [Route(UriHelper.ModuleDetails)]
+
+<div class="d-flex justify-content-between flex-wrap">
+	@if (string.IsNullOrEmpty(Module.Name))
+	{
+		<h3>Module details</h3>
+	}
+	else
+	{
+		<div>
+			<h3>@Module.Name</h3>
+			<p class="fs-6 text-muted">@Module.StartDate.ToShortDateString() − @Module.EndDate.ToShortDateString()</p>
+		</div>
+	}
+
+	<div class="mb-3">
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleUpdateUri(Module.Id));})">Update module</button>
+		<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleDeleteUri(Module.Id));})">Delete module</button>
+	</div>
+
+</div>
+
+
+<div class="card bg-light mb-3 shadow-sm">
+	<div class="card-body">
+		<div class="card-title fw-bold">Description</div>
+		@Module.Description
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Activities:</div>
+			<div class="card-body">
+				<ActivityList ActivityLst="Activities"></ActivityList>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Documents:</div>
+			<div class="card-body">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row flex-row-reverse">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Students:</div>
+			<div class="card-body">
+			</div>
+		</div>
+	</div>
+</div>
