@@ -12,6 +12,4 @@ public class Activity
     public DateTime EndDate { get; set; }
     public Guid ModuleId { get; set; }
     public Module? Module { get; set; } 
-
-    public ICollection<ActivityDocument>? ActivityDocument { get; set; }
 }

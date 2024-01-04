@@ -76,14 +76,14 @@ namespace LexiconLMS.Server.Controllers
         }
 
         // GET: api/applicationuser/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUser>> GetApplicationUser(Guid id)
+        [HttpGet("byname/{name}")]
+        public async Task<ActionResult<ApplicationUser>> GetApplicationUser(string name)
         {
             if (_context.Users == null)
             {
                 return NotFound();
             }
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == name);
 
             if (user == null)
             {

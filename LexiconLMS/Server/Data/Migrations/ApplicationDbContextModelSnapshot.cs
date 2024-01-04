@@ -310,45 +310,6 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.Document", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UploaderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UploaderId");
-
-                    b.ToTable("Document");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Document");
-
-                    b.UseTphMappingStrategy();
-                });
-
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
                 {
                     b.Property<Guid>("Id")
@@ -579,15 +540,6 @@ namespace LexiconLMS.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.Document", b =>
-                {
-                    b.HasOne("LexiconLMS.Shared.Entities.ApplicationUser", "Uploader")
-                        .WithMany()
-                        .HasForeignKey("UploaderId");
-
-                    b.Navigation("Uploader");
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>

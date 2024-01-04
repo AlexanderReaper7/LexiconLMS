@@ -16,7 +16,7 @@ namespace LexiconLMS.Client.Pages
 		[Parameter]
 		public Guid? ModuleId { get; set; }
 
-		public Module Module { get; set; } = new Module();
+        public Module Module { get; set; } = new Module();
 
         public IEnumerable<Activity> Activities { get; set; } = new List<Activity>();
 		public List<Document> ModuleDocuments { get; set; } = new List<Document>();
@@ -33,7 +33,7 @@ namespace LexiconLMS.Client.Pages
 				return;
 			}
 
-			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(ModuleId.Value)) ?? Module;
+			Module = (await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(ModuleId.Value)))!;
 
 			if (Module == null)
 			{
