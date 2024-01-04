@@ -18,7 +18,7 @@ public class ModuleDocument : Document
 
 public class ActivityDocument : Document
 {
-    
+    public Guid ActivityId { get; set; }
 }
 
 public class CourseDocument : Document

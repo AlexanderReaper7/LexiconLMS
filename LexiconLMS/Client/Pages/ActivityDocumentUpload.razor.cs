@@ -24,11 +24,10 @@ namespace LexiconLMS.Client.Pages
 		public string ErrorMessage { get; set; }
 
 		protected override void OnInitialized()
-        {
-            base.OnInitialized();
+		{
+			base.OnInitialized();
 
-
-        }
+		}
 
 		private async Task HandleValidSubmit()
 		{

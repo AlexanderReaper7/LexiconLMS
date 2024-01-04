@@ -27,7 +27,6 @@ namespace LexiconLMS.Client.Pages
 		{
 			base.OnInitialized();
 
-
 		}
 
 		private async Task HandleValidSubmit()
