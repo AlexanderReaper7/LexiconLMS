@@ -50,14 +50,25 @@ namespace LexiconLMS.Server.Controllers
 			return await query.ToListAsync();
 		}
 
-		// GET: api/Assignments/5
-		[HttpGet("{id}")]
-		public async Task<ActionResult<Activity>> GetActivity(Guid id)
+		// GET: api/Modules
+		[HttpGet("/activitiesbymodule/{id}")]
+		public async Task<ActionResult<IEnumerable<Activity>>> GetActivities(Guid id)
 		{
 			if (_context.Activities == null)
 			{
 				return NotFound();
 			}
+			return await _context.Activities.Where(a => a.ModuleId == id).ToListAsync();
+		}
+
+		// GET: api/Activities/5
+		[HttpGet("{id}")]
+        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        {
+          if (_context.Activities == null)
+          {
+              return NotFound();
+          }
 
 			var activity = await _context.Activities.Include(a => a.Type).FirstOrDefaultAsync(a => a.Id == id);
 

@@ -23,6 +23,7 @@ namespace LexiconLMS.Client.Pages
 		public Guid? ActivityId { get; set; }
 
 		public Activity Activity { get; set; } = new Activity();
+		public List<ActivityDocument> ActivityDocuments { get; set; } = new List<ActivityDocument>();
 
 		public Module Module { get; set; } = new Module();
 
@@ -42,15 +43,29 @@ namespace LexiconLMS.Client.Pages
 			Activity = await GenericDataService.GetAsync<Activity>(UriHelper.GetActivityUri(ActivityId)) ?? Activity;
 			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(Activity.ModuleId)) ?? Module;
 
-            if (Activity == null)
+			
+			
+
+
+			if (Activity == null)
 			{
 				ErrorMessage = "Activity not found";
 				return;
 			}
+
+			// (await GenericDataService.GetAsync<IEnumerable<ActivityDocument>>($"api/ActivityDocuments/activityId={ActivityId.ToString}"))!;
+			ActivityDocuments = await GenericDataService.GetAsync<List<ActivityDocument>>($"activitydocumentsbyactivity/{ActivityId}");
 			await base.OnInitializedAsync();
 		}
 
-		private async Task DeleteActivity()
+        private void DownloadDocument(ActivityDocument document)
+        {
+			Message = "Document Downloaded";
+		}
+
+	
+
+        private async Task DeleteActivity()
 		{
 			try
 			{
