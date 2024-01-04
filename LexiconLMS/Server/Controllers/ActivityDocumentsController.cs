@@ -51,7 +51,7 @@ namespace LexiconLMS.Server.Controllers
             return activityDocument;
         }
 
-		// GET: api/Modules
+		// GET: api/ActivityDocuments from acivity
 		[HttpGet("/activitydocumentsbyactivity/{id}")]
 		public async Task<ActionResult<IEnumerable<ActivityDocument>>> GetActivityDocuments(Guid id)
 		{

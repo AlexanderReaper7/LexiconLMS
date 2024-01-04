@@ -13,6 +13,15 @@
 			<p class="fs-6 text-muted">@Activity.StartDate. − @Activity.EndDate</p>
 		</div>
 	}
+
+	@if (!string.IsNullOrEmpty(ErrorMessage))
+	{
+		<p class="alert alert-danger">@ErrorMessage</p>
+	}
+	else if (!string.IsNullOrEmpty(Message))
+	{
+		<p class="alert alert-success">@Message</p>
+	}
 @* 	 <AuthorizeView Roles="Teacher">
           <Authorized> *@
 	<div class="mb-3">
@@ -53,11 +62,11 @@
 			<div class="card-header bg-light fw-bold">Documents:</div>
 			<div class="card-body">
 
-				@if (ActivityDocuments != null && ActivityDocuments.Any())
+				@if (Activity.ActivityDocument != null && Activity.ActivityDocument.Any())
 				{
 					<p>Documents:</p>
 					<ul>
-						@foreach (var item in ActivityDocuments)
+						@foreach (var item in Activity.ActivityDocument)
 						{
 							<li>
 								@item.Name

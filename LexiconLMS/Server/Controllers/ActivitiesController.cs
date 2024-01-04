@@ -61,7 +61,7 @@ namespace LexiconLMS.Server.Controllers
               return NotFound();
           }
 
-            var activity = await _context.Activities.Include(a => a.Type).FirstOrDefaultAsync(a => a.Id == id);
+            var activity = await _context.Activities.Include(a => a.Type).Include(d => d.ActivityDocument).FirstOrDefaultAsync(a => a.Id == id);
 
 
 			if (activity == null)

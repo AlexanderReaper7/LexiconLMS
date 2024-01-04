@@ -12,7 +12,7 @@ public class Document
 
 public class ModuleDocument : Document
 {
-    
+	public Guid ModuleId { get; set; }
 }
 
 public class ActivityDocument : Document
@@ -22,5 +22,5 @@ public class ActivityDocument : Document
 
 public class CourseDocument : Document
 {
-    
+    public Guid CourseId { get; set; }
 }

@@ -40,7 +40,7 @@ namespace LexiconLMS.Server.Controllers
             {
                 return NotFound();
             }
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _context.Courses.Include(d => d.CourseDocument).FirstOrDefaultAsync(d => d.Id == id);
 
             if (course == null)
             {

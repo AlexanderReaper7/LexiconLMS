@@ -30,9 +30,6 @@ namespace LexiconLMS.Client.Pages
 
         }
 
-
-
-
 		private async Task HandleValidSubmit()
 		{
 			try
