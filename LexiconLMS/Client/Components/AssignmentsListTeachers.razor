@@ -1,0 +1,28 @@
+﻿
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Assigment</th>
+                <th scope="col">Submitted</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Assignments != null)
+            {
+                @foreach (var activity in Assignments)
+                {
+                    <tr>
+                        <td scope="row">@activity.StudentName</td>
+                        <td scope="row">@activity.AssignmentName</td>
+                        <td scope="row">@activity.Submitted</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+

@@ -1,4 +1,5 @@
-﻿@attribute [Route(UriHelper.ModuleDetails)]
+﻿@using LexiconLMS.Shared.Dtos
+@attribute [Route(UriHelper.ModuleDetails)]
 
 <div class="d-flex justify-content-between flex-wrap">
 	@if (string.IsNullOrEmpty(Module.Name))
@@ -32,7 +33,7 @@
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Activities:</div>
-			<div class="card-body">
+			<div class="card-body overflow-auto" style="max-height: 400px;">
 				<ActivityList ActivityLst="Activities"></ActivityList>
 			</div>
 		</div>
@@ -40,7 +41,7 @@
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Documents:</div>
-			<div class="card-body">
+			<div class="card-body overflow-auto" style="max-height: 400px;">
 
 			</div>
 		</div>
@@ -50,8 +51,17 @@
 <div class="row flex-row-reverse">
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
-			<div class="card-header bg-light fw-bold">Students:</div>
-			<div class="card-body">
+			<div class="card-header bg-light fw-bold">Assignments:</div>
+			<div class="card-body overflow-auto" style="max-height: 400px;">
+				@if (Module.CourseId != null)
+				{
+					<AuthorizeView Roles="@StaticUserRoles.Teacher">
+						<AssignmentsListTeachers CourseId="Module.CourseId" ModuleId="Module.Id"></AssignmentsListTeachers>
+					</AuthorizeView>
+					<AuthorizeView Roles="@StaticUserRoles.Student">
+						<AssignmentsListStudents CourseId="Module.CourseId" ModuleId="Module.Id"></AssignmentsListStudents>
+					</AuthorizeView>
+				}
 			</div>
 		</div>
 	</div>

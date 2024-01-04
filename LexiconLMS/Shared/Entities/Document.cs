@@ -8,6 +8,7 @@ public class Document
     public DateTime UploadDate { get; set; }
     public string Path { get; set; } = string.Empty;
     public ApplicationUser Uploader { get; set; }
+    public string UploaderId { get; set; } = string.Empty;
 }
 
 public class ModuleDocument : Document

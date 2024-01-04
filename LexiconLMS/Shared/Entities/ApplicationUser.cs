@@ -6,7 +6,9 @@ namespace LexiconLMS.Shared.Entities;
 
 public class ApplicationUser : IdentityUser
 {
+    public Guid? CourseId { get; set; }
     public Course? Course { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
+    public ICollection<IdentityRole> Roles { get; set; }
 }
