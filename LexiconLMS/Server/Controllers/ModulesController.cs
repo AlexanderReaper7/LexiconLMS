@@ -11,6 +11,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using LexiconLMS.Shared.Dtos.ModulesDtos;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Shared.Dtos;
 
 namespace LexiconLMS.Server.Controllers
 {

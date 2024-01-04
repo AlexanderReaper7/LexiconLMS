@@ -54,15 +54,6 @@ namespace LexiconLMS.Client.Components
                 SubmissionState.SubmittedLate => "alert-info",
                 _ => ""
             };
-
-            if (status == SubmissionState.Submitted)
-            {
-                return "alert-success";
-            }
-            else
-            {
-                return "alert-danger";
-            }
         }
     }
 }

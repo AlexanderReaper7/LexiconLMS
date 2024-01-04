@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LexiconLMS.Shared.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,8 @@ namespace LexiconLMS.Shared.Dtos.ActivitiesDtos
         public string StudentName { get; set; } = string.Empty;
         public Guid AssignmentId { get; set; }
         public string AssignmentName { get; set; } = string.Empty;
-        public bool Submitted { get; set; }
-        
+        public SubmissionState SubmissionState { get; set; }
+        public DateTime DueDate { get; set; }
+
     }
 }

@@ -89,7 +89,9 @@ namespace LexiconLMS.Server.Controllers
                 return NotFound();
             }
 
-            var query = _context.Activities.Include(a => a.Type).Include(a => a.Documents)
+            DateTime now = DateTime.Now;
+
+            var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
                 .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment")
                 .Select(a => new
                 {
@@ -97,11 +99,11 @@ namespace LexiconLMS.Server.Controllers
                     a.Name,
                     a.StartDate,
                     a.EndDate,
-                    a.Documents,
+                    a.ActivityDocument,
                     CourseId = courseId
 
                 })
-                .Join(_context.Users.Include(u => u.Roles).DefaultIfEmpty(),
+                .Join(_context.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.Name == StaticUserRoles.Student)).DefaultIfEmpty(),
                     a => a.CourseId,
                     s => s.CourseId,
                     (a, s) => new AssigmentDtoForTeachers
@@ -110,7 +112,12 @@ namespace LexiconLMS.Server.Controllers
                         StudentName = s.FirstName + " " + s.LastName,
                         AssignmentId = a.Id,
                         AssignmentName = a.Name,
-                        Submitted = a.Documents!.Any(d => d.UploaderId == s.Id)
+
+                        SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == s.Id) ?
+						a.EndDate >= now ? SubmissionState.Submitted : SubmissionState.SubmittedLate
+						: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
+
+                        DueDate = a.EndDate
                     }
                 );
 
@@ -127,17 +134,16 @@ namespace LexiconLMS.Server.Controllers
                 return NotFound();
             }
 
-            var id = User;
 			DateTime now = DateTime.Now;
 
-            var query = _context.Activities.Include(a => a.Type).Include(a => a.Documents)
+            var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
                 .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment")
                 .Select(a => new AssigmentDtoForStudents
                 {
                     AssignmentId = a.Id,
                     AssignmentName = a.Name,
 
-					SubmissionState = a.Documents!.Any(d => d.UploaderId == studentId)? 
+					SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == studentId)? 
 					a.EndDate >= now? SubmissionState.Submitted : SubmissionState.SubmittedLate
 					: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
 

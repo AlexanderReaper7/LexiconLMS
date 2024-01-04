@@ -38,5 +38,17 @@ namespace LexiconLMS.Client.Components
 
             await base.OnInitializedAsync();
         }
+
+        private string GetStatusCSSClass(SubmissionState status)
+        {
+            return status switch
+            {
+                SubmissionState.Submitted => "alert-success",
+                SubmissionState.NotSubmitted => "alert-warning",
+                SubmissionState.Late => "alert-danger",
+                SubmissionState.SubmittedLate => "alert-info",
+                _ => ""
+            };
+        }
     }
 }
