@@ -66,6 +66,35 @@
 			return ActivitiesBaseUri;
 		}
 
+		public static string ActivityDocumentsBaseUri => "api/ActivityDocuments/";
+
+		public static string GetActivityDocumentsUri(string? activityId = null)
+		{
+			string query = string.Empty;
+
+			if (activityId is not null)
+			{
+				query = $"activityId={activityId}";
+			}
+
+			if (query != "")
+			{
+				return ActivityDocumentsBaseUri + $"?{query}";
+			}
+
+			return ActivityDocumentsBaseUri;
+		}
+
+		public static string GetAssignmentsTeachersUri<TCourseId, TModuleId>(TCourseId courseId, TModuleId moduleId)
+		{
+            return $"{ActivitiesBaseUri}courses/{courseId}/modules/{moduleId}/assignments";
+        }
+
+		public static string GetAssignmentsStudentsUri<TModuleId, TStudentId>(TModuleId moduleId, TStudentId studentId)
+		{
+			return $"{ActivitiesBaseUri}modules/{moduleId}/assignments/{studentId}";
+		}
+
 		public static string CoursesBaseUri => "api/Courses/";
 
 		public static string GetCourseUri<T>(T courseId)
@@ -88,6 +117,22 @@
 		public static string GetActivityTypesUri()
 		{
 			return ActivityTypesBaseUri;
+		}
+		
+		public static string ApplicationUserBaseUri => "api/applicationuser/";
+
+		public static string GetApplicationUserUri<T>(T applicationUserId)
+		{
+			return ApplicationUserBaseUri + applicationUserId!.ToString();
+		}
+		public static string GetApplicationUserByNameUri<T>(T applicationUserName)
+		{
+			return ApplicationUserBaseUri + "byname/" + applicationUserName!.ToString();
+		}
+
+		public static string GetApplicationUsersUri()
+		{
+			return ApplicationUserBaseUri;
 		}
 	}
 }

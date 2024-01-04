@@ -7,6 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
+using LexiconLMS.Client.Pages;
+using LexiconLMS.Shared.Dtos;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.AspNetCore.Identity;
+using LexiconLMS.Shared.Dtos.ActivitiesDtos;
+using Duende.IdentityServer.Extensions;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -21,7 +30,7 @@ namespace LexiconLMS.Server.Controllers
 			_context = context;
 		}
 
-		// GET: api/Activities
+		// GET: api/Assignments
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Activity>>> GetActivities(Guid? moduleId = null)
 		{
@@ -38,7 +47,7 @@ namespace LexiconLMS.Server.Controllers
 			}
 
 
-            return await query.ToListAsync();
+			return await query.ToListAsync();
 		}
 
 		// GET: api/Modules
@@ -61,20 +70,95 @@ namespace LexiconLMS.Server.Controllers
               return NotFound();
           }
 
-            var activity = await _context.Activities.Include(a => a.Type).FirstOrDefaultAsync(a => a.Id == id);
+			var activity = await _context.Activities.Include(a => a.Type).FirstOrDefaultAsync(a => a.Id == id);
 
 
 			if (activity == null)
-            {
-                return NotFound();
-            }
+			{
+				return NotFound();
+			}
 
 			return activity;
 		}
 
-		// PUT: api/Activities/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+        [HttpGet("courses/{courseId}/modules/{moduleId}/assignments")]
+        public async Task<ActionResult> GetAssignments(Guid courseId, Guid moduleId)
+        {
+            if (_context.Activities == null)
+            {
+                return NotFound();
+            }
+
+            DateTime now = DateTime.Now;
+
+            var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
+                .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment")
+                .Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.StartDate,
+                    a.EndDate,
+                    a.ActivityDocument,
+                    CourseId = courseId
+
+                })
+                .Join(_context.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.Name == StaticUserRoles.Student)).DefaultIfEmpty(),
+                    a => a.CourseId,
+                    s => s.CourseId,
+                    (a, s) => new AssigmentDtoForTeachers
+                    {
+                        StudentId = s.Id,
+                        StudentName = s.FirstName + " " + s.LastName,
+                        AssignmentId = a.Id,
+                        AssignmentName = a.Name,
+
+                        SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == s.Id) ?
+						a.EndDate >= now ? SubmissionState.Submitted : SubmissionState.SubmittedLate
+						: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
+
+                        DueDate = a.EndDate
+                    }
+                );
+
+            var assignments = await query.ToListAsync();
+
+            return Ok(assignments);
+        }
+
+        [HttpGet("modules/{moduleId}/assignments/{studentId}")]
+        public async Task<ActionResult> GetAssignments(Guid moduleId, string studentId)
+        {
+            if (_context.Activities == null)
+            {
+                return NotFound();
+            }
+
+			DateTime now = DateTime.Now;
+
+            var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
+                .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment")
+                .Select(a => new AssigmentDtoForStudents
+                {
+                    AssignmentId = a.Id,
+                    AssignmentName = a.Name,
+
+					SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == studentId)? 
+					a.EndDate >= now? SubmissionState.Submitted : SubmissionState.SubmittedLate
+					: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
+
+					DueDate = a.EndDate
+                });
+
+            var assignments = await query.ToListAsync();
+
+            return Ok(assignments);
+        }
+
+
+        // PUT: api/Assignments/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
 		public async Task<IActionResult> PutActivity(Guid id, Activity activity)
 		{
 			if (id != activity.Id)
@@ -103,27 +187,22 @@ namespace LexiconLMS.Server.Controllers
 			return NoContent();
 		}
 
-        // POST: api/Activities
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
-        {
-          if (_context.Activities == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
-          }
+		// POST: api/Assignments
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+		{
+			if (_context.Activities == null)
+			{
+				return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
+			}
 			_context.Entry(activity).State = EntityState.Unchanged;
 			_context.Activities.Add(activity);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
+			await _context.SaveChangesAsync();
+			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+		}
 
-            catch(Exception ex) { var exception = ex; }
-            return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
-        }
-
-		// DELETE: api/Activities/5
+		// DELETE: api/Assignments/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteActivity(Guid id)
 		{

@@ -11,6 +11,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using LexiconLMS.Shared.Dtos.ModulesDtos;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Shared.Dtos;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -61,7 +63,7 @@ namespace LexiconLMS.Server.Controllers
 
 			if (includeActivities)
 			{
-			//	query = query.Include(m => m.Activities)!.ThenInclude(a => a.Type);
+			//	query = query.Include(m => m.Assignments)!.ThenInclude(a => a.Type);
 			}
 			var @module = await query.FirstOrDefaultAsync(m=> m.Id == id);
 
