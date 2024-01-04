@@ -11,24 +11,7 @@
 
 <ModulesList List="Modules"/>
 <StudentList StudentLst="Students" Course="Course" />
+<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"coursedocumentupload/{Course.Id}");})">Upload Document</button>
+<DocumentList List="CourseDocuments"></DocumentList>
 
-@* <DocumentList List="CourseDocuments"></DocumentList> *@
-
-@if (Course.CourseDocument != null && Course.CourseDocument.Any())
-{
-	<p>Documents:</p>
-	<ul>
-		@foreach (var item in Course.CourseDocument)
-		{
-			<li>
-				@item.Name
-				<button @onclick="() => DownloadDocument(item)">Download</button>
-			</li>
-		}
-	</ul>
-}
-else
-{
-	<p>No documents available for this activity.</p>
-}
 

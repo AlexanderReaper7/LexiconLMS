@@ -32,16 +32,16 @@ namespace LexiconLMS.Server.Controllers
             return await _context.Document.ToListAsync();
         }
 
-		// GET: api/ActivityDocuments from acivity
-		[HttpGet("/coursedocumentsbycourseyactivity/{id}")]
-		public async Task<ActionResult<IEnumerable<CourseDocument>>> GetCourseDocuments(Guid id)
-		{
-			if (_context.CourseDocument == null)
-			{
-				return NotFound();
-			}
-			return await _context.CourseDocument.Where(m => m.CourseId == id).ToListAsync();
-		}
+		//// GET: api/ActivityDocuments from acivity
+		//[HttpGet("/coursedocumentsbycourseyactivity/{id}")]
+		//public async Task<ActionResult<IEnumerable<CourseDocument>>> GetCourseDocuments(Guid id)
+		//{
+		//	if (_context.CourseDocument == null)
+		//	{
+		//		return NotFound();
+		//	}
+		//	return await _context.CourseDocument.Where(m => m.CourseId == id).ToListAsync();
+		//}
 
 		// GET: api/Documents/5
 		[HttpGet("{id}")]

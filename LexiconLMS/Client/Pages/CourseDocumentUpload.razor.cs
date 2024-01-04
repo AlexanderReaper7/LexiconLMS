@@ -10,37 +10,37 @@ using System.Reflection;
 
 namespace LexiconLMS.Client.Pages
 {
-    public partial class ActivityDocumentUpload
-    {
+	public partial class CourseDocumentUpload
+	{
 		[Inject]
 		NavigationManager NavigationManager { get; set; }
-		
+
 		[Inject]
 		public IGenericDataService GenericDataService { get; set; } = default!;
 		[Parameter]
-        public Guid ActivityId { get; set; }
-		public ActivityDocument ActivityDocument { get; set; } = new ActivityDocument();
+		public Guid CourseId { get; set; }
+		public CourseDocument CourseDocument { get; set; } = new CourseDocument();
 
 		public string ErrorMessage { get; set; }
 
 		protected override void OnInitialized()
-        {
-            base.OnInitialized();
+		{
+			base.OnInitialized();
 
 
-        }
+		}
 
 		private async Task HandleValidSubmit()
 		{
 			try
 			{
-				ActivityDocument.ActivityId = ActivityId;
-				ActivityDocument.Path = $"api/activitydocuments/{ActivityDocument.Name}";
-				ActivityDocument.UploadDate = DateTime.Now;
-				// TODO ActivityDocument.Uploader = 
+				CourseDocument.CourseId = CourseId;
+				CourseDocument.Path = $"api/activitydocuments/{CourseDocument.Name}";
+				CourseDocument.UploadDate = DateTime.Now;
+				// TODO CourseDocument.Uploader = 
 
 
-				if (await GenericDataService.AddAsync("api/activitydocuments", ActivityDocument))
+				if (await GenericDataService.AddAsync("api/coursedocuments", CourseDocument))
 
 				{
 					NavigationManager.NavigateTo("/");

@@ -19,8 +19,9 @@ namespace LexiconLMS.Client.Pages
 		public Module Module { get; set; } = new Module();
 
         public IEnumerable<Activity> Activities { get; set; } = new List<Activity>();
+		public List<Document> ModuleDocuments { get; set; } = new List<Document>();
 
-        public string ErrorMessage { get; set; } = string.Empty;
+		public string ErrorMessage { get; set; } = string.Empty;
 
 		public string Message { get; set; } = string.Empty;
 
@@ -41,7 +42,7 @@ namespace LexiconLMS.Client.Pages
 			}
 
 			Activities = (await GenericDataService.GetAsync<IEnumerable<Activity>>(UriHelper.GetActivitiesUri(ModuleId.Value.ToString())))!;
-			
+			ModuleDocuments = await GenericDataService!.GetAsync<List<Document>>($"moduledocumentsbymodule/{ModuleId}") ?? ModuleDocuments;
 			await base.OnInitializedAsync();
 		}
 	}

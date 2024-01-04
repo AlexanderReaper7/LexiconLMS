@@ -1,8 +1,10 @@
 ﻿@using LexiconLMS.Shared.Entities;
 
-<h3>DocumentList</h3>
 
-
+@if (!string.IsNullOrEmpty(Message))
+	{
+<p class="alert alert-success">@Message</p>
+	}
 
 	@if (List != null && List.Any())
 			{
@@ -12,7 +14,7 @@
 	{
 		<li>
 			@item.Name
-		@* 	<button @onclick="() => DownloadDocument(item)">Download</button> *@
+			<button @onclick="() => DownloadDocument(item)">Download</button>
 		</li>
 		}
 	</ul>

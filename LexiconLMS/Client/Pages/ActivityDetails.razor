@@ -61,24 +61,7 @@
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Documents:</div>
 			<div class="card-body">
-
-				@if (Activity.ActivityDocument != null && Activity.ActivityDocument.Any())
-				{
-					<p>Documents:</p>
-					<ul>
-						@foreach (var item in Activity.ActivityDocument)
-						{
-							<li>
-								@item.Name
-								<button @onclick="() => DownloadDocument(item)">Download</button>
-							</li>
-						}
-					</ul>
-				}
-				else
-				{
-					<p>No documents available for this activity.</p>
-				}
+				<DocumentList List="ActivityDocuments"></DocumentList>
 			</div>
 		</div>
 	</div>

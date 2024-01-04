@@ -17,18 +17,21 @@ namespace LexiconLMS.Client.Pages
         [Inject]
         public IApplicationUserDataService? ApplicationUserDataService { get; set; }
 
-  //    [Inject]
-		//public IGenericDataService? GenericDataService { get; set; }
+        [Inject]
+        public IGenericDataService? GenericDataService { get; set; }
+
+		[Inject]
+		public NavigationManager NavigationManager { get; set; } = default!;
 		[Parameter]
         public string? CourseId { get; set; }
 
         public Course Course { get; set; }
         public List<Module> Modules { get; set; }
 
-		public List<CourseDocument> CourseDocuments { get; set; } = new List<CourseDocument>();
+        public List<Document> CourseDocuments { get; set; } = new List<Document>();
 
 
-		public List<ApplicationUser> Students { get; set; }
+        public List<ApplicationUser> Students { get; set; }
         protected override async Task OnInitializedAsync()
         {
             if (!string.IsNullOrEmpty(CourseId))
@@ -36,15 +39,12 @@ namespace LexiconLMS.Client.Pages
                 Course = await CourseDataService.GetCourse(Guid.Parse(CourseId));
                 Modules = await ModuleDataService.GetModulesByCourseId(Guid.Parse(CourseId));
                 Students = await ApplicationUserDataService.GetStudentsByCourseId(Guid.Parse(CourseId));
-			//	CourseDocuments = await GenericDataService!.GetAsync<List<CourseDocument>>($"coursedocumentsbycourseyactivity/{CourseId}") ?? CourseDocuments;
+				CourseDocuments = await GenericDataService!.GetAsync<List<Document>>($"coursedocumentsbycourse/{CourseId}") ?? CourseDocuments;
 			}
 
 			await base.OnInitializedAsync();
         }
 
-		private void DownloadDocument(CourseDocument document)
-		{
-			//Message = "Document Downloaded";
-		}
+		
 	}
 }

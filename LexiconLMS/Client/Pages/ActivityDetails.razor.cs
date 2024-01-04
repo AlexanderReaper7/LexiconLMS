@@ -24,7 +24,7 @@ namespace LexiconLMS.Client.Pages
 		public Guid? ActivityId { get; set; }
 
 		public Activity Activity { get; set; } = new Activity();
-		// public List<ActivityDocument> ActivityDocuments { get; set; } = new List<ActivityDocument>();
+		public List<Document> ActivityDocuments { get; set; } = new List<Document>();
 
 		public Module Module { get; set; } = new Module();
 
@@ -51,18 +51,12 @@ namespace LexiconLMS.Client.Pages
 			}
 		
 			
-			// ActivityDocuments = await GenericDataService.GetAsync<List<ActivityDocument>>($"activitydocumentsbyactivity/{ActivityId}") ?? ActivityDocuments;
+			 ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}") ?? ActivityDocuments;
 
 			await base.OnInitializedAsync();
 			
 		}
 
-        private void DownloadDocument(ActivityDocument document)
-        {
-			Message = "Document Downloaded";
-		}
-
-	
 
         private async Task DeleteActivity()
 		{

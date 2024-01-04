@@ -10,37 +10,37 @@ using System.Reflection;
 
 namespace LexiconLMS.Client.Pages
 {
-    public partial class ActivityDocumentUpload
-    {
+	public partial class ModuleDocumentUpload
+	{
 		[Inject]
 		NavigationManager NavigationManager { get; set; }
-		
+
 		[Inject]
 		public IGenericDataService GenericDataService { get; set; } = default!;
 		[Parameter]
-        public Guid ActivityId { get; set; }
-		public ActivityDocument ActivityDocument { get; set; } = new ActivityDocument();
+		public Guid ModuleId { get; set; }
+		public ModuleDocument ModuleDocument { get; set; } = new ModuleDocument();
 
 		public string ErrorMessage { get; set; }
 
 		protected override void OnInitialized()
-        {
-            base.OnInitialized();
+		{
+			base.OnInitialized();
 
 
-        }
+		}
 
 		private async Task HandleValidSubmit()
 		{
 			try
 			{
-				ActivityDocument.ActivityId = ActivityId;
-				ActivityDocument.Path = $"api/activitydocuments/{ActivityDocument.Name}";
-				ActivityDocument.UploadDate = DateTime.Now;
+				ModuleDocument.ModuleId = ModuleId;
+				ModuleDocument.Path = $"api/moduledocuments/{ModuleDocument.Name}";
+				ModuleDocument.UploadDate = DateTime.Now;
 				// TODO ActivityDocument.Uploader = 
 
 
-				if (await GenericDataService.AddAsync("api/activitydocuments", ActivityDocument))
+				if (await GenericDataService.AddAsync("api/moduledocuments", ModuleDocument))
 
 				{
 					NavigationManager.NavigateTo("/");
@@ -57,17 +57,6 @@ namespace LexiconLMS.Client.Pages
 			}
 		}
 	}
-
-
-
-	//private void UploadDocument()
-	//{
-	//    var newDocument = new ActivityDocument
-	//    {
-	//        FileName = fileName,
-	//        FilePath = $"uploads/{fileName}", // Adjust the path as needed
-	//        ActivitiesId = ActivityId // Set the current activity's ID
-	//    };
-
-	//}
 }
+
+

@@ -21,8 +21,19 @@ namespace LexiconLMS.Server.Controllers
             _context = context;
         }
 
-        // GET: api/ModuleDocuments
-        [HttpGet]
+		// GET: api/ModuleDocuments from Module
+		[HttpGet("/moduledocumentsbymodule/{id}")]
+		public async Task<ActionResult<IEnumerable<ModuleDocument>>> GetModuleDocuments(Guid id)
+		{
+			if (_context.ModuleDocument == null)
+			{
+				return NotFound();
+			}
+			return await _context.ModuleDocument.Where(m => m.ModuleId == id).ToListAsync();
+		}
+
+		// GET: api/ModuleDocuments
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<ModuleDocument>>> GetModuleDocument()
         {
           if (_context.ModuleDocument == null)

@@ -32,8 +32,19 @@ namespace LexiconLMS.Server.Controllers
             return await _context.CourseDocument.ToListAsync();
         }
 
-        // GET: api/CourseDocuments/5
-        [HttpGet("{id}")]
+		// GET: api/CourseDocuments from course
+		[HttpGet("/coursedocumentsbycourse/{id}")]
+		public async Task<ActionResult<IEnumerable<CourseDocument>>> GetCourseDocuments(Guid id)
+		{
+			if (_context.CourseDocument == null)
+			{
+				return NotFound();
+			}
+			return await _context.CourseDocument.Where(m => m.CourseId == id).ToListAsync();
+		}
+
+		// GET: api/CourseDocuments/5
+		[HttpGet("{id}")]
         public async Task<ActionResult<CourseDocument>> GetCourseDocument(Guid id)
         {
           if (_context.CourseDocument == null)
