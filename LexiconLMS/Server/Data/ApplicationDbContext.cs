@@ -35,8 +35,4 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         base.OnModelCreating(modelBuilder);
     }
 
-    public DbSet<LexiconLMS.Shared.Entities.Document> Document { get; set; } = default!;
-
-    public DbSet<LexiconLMS.Shared.Entities.ActivityDocument> ActivityDocument { get; set; } = default!;
-
 }

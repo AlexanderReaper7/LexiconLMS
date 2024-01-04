@@ -8,7 +8,10 @@
 <h3>Course Details</h3>
 
 <ActivitiesSchedule/>
-
+<AuthorizeView Roles="Teacher">
+    <Authorized>
 <ModulesList List="Modules"/>
+    </Authorized>
+</AuthorizeView>
 <StudentList StudentLst="Students" Course="Course" />
 

@@ -310,45 +310,6 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.Document", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UploaderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UploaderId");
-
-                    b.ToTable("Document");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Document");
-
-                    b.UseTphMappingStrategy();
-                });
-
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
                 {
                     b.Property<Guid>("Id")
@@ -516,18 +477,6 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.ActivityDocument", b =>
-                {
-                    b.HasBaseType("LexiconLMS.Shared.Entities.Document");
-
-                    b.Property<Guid>("ActivityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasDiscriminator().HasValue("ActivityDocument");
-                });
-
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Activity", b =>
                 {
                     b.HasOne("LexiconLMS.Shared.Entities.Module", "Module")
@@ -555,15 +504,6 @@ namespace LexiconLMS.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.Document", b =>
-                {
-                    b.HasOne("LexiconLMS.Shared.Entities.ApplicationUser", "Uploader")
-                        .WithMany()
-                        .HasForeignKey("UploaderId");
-
-                    b.Navigation("Uploader");
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
@@ -625,20 +565,6 @@ namespace LexiconLMS.Server.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.ActivityDocument", b =>
-                {
-                    b.HasOne("LexiconLMS.Shared.Entities.Activity", null)
-                        .WithMany("ActivityDocuments")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LexiconLMS.Shared.Entities.Activity", b =>
-                {
-                    b.Navigation("ActivityDocuments");
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Course", b =>

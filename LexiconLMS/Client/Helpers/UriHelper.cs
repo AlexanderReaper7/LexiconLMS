@@ -66,25 +66,6 @@
 			return ActivitiesBaseUri;
 		}
 
-		public static string ActivityDocumentsBaseUri => "api/ActivityDocuments/";
-
-		public static string GetActivityDocumentsUri(string? activityId = null)
-		{
-			string query = string.Empty;
-
-			if (activityId is not null)
-			{
-				query = $"activityId={activityId}";
-			}
-
-			if (query != "")
-			{
-				return ActivityDocumentsBaseUri + $"?{query}";
-			}
-
-			return ActivityDocumentsBaseUri;
-		}
-
 		public static string CoursesBaseUri => "api/Courses/";
 
 		public static string GetCourseUri<T>(T courseId)
