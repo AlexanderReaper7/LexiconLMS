@@ -13,5 +13,5 @@ public class Activity
     public Guid ModuleId { get; set; }
     public Module? Module { get; set; } 
 
-    public ICollection<ActivityDocument>? ActivityDocument { get; set; }
+    public ICollection<ActivityDocument>? ActivityDocument { get; set; }    
 }

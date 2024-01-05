@@ -1,16 +1,14 @@
-﻿using LexiconLMS.Client.Services;
-using LexiconLMS.Shared.Entities;
-using Microsoft.AspNetCore.Components;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Text.Json;
+﻿using System.Text.Json;
 using static System.Net.WebRequestMethods;
 using LexiconLMS.Client.Helpers;
 using System.Reflection;
+using LexiconLMS.Client.Services;
+using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Components;
 
 namespace LexiconLMS.Client.Pages
 {
-	public partial class ActivityDocumentUpload
+	public partial class CourseDocumentUpload
 	{
 		[Inject]
 		NavigationManager NavigationManager { get; set; }
@@ -18,8 +16,8 @@ namespace LexiconLMS.Client.Pages
 		[Inject]
 		public IGenericDataService GenericDataService { get; set; } = default!;
 		[Parameter]
-		public Guid ActivityId { get; set; }
-		public ActivityDocument ActivityDocument { get; set; } = new ActivityDocument();
+		public Guid CourseId { get; set; }
+		public CourseDocument CourseDocument { get; set; } = new CourseDocument();
 
 		public string ErrorMessage { get; set; }
 
@@ -33,13 +31,13 @@ namespace LexiconLMS.Client.Pages
 		{
 			try
 			{
-				ActivityDocument.ActivityId = ActivityId;
-				ActivityDocument.Path = $"api/activitydocuments/{ActivityDocument.Name}";
-				ActivityDocument.UploadDate = DateTime.Now;
-				// TODO ActivityDocument.Uploader = 
+				CourseDocument.CourseId = CourseId;
+				CourseDocument.Path = $"api/activitydocuments/{CourseDocument.Name}";
+				CourseDocument.UploadDate = DateTime.Now;
+				// TODO CourseDocument.Uploader = 
 
 
-				if (await GenericDataService.AddAsync("api/activitydocuments", ActivityDocument))
+				if (await GenericDataService.AddAsync("api/coursedocuments", CourseDocument))
 
 				{
 					NavigationManager.NavigateTo("/");

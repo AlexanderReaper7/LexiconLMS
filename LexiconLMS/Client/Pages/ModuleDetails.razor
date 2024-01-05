@@ -18,6 +18,7 @@
 	}
 
 	<div class="mb-3">
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"moduledocumentupload/{Module.Id}");})">Upload Document</button>
 		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleUpdateUri(Module.Id));})">Update module</button>
 		<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleDeleteUri(Module.Id));})">Delete module</button>
 	</div>
@@ -49,7 +50,7 @@
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Documents:</div>
 			<div class="card-body overflow-auto" style="max-height: 400px;">
-
+				<DocumentList List="ModuleDocuments"></DocumentList>
 			</div>
 		</div>
 	</div>

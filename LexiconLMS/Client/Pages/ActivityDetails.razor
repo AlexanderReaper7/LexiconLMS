@@ -1,6 +1,4 @@
 ﻿@attribute [Route(UriHelper.ActivityDetails)]
-
-
 <div class="d-flex justify-content-between flex-wrap">
 	@if (string.IsNullOrEmpty(Activity.Name))
 	{
@@ -12,6 +10,15 @@
 			<h3>Activity: @Activity.Name</h3>
 			<p class="fs-6 text-muted">@Activity.StartDate. − @Activity.EndDate</p>
 		</div>
+	}
+
+	@if (!string.IsNullOrEmpty(ErrorMessage))
+	{
+		<p class="alert alert-danger">@ErrorMessage</p>
+	}
+	else if (!string.IsNullOrEmpty(Message))
+	{
+		<p class="alert alert-success">@Message</p>
 	}
 @* 	 <AuthorizeView Roles="Teacher">
           <Authorized> *@
@@ -52,30 +59,13 @@
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Documents:</div>
 			<div class="card-body">
-
-				@if (ActivityDocuments != null && ActivityDocuments.Any())
-				{
-					<p>Documents:</p>
-					<ul>
-						@foreach (var item in ActivityDocuments)
-						{
-							<li>
-								@item.Name
-								<button @onclick="() => DownloadDocument(item)">Download</button>
-							</li>
-						}
-					</ul>
-				}
-				else
-				{
-					<p>No documents available for this activity.</p>
-				}
+				<DocumentList List="ActivityDocuments"></DocumentList>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="row flex-row-reverse">
+@* <div class="row flex-row-reverse">
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Students:</div>
@@ -83,4 +73,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> *@

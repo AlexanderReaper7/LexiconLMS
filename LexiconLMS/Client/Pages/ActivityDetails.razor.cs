@@ -9,6 +9,7 @@ using LexiconLMS.Client.Helpers;
 using System.Reflection;
 using Module = LexiconLMS.Shared.Entities.Module;
 
+
 namespace LexiconLMS.Client.Pages
 {
 	public partial class ActivityDetails
@@ -23,7 +24,7 @@ namespace LexiconLMS.Client.Pages
 		public Guid? ActivityId { get; set; }
 
 		public Activity Activity { get; set; } = new Activity();
-		public List<ActivityDocument> ActivityDocuments { get; set; } = new List<ActivityDocument>();
+		public List<Document> ActivityDocuments { get; set; } = new List<Document>();
 
 		public Module Module { get; set; } = new Module();
 
@@ -43,29 +44,21 @@ namespace LexiconLMS.Client.Pages
 			Activity = await GenericDataService.GetAsync<Activity>(UriHelper.GetActivityUri(ActivityId)) ?? Activity;
 			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(Activity.ModuleId)) ?? Module;
 
-			
-			
-
-
 			if (Activity == null)
 			{
 				ErrorMessage = "Activity not found";
 				return;
 			}
 
-			// (await GenericDataService.GetAsync<IEnumerable<ActivityDocument>>($"api/ActivityDocuments/activityId={ActivityId.ToString}"))!;
-			ActivityDocuments = await GenericDataService.GetAsync<List<ActivityDocument>>($"activitydocumentsbyactivity/{ActivityId}");
+
+			ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}") ?? ActivityDocuments;
+
 			await base.OnInitializedAsync();
+
 		}
 
-        private void DownloadDocument(ActivityDocument document)
-        {
-			Message = "Document Downloaded";
-		}
 
-	
-
-        private async Task DeleteActivity()
+		private async Task DeleteActivity()
 		{
 			try
 			{
@@ -75,7 +68,7 @@ namespace LexiconLMS.Client.Pages
 				}
 				if (await GenericDataService.DeleteAsync(UriHelper.GetActivityUri(ActivityId)))
 				{
-					NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Activity.ModuleId));
+					NavigationManager.NavigateTo("/");
 				}
 				else
 				{

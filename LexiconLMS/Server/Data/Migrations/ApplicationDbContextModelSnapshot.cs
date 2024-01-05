@@ -342,7 +342,7 @@ namespace LexiconLMS.Server.Data.Migrations
 
                     b.HasIndex("UploaderId");
 
-                    b.ToTable("Document");
+                    b.ToTable("Documents");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Document");
 
@@ -528,6 +528,30 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.HasDiscriminator().HasValue("ActivityDocument");
                 });
 
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.CourseDocument", b =>
+                {
+                    b.HasBaseType("LexiconLMS.Shared.Entities.Document");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasDiscriminator().HasValue("CourseDocument");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.ModuleDocument", b =>
+                {
+                    b.HasBaseType("LexiconLMS.Shared.Entities.Document");
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("ModuleId");
+
+                    b.HasDiscriminator().HasValue("ModuleDocument");
+                });
+
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Activity", b =>
                 {
                     b.HasOne("LexiconLMS.Shared.Entities.Module", "Module")
@@ -630,19 +654,39 @@ namespace LexiconLMS.Server.Data.Migrations
             modelBuilder.Entity("LexiconLMS.Shared.Entities.ActivityDocument", b =>
                 {
                     b.HasOne("LexiconLMS.Shared.Entities.Activity", null)
-                        .WithMany("ActivityDocuments")
+                        .WithMany("ActivityDocument")
                         .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.CourseDocument", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.Course", null)
+                        .WithMany("CourseDocuments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.ModuleDocument", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.Module", null)
+                        .WithMany("ModuleDocuments")
+                        .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Activity", b =>
                 {
-                    b.Navigation("ActivityDocuments");
+                    b.Navigation("ActivityDocument");
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Course", b =>
                 {
+                    b.Navigation("CourseDocuments");
+
                     b.Navigation("Modules");
 
                     b.Navigation("Users");
@@ -651,6 +695,8 @@ namespace LexiconLMS.Server.Data.Migrations
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
                 {
                     b.Navigation("Activities");
+
+                    b.Navigation("ModuleDocuments");
                 });
 #pragma warning restore 612, 618
         }

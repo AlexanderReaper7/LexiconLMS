@@ -21,7 +21,17 @@ namespace LexiconLMS.Server.Controllers
             _context = context;
         }
 
-	
+		// GET: api/ActivityDocuments from acivity
+		[HttpGet("/activitydocumentsbyactivity/{id}")]
+		public async Task<ActionResult<IEnumerable<ActivityDocument>>> GetActivityDocuments(Guid id)
+		{
+			if (_context.ActivityDocument == null)
+			{
+				return NotFound();
+			}
+			return await _context.ActivityDocument.Where(m => m.ActivityId == id).ToListAsync();
+		}
+
 		// GET: api/ActivityDocuments
 		[HttpGet]
         public async Task<ActionResult<IEnumerable<ActivityDocument>>> GetActivityDocument()
@@ -51,21 +61,9 @@ namespace LexiconLMS.Server.Controllers
             return activityDocument;
         }
 
-		// GET: api/Modules
-		[HttpGet("/activitydocumentsbyactivity/{id}")]
-		public async Task<ActionResult<IEnumerable<ActivityDocument>>> GetActivityDocuments(Guid id)
-		{
-			if (_context.ActivityDocument == null)
-			{
-				return NotFound();
-			}
-			return await _context.ActivityDocument.Where(m => m.ActivityId == id).ToListAsync();
-		}
-
-
-		// PUT: api/ActivityDocuments/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+        // PUT: api/ActivityDocuments/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutActivityDocument(Guid id, ActivityDocument activityDocument)
         {
             if (id != activityDocument.Id)

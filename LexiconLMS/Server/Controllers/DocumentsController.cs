@@ -23,24 +23,24 @@ namespace LexiconLMS.Server.Controllers
 
         // GET: api/Documents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Document>>> GetDocument()
+        public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
         {
-            if (_context.Document == null)
-            {
-                return NotFound();
-            }
-            return await _context.Document.ToListAsync();
+          if (_context.Documents == null)
+          {
+              return NotFound();
+          }
+            return await _context.Documents.ToListAsync();
         }
 
         // GET: api/Documents/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Document>> GetDocument(Guid id)
         {
-            if (_context.Document == null)
-            {
-                return NotFound();
-            }
-            var document = await _context.Document.FindAsync(id);
+          if (_context.Documents == null)
+          {
+              return NotFound();
+          }
+            var document = await _context.Documents.FindAsync(id);
 
             if (document == null)
             {
@@ -86,11 +86,11 @@ namespace LexiconLMS.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Document>> PostDocument(Document document)
         {
-            if (_context.Document == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Document'  is null.");
-            }
-            _context.Document.Add(document);
+          if (_context.Documents == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Documents'  is null.");
+          }
+            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDocument", new { id = document.Id }, document);
@@ -100,17 +100,17 @@ namespace LexiconLMS.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDocument(Guid id)
         {
-            if (_context.Document == null)
+            if (_context.Documents == null)
             {
                 return NotFound();
             }
-            var document = await _context.Document.FindAsync(id);
+            var document = await _context.Documents.FindAsync(id);
             if (document == null)
             {
                 return NotFound();
             }
 
-            _context.Document.Remove(document);
+            _context.Documents.Remove(document);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace LexiconLMS.Server.Controllers
 
         private bool DocumentExists(Guid id)
         {
-            return (_context.Document?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Documents?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

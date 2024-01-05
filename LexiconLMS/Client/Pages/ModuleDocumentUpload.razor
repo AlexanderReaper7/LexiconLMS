@@ -1,4 +1,4 @@
-﻿@page "/activitydocumentupload/{activityid:guid}"
+﻿@page "/moduledocumentupload/{moduleid:guid}"
 @using LexiconLMS.Shared.Entities
 
 <section class="card p-3 col-md-8 col-lg-6">
@@ -10,7 +10,7 @@
 
 	<h3>Add Document</h3>
 
-	<EditForm Model="@ActivityDocument" OnValidSubmit="@HandleValidSubmit">
+	<EditForm Model="@ModuleDocument" OnValidSubmit="@HandleValidSubmit">
 
 		<DataAnnotationsValidator></DataAnnotationsValidator>
 		<div class="d-lg-table">
@@ -19,8 +19,8 @@
 					<label for="name" class="col-form-labelo">Name: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputText id="name" class="form-control" @bind-Value="@ActivityDocument.Name" placeholder="Name"></InputText>
-					<ValidationMessage class="offset-md-3" For="@(() => ActivityDocument.Name)" />
+					<InputText id="name" class="form-control" @bind-Value="@ModuleDocument.Name" placeholder="Name"></InputText>
+					<ValidationMessage class="offset-md-3" For="@(() => ModuleDocument.Name)" />
 				</div>
 			</div>
 
@@ -29,14 +29,14 @@
 					<label for="description" class="col-form-labelo">Description: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputText id="description" class="form-control" @bind-Value="@ActivityDocument.Description" placeholder="Description"></InputText>
-					<ValidationMessage class="offset-md-3" For="@(() => ActivityDocument.Description)" />
+					<InputText id="description" class="form-control" @bind-Value="@ModuleDocument.Description" placeholder="Description"></InputText>
+					<ValidationMessage class="offset-md-3" For="@(() => ModuleDocument.Description)" />
 				</div>
 			</div>
 
 		</div>
 
-		<button type="submit" class="btn btn-success me-1">Save Document</button>
+		<button type="submit" class="btn btn-success me-1">Save Activity</button>
 
 		<button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {NavigationManager.NavigateTo("/");})">Back</button>
 
