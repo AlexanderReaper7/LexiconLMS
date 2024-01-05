@@ -1,33 +1,31 @@
 ﻿@using LexiconLMS.Shared.Entities
 
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Assigment</th>
-                <th scope="col">State</th>
-                <th scope="col">Due</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Assignments != null)
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Assigment</th>
+            <th scope="col">State</th>
+            <th scope="col">Due</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Assignments != null)
+        {
+            @foreach (var activity in Assignments)
             {
-                @foreach (var activity in Assignments)
-                {
-                    <tr>
-                        <td scope="row">@activity.AssignmentName</td>
-                        <td scope="row">
-                            <div class="@GetStatusCSSClass(activity.SubmissionState) text-center text-lowercase">
-                                @activity.SubmissionState.AsText()
-                            </div>
-                        </td>
-                        <td scope="row">@activity.DueDate</td>
-                    </tr>
-                }
+                <tr>
+                    <td scope="row">@activity.AssignmentName</td>
+                    <td scope="row">
+                        <div class="@GetStatusCSSClass(activity.SubmissionState) text-center text-lowercase">
+                            @activity.SubmissionState.AsText()
+                        </div>
+                    </td>
+                    <td scope="row">@activity.DueDate</td>
+                </tr>
             }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
 
 

@@ -20,9 +20,6 @@ namespace LexiconLMS.Client.Components
         [EditorRequired]
         public Guid? ModuleId { get; set; }
 
-        [Parameter]
-        [EditorRequired]
-        public Guid? CourseId { get; set; }
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
@@ -31,7 +28,7 @@ namespace LexiconLMS.Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            if (ModuleId == null || CourseId == null)
+            if (ModuleId == null)
             {
                 return;
             }

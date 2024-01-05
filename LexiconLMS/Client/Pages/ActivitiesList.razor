@@ -1,4 +1,4 @@
-﻿@page "/activitieslist"
+﻿@attribute [Route(UriHelper.ActivityList)]
 @using LexiconLMS.Client.Components;
 <h3>List of Activities</h3>
 
@@ -22,11 +22,11 @@
                 <td scope="row">@activity.StartDate</td>
                 <td scope="row">@activity.EndDate</td>
                 <td scope="row">
-                    <a href="@($"activitydetails/{activity.Id}")" class="btn btn-outline-primary">Details</a>
+                    <a href="@UriHelper.GetActivityDetailsUri(activity.Id)" class="btn btn-outline-primary">Details</a>
                     <AuthorizeView Roles="Teacher">
                         <Authorized>
-                            <a href="@($"activityUpdate/{activity.Id}")" class="btn btn-outline-primary">Update</a>
-                            <a href="@($"activityDelete/{activity.Id}")" class="btn btn-outline-primary">Delete</a>
+                            <a href="@UriHelper.GetActivityUpdateUri(activity.Id)" class="btn btn-outline-primary">Update</a>
+                            <a href="@UriHelper.GetActivityDeleteUri(activity.Id)" class="btn btn-outline-primary">Delete</a>
                         </Authorized>
                     </AuthorizeView>
                 </td>

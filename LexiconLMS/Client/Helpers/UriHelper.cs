@@ -2,18 +2,56 @@
 {
     public static class UriHelper
     {
-		private const string modulePrefix = "/module";
-		private const string addSuffix = "add";
-		private const string updateSuffix = "update";
-		private const string deleteSuffix = "delete";
-		private const string detailsSuffix = "details";
+        #region client's URIs
+        private const string course = "course";
+        private const string module = "module";
+        private const string activity = "activity";
+		private const string add = "add";
+		private const string update = "update";
+		private const string delete = "delete";
+		private const string details = "details";
+		private const string list = "list";
 
-		public const string ModuleDetails = $"{modulePrefix}{detailsSuffix}/{{moduleId:guid}}";
-		public const string ModuleUpdate = $"{modulePrefix}{updateSuffix}/{{moduleId:guid}}";
-		public const string ModuleAdd = $"{modulePrefix}{addSuffix}/{{courseId:guid}}";
-		public const string ModuleDelete = $"{modulePrefix}{deleteSuffix}/{{moduleId:guid}}";
+		public const string CourseList = $"/{list}of{course}s";
+		public const string CourseDetails = $"/{course}/{{courseId}}";
+		public const string CourseUpdate = $"/{course}{update}/{{courseId}}";
+		public const string CourseAdd = $"/{course}{add}";
+		public const string CourseDelete = $"/{course}{delete}/{{courseId}}";
 
-		public static string ModulesBaseUri => "api/modules/";
+		public const string ModuleDetails = $"/{module}{details}/{{moduleId:guid}}";
+		public const string ModuleUpdate = $"/{module}{update}/{{moduleId:guid}}";
+		public const string ModuleAdd = $"/{module}{add}/{{courseId:guid}}";
+		public const string ModuleDelete = $"/{module}{delete}/{{moduleId:guid}}";
+
+		public const string ActivityList = $"/activities{list}";
+		public const string ActivityDetails = $"/{activity}{details}/{{activityId:guid}}";
+		public const string ActivityUpdate = $"/{activity}{update}/{{activityId:guid}}";
+		public const string ActivityAdd = $"/{activity}{add}/{{moduleId:guid}}";
+		public const string ActivityDelete = $"/{activity}{delete}/{{activityId:guid}}";
+
+		//Course uri
+		public static string GetCourseAddUri() =>  CourseAdd;
+        public static string GetCourseUpdateUri<T>(T courseId) =>  $"/{course}{update}/{courseId}";
+        public static string GetCourseDeleteUri<T>(T courseId) =>  $"/{course}{delete}/{courseId}";
+        public static string GetCourseDetailsUri<T>(T courseId) =>  $"/{course}/{courseId}";
+        public static string GetCourseListUri() => CourseList;
+
+		//Module uri
+		public static string GetModuleAddUri<T>(T courseId) => $"/{module}{add}/{courseId}";
+		public static string GetModuleUpdateUri<T>(T moduleId) =>  $"/{module}{update}/{moduleId}";
+		public static string GetModuleDeleteUri<T>(T moduleId) =>  $"/{module}{delete}/{moduleId}";
+		public static string GetModuleDetailsUri<T>(T moduleId)=>  $"/{module}{details}/{moduleId}";
+
+		//Activity uri
+		public static string GetActivityAddUri<T>(T moduleId) => $"/{activity}{add}/{moduleId}";
+		public static string GetActivityUpdateUri<T>(T activityId) =>  $"/{activity}{update}/{activityId}";
+		public static string GetActivityDeleteUri<T>(T activityId) =>  $"/{activity}{delete}/{activityId}";
+		public static string GetActivityDetailsUri<T>(T activityId)=>  $"/{activity}{details}/{activityId}";
+		public static string GetActivityListUri()=>  ActivityList;
+        #endregion
+
+        #region API's URIs
+        public static string ModulesBaseUri => "api/modules/";
 
         public static string GetModuleUri<T>(T moduleId, bool includeActivities = false)
         {
@@ -25,24 +63,7 @@
             return ModulesBaseUri;
         }
 
-		public static string GetModuleAddUri<T>(T courseId)
-		{
-			return $"{modulePrefix}{addSuffix}/{courseId}";
-		}
-		public static string GetModuleUpdateUri<T>(T moduleId)
-		{
-			return $"{modulePrefix}{updateSuffix}/{moduleId}";
-		}
-		public static string GetModuleDeleteUri<T>(T moduleId)
-		{
-			return $"{modulePrefix}{deleteSuffix}/{moduleId}";
-		}
-		public static string GetModuleDetailsUri<T>(T moduleId)
-		{
-			return $"{modulePrefix}{detailsSuffix}/{moduleId}>";
-		}
-
-		public static string ActivitiesBaseUri => "api/activities/";
+        public static string ActivitiesBaseUri => "api/activities/";
 
 		public static string GetActivityUri<T>(T activityId)
 		{
@@ -134,5 +155,6 @@
 		{
 			return ApplicationUserBaseUri;
 		}
-	}
+        #endregion
+    }
 }

@@ -41,7 +41,7 @@ namespace LexiconLMS.Client.Pages
                 if (await GenericDataService.AddAsync(UriHelper.GetActivitiesUri(), Activity))
 		
 				{
-                    NavigationManager.NavigateTo("/");
+                    NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(ModuleId));
                 }
                 else
                 {

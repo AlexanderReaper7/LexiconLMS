@@ -60,7 +60,7 @@ namespace LexiconLMS.Client.Pages
 				}
 				if (await GenericDataService.DeleteAsync(UriHelper.GetActivityUri(ActivityId)))
 				{
-					NavigationManager.NavigateTo("/");
+					NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Activity.ModuleId));
 				}
 				else
 				{
