@@ -12,7 +12,9 @@
 	{
 		<p class="alert alert-success">@Message</p>
 	}
-
+	<div>
+		<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(Module.CourseId)))">To course</button>
+	</div>
 	<h3>Update Module</h3>
 
 	<EditForm Model="@Module" OnValidSubmit="@HandleValidSubmit">
@@ -57,28 +59,10 @@
 				</div>
 			</div>
 		</div>
-		@* <div class="row mb-3">
-			<div>
-				<hr />
-				<h3>Activities: </h3>
-			</div>
-			<div>
-				@if (LoadActivities)
-				{
-					<div class="table-responsive">
-						<ActivityList></ActivityList>
-					</div>
-				}
-			</div>
-		</div> *@
 
 		<button type="submit" class="btn btn-success me-1">Save module</button>
 
-		<button type="button" class="btn btn-danger my-1" @onclick="@DeleteModule">
-		Delete
-		</button>
-
-		@* <button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {navigationManager.NavigateTo("/");})">Back</button> *@
+		<button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Module.Id)))">Module details</button>
 
 	</EditForm>
 

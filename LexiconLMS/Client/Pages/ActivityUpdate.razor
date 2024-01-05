@@ -1,4 +1,4 @@
-﻿@page "/activityupdate/{ActivityId:guid}"
+﻿@attribute [Route(UriHelper.ActivityUpdate)]
 @using LexiconLMS.Shared.Entities
 
 <section class="card p-3">
@@ -75,7 +75,7 @@
 		<button type="button" class="btn btn-danger my-1" @onclick="@DeleteActivity">
 			Delete
 		</button>
-		<a href="@($"activitieslist")" class="btn btn-outline-primary">Back to Activity list</a>
+		<a href="@UriHelper.GetActivityListUri()" class="btn btn-outline-primary">Back to Activity list</a>
 
 		@* <button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {navigationManager.NavigateTo("/");})">Back</button> *@
 

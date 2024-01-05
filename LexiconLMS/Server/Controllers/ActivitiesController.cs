@@ -199,6 +199,7 @@ namespace LexiconLMS.Server.Controllers
 			_context.Entry(activity).State = EntityState.Unchanged;
 			_context.Activities.Add(activity);
 			await _context.SaveChangesAsync();
+
 			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
 		}
 

@@ -1,10 +1,10 @@
-﻿@page "/listofcourses"
+﻿@attribute [Route(UriHelper.CourseList)]
 
 <h3>Course List</h3>
 
  <AuthorizeView Roles="Teacher">
     <Authorized>
-        <a href="@($"courseadd")" class="btn btn-outline-primary">Add new Course</a>
+        <a href="@UriHelper.GetCourseAddUri()" class="btn btn-outline-primary">Add new Course</a>
     </Authorized>
 </AuthorizeView>
 
@@ -27,11 +27,11 @@
                     <td scope="row">@course.StartDate</td>
                     <td scope="row">@course.EndDate</td>
                     <td scope="row">
-                    <a href="@($"course/{course.Id}")" class="btn btn-outline-primary">Details</a>
+                    <a href="@UriHelper.GetCourseDetailsUri(course.Id)" class="btn btn-outline-primary">Details</a>
                         <AuthorizeView Roles="Teacher">
                             <Authorized>
-                                <a href="@($"courseupdate/{course.Id}")" class="btn btn-outline-primary">Update</a>
-                                <a href="@($"coursedelete/{course.Id}")" class="btn btn-outline-primary">Delete</a>
+                                <a href="@UriHelper.GetCourseUpdateUri(course.Id)" class="btn btn-outline-primary">Update</a>
+                                <a href="@UriHelper.GetCourseDeleteUri(course.Id)" class="btn btn-outline-primary">Delete</a>
                             </Authorized>
                         </AuthorizeView>
                     </td>

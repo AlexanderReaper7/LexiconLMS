@@ -36,7 +36,7 @@ namespace LexiconLMS.Client.Pages
 				Module.CourseId = CourseId!.Value;
 				if (await GenericDataService.AddAsync(UriHelper.GetModulesUri(), Module))
 				{
-					NavigationManager.NavigateTo("/");
+					NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(CourseId));
 				}
 				else
 				{
@@ -48,10 +48,5 @@ namespace LexiconLMS.Client.Pages
 				ErrorMessage = $"{ex.Message} {ex.HResult}";
 			}
 		}
-
-        private void DeleteModule()
-        {
-
-        }
     }
 }

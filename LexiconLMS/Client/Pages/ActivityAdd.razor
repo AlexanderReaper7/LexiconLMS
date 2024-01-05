@@ -1,4 +1,4 @@
-﻿@page "/activityadd/{moduleId:guid}"
+﻿@attribute [Route(UriHelper.ActivityAdd)]
 @using LexiconLMS.Shared.Entities
 
 <section class="card p-3 col-md-8 col-lg-6">
@@ -26,7 +26,7 @@
 
 			<div class="row d-lg-table-row mb-3 mb-lg-0">
 				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
-					<label for="name" class="col-form-labelo">Activity Type: </label>
+					<label for="name" class="col-form-labelo text-nowrap">Activity Type: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
 					<InputText id="name" class="form-control" @bind-Value="@Activity.Type.Name" placeholder="Name"></InputText>
@@ -67,7 +67,7 @@
 
 		<button type="submit" class="btn btn-success me-1">Save Activity</button>
 
-		<button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {NavigationManager.NavigateTo("/");})">Back</button>
+		<button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(ModuleId));})">Back</button>
 
 	</EditForm>
 

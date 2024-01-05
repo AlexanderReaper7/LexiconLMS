@@ -1,44 +1,42 @@
 ﻿
 
 
-<div class="table-responsive"> 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (ActivityLst != null)
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ActivityLst != null)
+        {
+            @foreach (var activity in ActivityLst)
             {
-                @foreach (var activity in ActivityLst)
-                {
-                    <tr>
-                        <td scope="row">@activity.Name</td>
-                        <td scope="row">@activity.Type.Name</td>
-                        <td scope="row">@activity.StartDate</td>
-                        <td scope="row">@activity.EndDate</td>
-                        <td scope="row">
-                            <div class="d-flex">
-                                <a href="@($"activityDetails/{activity.Id}")" class="btn"><span class="text-dark oi oi-external-link"></span></a>
-                                <AuthorizeView Roles="Teacher">
-                                    <Authorized>
-                                        <a href="@($"activityUpdate/{activity.Id}")" class="btn"><span class="text-dark oi oi-pencil"></span></a>
-                                        <a href="@($"activityDelete/{activity.Id}")" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
-                                    </Authorized>
-                                </AuthorizeView>
-                            </div>
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td scope="row">@activity.Name</td>
+                    <td scope="row">@activity.Type.Name</td>
+                    <td scope="row">@activity.StartDate</td>
+                    <td scope="row">@activity.EndDate</td>
+                    <td scope="row">
+                        <div class="d-flex">
+                            <a href="@UriHelper.GetActivityDetailsUri(activity.Id)" class="btn"><span class="text-dark oi oi-external-link"></span></a>
+                            <AuthorizeView Roles="Teacher">
+                                <Authorized>
+                                    <a href="@UriHelper.GetActivityUpdateUri(activity.Id)" class="btn"><span class="text-dark oi oi-pencil"></span></a>
+                                    <a href="@UriHelper.GetActivityDeleteUri(activity.Id)" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
+                                </Authorized>
+                            </AuthorizeView>
+                        </div>
+                    </td>
+                </tr>
             }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
 
 
 

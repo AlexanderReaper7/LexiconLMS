@@ -52,27 +52,11 @@
 					<InputDate id="end-date" class="form-control" @bind-Value="@Module.EndDate" placeholder="End date"></InputDate>
 				</div>
 			</div>
-
-			<div class="row d-lg-table-row mb-3 mb-lg-0">
-				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
-					<label for="country" class="col-form-label w-auto">Activities: </label>
-				</div>
-				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<button class="btn btn-primary">Add activity</button>
-				</div>
-			</div>
 		</div>
 
 		<button type="submit" class="btn btn-success me-1">Save module</button>
 
-		 @if (Module.Id != default)
-		{
-			<button type="button" class="btn btn-danger my-1" @onclick="@DeleteModule">
-			Delete
-			</button>
-		}
-
-		@* <button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {navigationManager.NavigateTo("/");})">Back</button> *@
+		<button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(CourseId)))">Back to course</button>
 
 	</EditForm>
 

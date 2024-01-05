@@ -6,6 +6,7 @@ using System.Text.Json;
 using LexiconLMS.Client.Services;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Client.Helpers;
 
 namespace LexiconLMS.Client.Pages
 {
@@ -25,7 +26,7 @@ namespace LexiconLMS.Client.Pages
         private async Task HandleValidSubmit()
         {
             if (await CourseDataService.AddCourse(Course))
-                NavigationManager.NavigateTo($"listofcourses");
+                NavigationManager.NavigateTo(UriHelper.GetCourseListUri());
         }
     }
 }
