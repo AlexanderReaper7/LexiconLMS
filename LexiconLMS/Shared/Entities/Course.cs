@@ -10,5 +10,5 @@ public class Course
     public ICollection<Module>? Modules { get; set; }
 
     public ICollection<ApplicationUser>? Users { get; set; }
-    public ICollection<Document>? Documents { get; set; }
+    public ICollection<CourseDocument>? Documents { get; set; }
 }
