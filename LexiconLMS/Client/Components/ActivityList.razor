@@ -1,4 +1,5 @@
-﻿
+﻿@using LexiconLMS.Shared.Entities
+
 
 
 <table class="table">
@@ -37,6 +38,11 @@
         }
     </tbody>
 </table>
+
+@code{
+    [Parameter]
+    public IEnumerable<Activity>? ActivityLst { get; set; } = null;
+}
 
 
 

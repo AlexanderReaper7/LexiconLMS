@@ -63,6 +63,7 @@
 				@if (Module.CourseId != null)
 				{
 					<AuthorizeView Roles="@StaticUserRoles.Teacher">
+						<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentAddUri(Module.Id));})">Add assignment</button>
 						<AssignmentsListTeachers CourseId="Module.CourseId" ModuleId="Module.Id"></AssignmentsListTeachers>
 					</AuthorizeView>
 					<AuthorizeView Roles="@StaticUserRoles.Student">

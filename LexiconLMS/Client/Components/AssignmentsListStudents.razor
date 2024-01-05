@@ -15,7 +15,7 @@
             @foreach (var activity in Assignments)
             {
                 <tr>
-                    <td scope="row">@activity.AssignmentName</td>
+                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
                     <td scope="row">
                         <div class="@GetStatusCSSClass(activity.SubmissionState) text-center text-lowercase">
                             @activity.SubmissionState.AsText()

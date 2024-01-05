@@ -1,0 +1,8 @@
+﻿@attribute [Route(UriHelper.AssignmentUpdate)]
+
+<ActivityForm OnlyAssignments="true" ActivityId="ActivityId"></ActivityForm>
+
+@code {
+	[Parameter]
+	public Guid? ActivityId { get; set; }
+}

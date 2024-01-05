@@ -6,6 +6,7 @@
         private const string course = "course";
         private const string module = "module";
         private const string activity = "activity";
+		private const string assignment = "assignment";
 		private const string add = "add";
 		private const string update = "update";
 		private const string delete = "delete";
@@ -29,6 +30,9 @@
 		public const string ActivityAdd = $"/{activity}{add}/{{moduleId:guid}}";
 		public const string ActivityDelete = $"/{activity}{delete}/{{activityId:guid}}";
 
+		public const string AssignmentUpdate = $"/{assignment}{update}/{{activityId:guid}}";
+		public const string AssignmentAdd = $"/{assignment}{add}/{{moduleId:guid}}";
+
 		//Course uri
 		public static string GetCourseAddUri() =>  CourseAdd;
         public static string GetCourseUpdateUri<T>(T courseId) =>  $"/{course}{update}/{courseId}";
@@ -48,6 +52,10 @@
 		public static string GetActivityDeleteUri<T>(T activityId) =>  $"/{activity}{delete}/{activityId}";
 		public static string GetActivityDetailsUri<T>(T activityId)=>  $"/{activity}{details}/{activityId}";
 		public static string GetActivityListUri()=>  ActivityList;
+		
+		//Assignment uri
+		public static string GetAssignmentAddUri<T>(T moduleId) => $"/{assignment}{add}/{moduleId}";
+		public static string GetAssignmentUpdateUri<T>(T assignmentId) =>  $"/{assignment}{update}/{assignmentId}";
         #endregion
 
         #region API's URIs
