@@ -50,9 +50,39 @@ namespace LexiconLMS.Server.Controllers
             return document;
         }
 
-        // PUT: api/Documents/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+		// GET: api/Documents/5
+		[HttpGet("/documentsetfk/{id}")]
+		public async Task<ActionResult<Document>> GetDocumentSetFK(Guid id)
+		{
+            var document = new Document();
+            if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+
+            var activityresponse = _context.Documents.FirstOrDefault(p => p.ActivityId == id);
+
+				if (activityresponse != null)
+            {
+                return Ok(activityresponse);
+            }
+
+			}
+			else
+				var document = await _context.Documents.FindAsync(id);
+
+			if (document == null)
+			{
+				return NotFound();
+			}
+
+			return document;
+		}
+
+
+		// PUT: api/Documents/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutDocument(Guid id, Document document)
         {
             if (id != document.Id)

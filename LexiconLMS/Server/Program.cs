@@ -24,13 +24,26 @@ public class Program
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        builder.Services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => {
-                options.IdentityResources["openid"].UserClaims.Add("role");
-                options.ApiResources.Single().UserClaims.Add("role");
-            });
+		//builder.Services.AddIdentityServer()
+		//    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => {
+		//        options.IdentityResources["openid"].UserClaims.Add("role");
+		//        options.ApiResources.Single().UserClaims.Add("role");
+		//    });
 
-        builder.Services.AddAuthentication()
+		builder.Services.AddIdentityServer()
+	                    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(
+
+		options => {
+
+			options.IdentityResources["openid"].UserClaims.Add("role");
+
+			if (options.ApiResources.Any())
+			{
+				options.ApiResources.Single().UserClaims.Add("role");
+			}
+		});
+
+		builder.Services.AddAuthentication()
             .AddIdentityServerJwt();
 
         builder.Services.AddControllersWithViews();

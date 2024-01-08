@@ -7,19 +7,22 @@ using System.Text.Json;
 using static System.Net.WebRequestMethods;
 using LexiconLMS.Client.Helpers;
 using System.Reflection;
+using System.Net.Security;
 
 namespace LexiconLMS.Client.Pages
 {
-	public partial class ActivityDocumentUpload
+	public partial class DocumentUpload
 	{
 		[Inject]
 		NavigationManager NavigationManager { get; set; }
 
 		[Inject]
 		public IGenericDataService GenericDataService { get; set; } = default!;
-		[Parameter]		
-		public Guid ActivityId { get; set; }
-		public ActivityDocument ActivityDocument { get; set; } = new ActivityDocument();
+		[Parameter]
+		public Guid Id { get; set; }
+		public Document Document { get; set; } = new Document();
+
+		public Document Response { get; set; } = new Document();
 
 		public string ErrorMessage { get; set; }
 
@@ -31,23 +34,22 @@ namespace LexiconLMS.Client.Pages
 
 		private async Task HandleValidSubmit()
 		{
+			// Sets Íd to Correct FK
+			Response = await GenericDataService.GetAsync<Document>($"documentsetfk/{Id}") ?? Response;
+			Response.Description = Document.Description;
+			Response.Name = Document.Name;
 			try
 			{
-				ActivityDocument.ActivityId = ActivityId;
-				ActivityDocument.Path = $"api/activitydocuments/{ActivityDocument.Name}";
-				ActivityDocument.UploadDate = DateTime.Now;
-				// TODO ActivityDocument.Uploader = 
 
-
-				if (await GenericDataService.AddAsync("api/activitydocuments", ActivityDocument))
-
+				Response.Path = $"api/activitydocuments/{Response.Name}";
+				Response.UploadDate = DateTime.Now;
+				// TODO ActivityDocument.Uploaderrole = 
+				if (await GenericDataService.AddAsync("api/documents", Response))
 				{
-				
-					NavigationManager.NavigateTo(UriHelper.GetActivityDetailsUri(ActivityId));
+					NavigationManager.NavigateTo(UriHelper.GetActivityDetailsUri(Id));
 				}
-				else 
+				else
 				{
-
 					ErrorMessage = "Could not add document";
 				}
 			}
