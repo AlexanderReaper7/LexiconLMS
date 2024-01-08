@@ -1,4 +1,7 @@
 ﻿@attribute [Route(UriHelper.ActivityDetails)]
+
+<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Activity.ModuleId)))">To Module</button>
+
 <div class="d-flex justify-content-between flex-wrap">
 	@if (string.IsNullOrEmpty(Activity.Name))
 	{

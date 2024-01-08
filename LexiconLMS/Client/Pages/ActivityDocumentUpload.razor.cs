@@ -42,9 +42,10 @@ namespace LexiconLMS.Client.Pages
 				if (await GenericDataService.AddAsync("api/activitydocuments", ActivityDocument))
 
 				{
-					NavigationManager.NavigateTo("/");
+				
+					NavigationManager.NavigateTo(UriHelper.GetActivityDetailsUri(ActivityId));
 				}
-				else
+				else 
 				{
 
 					ErrorMessage = "Could not add document";

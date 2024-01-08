@@ -40,9 +40,10 @@ namespace LexiconLMS.Client.Pages
 				if (await GenericDataService.AddAsync("api/coursedocuments", CourseDocument))
 
 				{
-					NavigationManager.NavigateTo("/");
-				}
-				else
+					NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(CourseId));
+				}  
+
+                else
 				{
 
 					ErrorMessage = "Could not add document";
