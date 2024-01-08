@@ -12,7 +12,7 @@ public class Document
     public string? RoleOfUploader { get; set; }
     public Guid? ModuleId { get; set; }
     public Guid? CourseId { get; set; }
-	public Guid ActivityId { get; set; }
+	public Guid? ActivityId { get; set; }
 }
 
 //public class ModuleDocument : Document

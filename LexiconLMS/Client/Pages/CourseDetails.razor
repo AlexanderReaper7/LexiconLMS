@@ -14,6 +14,6 @@
     </Authorized>
 </AuthorizeView>
 <StudentList StudentLst="Students" Course="Course" />
-<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"coursedocumentupload/{Course.Id}");})">Upload Document</button>
+<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Course.Id}");})">Upload Document</button>
 <DocumentList List="CourseDocuments"></DocumentList>
 

@@ -18,7 +18,7 @@
 	}
 
 	<div class="mb-3">
-		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"moduledocumentupload/{Module.Id}");})">Upload Document</button>
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Module.Id}");})">Upload Document</button>
 		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleUpdateUri(Module.Id));})">Update module</button>
 		<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleDeleteUri(Module.Id));})">Delete module</button>
 	</div>

@@ -60,25 +60,26 @@ namespace LexiconLMS.Server.Controllers
 				return NotFound();
 			}
 
-            var activityresponse = await _context.Activities.FirstOrDefaultAsync(p => p.Id == id);
+            var activityresponse =  await _context.Activities.FindAsync(id);
 
-			if (activityresponse != null)
+            if (activityresponse != null) 
             {
                 document.ActivityId = id;
                 return Ok(document);
             }
+            
 
-			var moduleresponse = await _context.Modules.FirstOrDefaultAsync(p => p.Id == id);
-			
+            var moduleresponse =  await _context.Modules.FindAsync(id);
+
             if (moduleresponse != null)
-			{
+            {
                 document.ModuleId = id;
-				return Ok(moduleresponse);
-			}
+                return Ok(document);
+            }
 
-			var courseresponse = await _context.Documents.FirstOrDefaultAsync(p => p.CourseId == id);
+            var courseresponse = await _context.Courses.FindAsync(id);
 
-			if (moduleresponse != null)
+			if (courseresponse != null)
 			{
                 document.CourseId = id;
 				return Ok(document);
@@ -99,10 +100,29 @@ namespace LexiconLMS.Server.Controllers
             return await _context.Documents.Where(m => m.ActivityId == id).ToListAsync();
         }
 
+		[HttpGet("/moduledocumentsbymodule/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.ModuleId == id).ToListAsync();
+		}
 
-        // PUT: api/Documents/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+		[HttpGet("/coursedocumentsbycourse/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetCourseDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.CourseId == id).ToListAsync();
+		}
+
+		// PUT: api/Documents/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutDocument(Guid id, Document document)
         {
             if (id != document.Id)

@@ -36,6 +36,7 @@ namespace LexiconLMS.Client.Pages
 		{
 			// Sets Íd to Correct FK
 			Response = await GenericDataService.GetAsync<Document>($"documentsetfk/{Id}") ?? Response;
+			
 			Response.Description = Document.Description;
 			Response.Name = Document.Name;
 			try
