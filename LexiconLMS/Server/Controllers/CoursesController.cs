@@ -7,11 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Shared.Dtos;
+using NuGet.DependencyResolver;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace LexiconLMS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = StaticUserRoles.Teacher)]
     public class CoursesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -29,6 +34,8 @@ namespace LexiconLMS.Server.Controllers
             {
                 return NotFound();
             }
+            var user = User;
+
             return await _context.Courses.ToListAsync();
         }
 

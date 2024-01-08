@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using LexiconLMS.Server.Mappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using System.Security.Claims;
+using LexiconLMS.Shared.Dtos;
 
 namespace LexiconLMS;
 public class Program
@@ -24,14 +28,35 @@ public class Program
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+        //Works without builder.Services.AddAuthentication().AddIdentityServerJwt()
         builder.Services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => {
-                options.IdentityResources["openid"].UserClaims.Add("role");
-                options.ApiResources.Single().UserClaims.Add("role");
-            });
+        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(
+        
+        options => {
 
-        builder.Services.AddAuthentication()
-            .AddIdentityServerJwt();
+            options.IdentityResources["openid"].UserClaims.Add("role");
+
+            if (options.ApiResources.Any())
+            {
+                options.ApiResources.Single().UserClaims.Add("role");
+            }
+        });
+
+        //builder.Services.AddIdentityServer()
+        //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => {
+        //        options.IdentityResources["openid"].UserClaims.Add("role");
+        //        options.ApiResources.Single().UserClaims.Add("role");
+        //    });
+
+
+        //builder.Services.AddAuthentication()
+        //    .AddIdentityServerJwt();
+
+        //builder.Services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme,
+        //options =>
+        //{
+        //    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
+        //});
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
@@ -69,7 +94,6 @@ public class Program
 
         app.UseIdentityServer();
         app.UseAuthorization();
-
 
         app.MapRazorPages();
         app.MapControllers();

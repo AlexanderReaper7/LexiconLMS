@@ -30,7 +30,7 @@ namespace LexiconLMS.Server.Controllers
 			_context = context;
 		}
 
-		// GET: api/Assignments
+		// GET: api/Assignment
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Activity>>> GetActivities(Guid? moduleId = null)
 		{
@@ -138,7 +138,7 @@ namespace LexiconLMS.Server.Controllers
 
             var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
                 .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment")
-                .Select(a => new AssigmentDtoForStudents
+                .Select(a => new AssignmentsDtoForStudents
                 {
                     AssignmentId = a.Id,
                     AssignmentName = a.Name,
@@ -155,8 +155,44 @@ namespace LexiconLMS.Server.Controllers
             return Ok(assignments);
         }
 
+        [HttpGet("students/{studentId}/assignments/{assignmentId}")]
+        public async Task<ActionResult> GetAssignments(string studentId, Guid assignmentId)
+        {
+            if (_context.Activities == null)
+            {
+                return NotFound();
+            }
 
-        // PUT: api/Assignments/5
+            DateTime now = DateTime.Now;
+
+            var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
+                .Where(a => a.Type.Name == "Assignment")
+                .Select(a => new AssignmentDtoForStudents
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+					Description = a.Description,
+
+                    SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == studentId) ?
+                    a.EndDate >= now ? SubmissionState.Submitted : SubmissionState.SubmittedLate
+                    : a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
+
+                    DueDate = a.EndDate,
+					Documents = a.ActivityDocument!.Where(d => d.UploaderId == studentId).Cast<Document>().ToList()
+                });
+
+            var assignment = await query.FirstOrDefaultAsync(a => a.Id == assignmentId);
+
+			if (assignment == null)
+			{
+                return NotFound();
+            }
+
+            return Ok(assignment);
+        }
+
+
+        // PUT: api/Assignment/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
 		public async Task<IActionResult> PutActivity(Guid id, Activity activity)
@@ -187,7 +223,7 @@ namespace LexiconLMS.Server.Controllers
 			return NoContent();
 		}
 
-		// POST: api/Assignments
+		// POST: api/Assignment
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
 		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
@@ -203,7 +239,7 @@ namespace LexiconLMS.Server.Controllers
 			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
 		}
 
-		// DELETE: api/Assignments/5
+		// DELETE: api/Assignment/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteActivity(Guid id)
 		{

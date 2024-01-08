@@ -1,12 +1,13 @@
-﻿@using LexiconLMS.Shared.Entities
+﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Entities
 
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">Assigment</th>
-            <th scope="col">State</th>
-            <th scope="col">Due</th>
-            <th scope="col"></th>
+            <th>Assigment</th>
+            <th>State</th>
+            <th>Deadline</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -15,13 +16,13 @@
             @foreach (var activity in Assignments)
             {
                 <tr>
-                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
-                    <td scope="row">
-                        <div class="@GetStatusCSSClass(activity.SubmissionState) text-center text-lowercase">
+                    <td><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
+                    <td>
+                        <div class="@activity.SubmissionState.GetCSSClass() text-center text-lowercase">
                             @activity.SubmissionState.AsText()
                         </div>
                     </td>
-                    <td scope="row">@activity.DueDate</td>
+                    <td>@activity.DueDate</td>
                 </tr>
             }
         }

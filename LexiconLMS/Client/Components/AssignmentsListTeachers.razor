@@ -1,4 +1,5 @@
-﻿@using LexiconLMS.Shared.Entities;
+﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Entities;
 
 <table class="table">
     <thead>
@@ -16,10 +17,10 @@
             @foreach (var activity in Assignments)
             {
                 <tr>
-                    <td scope="row">@activity.StudentName</td>
+                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.AssignmentId)">@activity.StudentId</a></td>
                     <td scope="row"><a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
                     <td scope="row">
-                        <div class="@GetStatusCSSClass(activity.SubmissionState) text-center text-lowercase">
+                        <div class="@activity.SubmissionState.GetCSSClass() text-center text-lowercase">
                             @activity.SubmissionState.AsText()
                         </div>
                     </td>

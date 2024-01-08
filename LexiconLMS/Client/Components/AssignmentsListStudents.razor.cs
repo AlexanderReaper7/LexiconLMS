@@ -5,6 +5,7 @@ using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace LexiconLMS.Client.Components
 {
@@ -23,7 +24,7 @@ namespace LexiconLMS.Client.Components
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-        public IEnumerable<AssigmentDtoForStudents> Assignments { get; set; } = null;
+        public IEnumerable<AssignmentsDtoForStudents> Assignments { get; set; } = null;
 
 
         protected override async Task OnInitializedAsync()
@@ -32,25 +33,15 @@ namespace LexiconLMS.Client.Components
             {
                 return;
             }
-			string username = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.Name!;
+            var user2 = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue("sub");
+
+            string username = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.Name!;
 
             ApplicationUser user = (await GenericDataService.GetAsync<ApplicationUser>(UriHelper.GetApplicationUserByNameUri(username)))!;
 
-			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssigmentDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, user.Id)))!;
+			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssignmentsDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, user.Id)))!;
 
             await base.OnInitializedAsync();
-        }
-
-        private string GetStatusCSSClass(SubmissionState status)
-        {
-            return status switch
-            {
-                SubmissionState.Submitted => "alert-success",
-                SubmissionState.NotSubmitted => "alert-warning",
-                SubmissionState.Late => "alert-danger",
-                SubmissionState.SubmittedLate => "alert-info",
-                _ => ""
-            };
         }
     }
 }

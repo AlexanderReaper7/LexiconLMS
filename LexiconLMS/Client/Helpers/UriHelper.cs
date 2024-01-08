@@ -30,6 +30,7 @@
 		public const string ActivityAdd = $"/{activity}{add}/{{moduleId:guid}}";
 		public const string ActivityDelete = $"/{activity}{delete}/{{activityId:guid}}";
 
+		public const string AssignmentDetails = $"/{assignment}{details}/{{activityId:guid}}";
 		public const string AssignmentUpdate = $"/{assignment}{update}/{{activityId:guid}}";
 		public const string AssignmentAdd = $"/{assignment}{add}/{{moduleId:guid}}";
 
@@ -46,7 +47,7 @@
 		public static string GetModuleDeleteUri<T>(T moduleId) =>  $"/{module}{delete}/{moduleId}";
 		public static string GetModuleDetailsUri<T>(T moduleId)=>  $"/{module}{details}/{moduleId}";
 
-		//Activity uri
+		//Assignment uri
 		public static string GetActivityAddUri<T>(T moduleId) => $"/{activity}{add}/{moduleId}";
 		public static string GetActivityUpdateUri<T>(T activityId) =>  $"/{activity}{update}/{activityId}";
 		public static string GetActivityDeleteUri<T>(T activityId) =>  $"/{activity}{delete}/{activityId}";
@@ -56,6 +57,7 @@
 		//Assignment uri
 		public static string GetAssignmentAddUri<T>(T moduleId) => $"/{assignment}{add}/{moduleId}";
 		public static string GetAssignmentUpdateUri<T>(T assignmentId) =>  $"/{assignment}{update}/{assignmentId}";
+		public static string GetAssignmentDetailsUri<T>(T assignmentId) => $"/{assignment}{details}/{assignmentId}";
         #endregion
 
         #region API's URIs
@@ -123,8 +125,14 @@
 		{
 			return $"{ActivitiesBaseUri}modules/{moduleId}/assignments/{studentId}";
 		}
+        public static string GetAssignmentStudentsUri<TStudentId, TAssignmentId>(TStudentId studentId, TAssignmentId assignmentId)
+        {
+			var s = $"{ActivitiesBaseUri}students/{studentId}/assignments/{assignmentId}";
 
-		public static string CoursesBaseUri => "api/Courses/";
+			return s;
+        }
+
+        public static string CoursesBaseUri => "api/Courses/";
 
 		public static string GetCourseUri<T>(T courseId)
 		{
