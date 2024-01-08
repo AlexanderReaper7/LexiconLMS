@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Shared.Dtos
 {
-    public static class StaticUserRoles
+    public enum StaticUserRoles
     {
-        public const string Teacher = "Teacher";
-        public const string Student = "Student";
+        Teacher,
+        Student
     }
 }

@@ -17,7 +17,7 @@ namespace LexiconLMS.Client.Pages
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-        public ApplicationUserDto ApplicationUserDto { get; set; } = new ApplicationUserDto();
+        public ApplicationUserDtoAdd ApplicationUserDto { get; set; } = new ApplicationUserDtoAdd();
 
         [Parameter]
         public string? CourseId { get; set; }

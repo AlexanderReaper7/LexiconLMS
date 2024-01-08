@@ -6,7 +6,7 @@
 }
 else
 {
-    <a href="@($"/useradd/{Course.Id}")" class="btn btn-outline-primary">Add new User</a>
+    
 
     <AuthorizeView Roles="Teacher">
         <Authorized>
@@ -31,11 +31,15 @@ else
                     <td scope="row">@student.LastName</td>
                     <td scope="row">@student.Email</td>
                     <td scope="row">
-                        <a href="@($"studentdetails/{student.Id}")" class="btn btn-outline-primary">Details</a>
+                        <a href="@($"userdetails/{student.Id}")" class="btn btn-outline-primary">Details</a>
+
+                        <a href="@($"userupdate/{student.Id}")" class="btn btn-outline-primary">Update</a>
+                        <a href="@($"userdelete/{student.Id}")" class="btn btn-outline-primary">Delete</a>
+                        
                         <AuthorizeView Roles="Teacher">
                             <Authorized>
-                                <a href="@($"studentupdate/{student.Id}")" class="btn btn-outline-primary">Update</a>
-                                <a href="@($"studentdelete/{student.Id}")" class="btn btn-outline-primary">Delete</a>
+                                <a href="@($"userupdate/{student.Id}")" class="btn btn-outline-primary">Update</a>
+                                <a href="@($"userdelete/{student.Id}")" class="btn btn-outline-primary">Delete</a>
                             </Authorized>
                         </AuthorizeView>
                     </td>

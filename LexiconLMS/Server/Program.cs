@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using LexiconLMS.Server.Mappings;
+using System.Text.Json.Serialization;
 
 namespace LexiconLMS;
 public class Program
@@ -30,7 +31,11 @@ public class Program
         builder.Services.AddAuthentication()
             .AddIdentityServerJwt();
 
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+
         builder.Services.AddRazorPages();
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(typeof(ActivitiesMappings));

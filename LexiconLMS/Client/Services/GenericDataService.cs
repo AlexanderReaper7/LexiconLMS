@@ -62,20 +62,27 @@ public class GenericDataService : IGenericDataService
 
     public async Task<bool> UpdateAsync<T>(string path, T objectToUpdate)
     {
-
-        string json = JsonSerializer.Serialize(objectToUpdate);
-
-        var request = new HttpRequestMessage(HttpMethod.Put, path);
-        var httpContent = new StringContent(json, new MediaTypeHeaderValue(Application.Json));
-        request.Content = httpContent;
-
-        var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-
-        if (response.IsSuccessStatusCode)
+        try
         {
-            return true;
+            string json = JsonSerializer.Serialize(objectToUpdate);
+
+            var request = new HttpRequestMessage(HttpMethod.Put, path);
+            var httpContent = new StringContent(json, new MediaTypeHeaderValue(Application.Json));
+            request.Content = httpContent;
+
+            var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
+        catch (Exception ex) {
+            var ex1 = ex.InnerException;
+            return false;
+        }
+        
     }
 
     public async Task<bool> DeleteAsync(string path)
