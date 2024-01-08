@@ -41,7 +41,7 @@ namespace LexiconLMS.Client.Pages
 			try
 			{
 
-				Response.Path = $"api/activitydocuments/{Response.Name}";
+				Response.Path = $"api/documents/{Response.Name}";
 				Response.UploadDate = DateTime.Now;
 				// TODO ActivityDocument.Uploaderrole = 
 				if (await GenericDataService.AddAsync("api/documents", Response))

@@ -26,7 +26,7 @@
 @* 	 <AuthorizeView Roles="Teacher">
           <Authorized> *@
 	<div class="mb-3">
-		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activitydocumentupload/{Activity.Id}");})">Upload Document</button>
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Activity.Id}");})">Upload Document</button>
 		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Activity.Id}");})">Update Activty</button>
 		<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
 	</div>

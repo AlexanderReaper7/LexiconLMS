@@ -60,29 +60,49 @@ namespace LexiconLMS.Server.Controllers
 				return NotFound();
 			}
 
-            var activityresponse = _context.Documents.FirstOrDefault(p => p.ActivityId == id);
+            var activityresponse = await _context.Activities.FirstOrDefaultAsync(p => p.Id == id);
 
-				if (activityresponse != null)
+			if (activityresponse != null)
             {
-                return Ok(activityresponse);
+                document.ActivityId = id;
+                return Ok(document);
             }
 
-			}
-			else
-				var document = await _context.Documents.FindAsync(id);
-
-			if (document == null)
+			var moduleresponse = await _context.Modules.FirstOrDefaultAsync(p => p.Id == id);
+			
+            if (moduleresponse != null)
 			{
-				return NotFound();
+                document.ModuleId = id;
+				return Ok(moduleresponse);
 			}
 
-			return document;
+			var courseresponse = await _context.Documents.FirstOrDefaultAsync(p => p.CourseId == id);
+
+			if (moduleresponse != null)
+			{
+                document.CourseId = id;
+				return Ok(document);
+			}
+		
+                return NotFound();
+	
 		}
 
+        // GET: api/ActivityDocuments from acivity
+        [HttpGet("/activitydocumentsbyactivity/{id}")]
+        public async Task<ActionResult<IEnumerable<Document>>> GetActivityDocuments(Guid id)
+        {
+            if (_context.Documents == null)
+            {
+                return NotFound();
+            }
+            return await _context.Documents.Where(m => m.ActivityId == id).ToListAsync();
+        }
 
-		// PUT: api/Documents/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+
+        // PUT: api/Documents/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutDocument(Guid id, Document document)
         {
             if (id != document.Id)

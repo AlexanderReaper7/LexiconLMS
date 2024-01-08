@@ -50,12 +50,12 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     }
 
 
-    public DbSet<LexiconLMS.Shared.Entities.ActivityDocument> ActivityDocument { get; set; } = default!;
+    //public DbSet<LexiconLMS.Shared.Entities.Document> Documents { get; set; } = default!;
 
 
-    public DbSet<LexiconLMS.Shared.Entities.CourseDocument> CourseDocument { get; set; } = default!;
+    //public DbSet<LexiconLMS.Shared.Entities.CourseDocument> CourseDocument { get; set; } = default!;
 
 
-    public DbSet<LexiconLMS.Shared.Entities.ModuleDocument> ModuleDocument { get; set; } = default!;
+    //public DbSet<LexiconLMS.Shared.Entities.ModuleDocument> ModuleDocument { get; set; } = default!;
 
 }
