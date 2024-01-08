@@ -55,7 +55,7 @@ namespace LexiconLMS.Client.Pages
 				ErrorMessage = "Activity not found";
 				return;
 			}
-			ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}");
+			ActivityDocuments = (await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}?includeStudentsDocuments=false"))!;
 			await base.OnInitializedAsync();
 
 		}

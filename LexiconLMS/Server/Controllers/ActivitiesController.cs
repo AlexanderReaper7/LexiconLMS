@@ -137,7 +137,7 @@ namespace LexiconLMS.Server.Controllers
 			DateTime now = DateTime.Now;
 
             var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
-                .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment")
+                .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment" && a.StartDate <= now)
                 .Select(a => new AssignmentsDtoForStudents
                 {
                     AssignmentId = a.Id,
