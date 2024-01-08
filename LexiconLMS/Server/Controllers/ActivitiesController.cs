@@ -126,8 +126,8 @@ namespace LexiconLMS.Server.Controllers
             return Ok(assignments);
         }
 
-        [HttpGet("modules/{moduleId}/assignments/{studentId}")]
-        public async Task<ActionResult> GetAssignments(Guid moduleId, string studentId)
+        [HttpGet("students/{studentId}/modules/{moduleId}/assignments")]
+        public async Task<ActionResult> GetAssignments(string studentId, Guid moduleId)
         {
             if (_context.Activities == null)
             {
@@ -156,7 +156,7 @@ namespace LexiconLMS.Server.Controllers
         }
 
         [HttpGet("students/{studentId}/assignments/{assignmentId}")]
-        public async Task<ActionResult> GetAssignments(string studentId, Guid assignmentId)
+        public async Task<ActionResult> GetAssignment(string studentId, Guid assignmentId)
         {
             if (_context.Activities == null)
             {

@@ -47,7 +47,7 @@
 		public static string GetModuleDeleteUri<T>(T moduleId) =>  $"/{module}{delete}/{moduleId}";
 		public static string GetModuleDetailsUri<T>(T moduleId)=>  $"/{module}{details}/{moduleId}";
 
-		//Assignment uri
+		//Activity uri
 		public static string GetActivityAddUri<T>(T moduleId) => $"/{activity}{add}/{moduleId}";
 		public static string GetActivityUpdateUri<T>(T activityId) =>  $"/{activity}{update}/{activityId}";
 		public static string GetActivityDeleteUri<T>(T activityId) =>  $"/{activity}{delete}/{activityId}";
@@ -123,7 +123,7 @@
 
 		public static string GetAssignmentsStudentsUri<TModuleId, TStudentId>(TModuleId moduleId, TStudentId studentId)
 		{
-			return $"{ActivitiesBaseUri}modules/{moduleId}/assignments/{studentId}";
+			return $"{ActivitiesBaseUri}students/{studentId}/modules/{moduleId}/assignments";
 		}
         public static string GetAssignmentStudentsUri<TStudentId, TAssignmentId>(TStudentId studentId, TAssignmentId assignmentId)
         {

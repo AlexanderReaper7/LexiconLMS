@@ -22,9 +22,9 @@ namespace LexiconLMS.Client.Components
         public Guid? ModuleId { get; set; }
 
         [Inject]
-        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
-        public IEnumerable<AssignmentsDtoForStudents> Assignments { get; set; } = null;
+        public IEnumerable<AssignmentsDtoForStudents> Assignments { get; set; } = null!;
 
 
         protected override async Task OnInitializedAsync()
@@ -33,13 +33,14 @@ namespace LexiconLMS.Client.Components
             {
                 return;
             }
-            var user2 = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue("sub");
+            string userId = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue("sub")!;
 
-            string username = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.Name!;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return;
+            }
 
-            ApplicationUser user = (await GenericDataService.GetAsync<ApplicationUser>(UriHelper.GetApplicationUserByNameUri(username)))!;
-
-			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssignmentsDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, user.Id)))!;
+			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssignmentsDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, userId)))!;
 
             await base.OnInitializedAsync();
         }

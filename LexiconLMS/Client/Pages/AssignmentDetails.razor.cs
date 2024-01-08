@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Components;
 using LexiconLMS.Client.Helpers;
 using LexiconLMS.Shared.Dtos.ActivitiesDtos;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace LexiconLMS.Client.Pages
@@ -19,10 +22,10 @@ namespace LexiconLMS.Client.Pages
         [Parameter]
         public Guid? ActivityId { get; set; }
 
-        [Inject]
-        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+		[Inject]
+		public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
-        public AssignmentDtoForStudents? Assignment { get; set; } = new AssignmentDtoForStudents();
+        public AssignmentDtoForStudents Assignment { get; set; } = new AssignmentDtoForStudents();
 		public List<Document> ActivityDocuments { get; set; } = new List<Document>();
 		public string ErrorMessage { get; set; } = string.Empty;
 
@@ -37,18 +40,22 @@ namespace LexiconLMS.Client.Pages
 				return;
 			}
 
-            string username = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.Name!;
+            string userId = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue("sub")!;
 
-            ApplicationUser user = (await GenericDataService.GetAsync<ApplicationUser>(UriHelper.GetApplicationUserByNameUri(username)))!;
+            if (string.IsNullOrEmpty(userId))
+            {
+                ErrorMessage = "Current user not available";
+                return;
+            }
 
-            Assignment = (await GenericDataService.GetAsync<AssignmentDtoForStudents>(UriHelper.GetAssignmentStudentsUri(user.Id, ActivityId)))!;
+            Assignment = (await GenericDataService.GetAsync<AssignmentDtoForStudents>(UriHelper.GetAssignmentStudentsUri(userId, ActivityId))) ?? Assignment;
 
             if (Assignment == null)
 			{
 				ErrorMessage = "Activity not found";
 				return;
 			}
-			ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}") ?? ActivityDocuments;
+			ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}");
 			await base.OnInitializedAsync();
 
 		}

@@ -6,8 +6,8 @@
         <tr>
             <th scope="col">Student</th>
             <th scope="col">Assigment</th>
-            <th scope="col">Submitted</th>
-            <th scope="col">Due Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Deadline</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -17,8 +17,8 @@
             @foreach (var activity in Assignments)
             {
                 <tr>
-                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.AssignmentId)">@activity.StudentId</a></td>
-                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
+                    <td scope="row">@* <a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.StudentId)"> *@@activity.StudentName@* </a>*@</td>
+                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
                     <td scope="row">
                         <div class="@activity.SubmissionState.GetCSSClass() text-center text-lowercase">
                             @activity.SubmissionState.AsText()

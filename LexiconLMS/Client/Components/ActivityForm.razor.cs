@@ -41,7 +41,7 @@ public partial class ActivityForm
 		Activity = await GenericDataService.GetAsync<Activity>(UriHelper.GetActivityUri(ActivityId)) ?? Activity;
 		if (Activity == null)
 		{
-			ErrorMessage = "Activity not found";
+			ErrorMessage = EntityName+" not found";
 			return;
 		}
 
@@ -66,7 +66,7 @@ public partial class ActivityForm
 				else
 				{
 
-					ErrorMessage = "Could not add activity";
+					ErrorMessage = "Could not add "+ EntityName.ToLower();
 				}
 			}
 			catch (Exception ex)
@@ -82,11 +82,11 @@ public partial class ActivityForm
 
 				if (await GenericDataService.UpdateAsync(UriHelper.GetActivityUri(ActivityId), Activity))
 				{
-					Message = "Activity saved";
+					Message = EntityName+" saved";
 				}
 				else
 				{
-					ErrorMessage = "Could not update Activity";
+					ErrorMessage = "Could not update "+ EntityName;
 				}
 			}
 			catch (Exception ex)
@@ -110,7 +110,7 @@ public partial class ActivityForm
 			}
 			else
 			{
-				ErrorMessage = "Could not delete Module";
+				ErrorMessage = "Could not delete "+ EntityName;
 			}
 		}
 		catch (Exception ex)

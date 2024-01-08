@@ -16,7 +16,6 @@ namespace LexiconLMS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = StaticUserRoles.Teacher)]
     public class CoursesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -34,7 +33,6 @@ namespace LexiconLMS.Server.Controllers
             {
                 return NotFound();
             }
-            var user = User;
 
             return await _context.Courses.ToListAsync();
         }
