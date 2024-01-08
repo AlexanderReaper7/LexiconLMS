@@ -14,19 +14,19 @@ using LexiconLMS.Shared.Dtos;
 namespace LexiconLMS;
 public class Program
 {
-    public static async Task Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+	public static async Task Main(string[] args)
+	{
+		var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+		// Add services to the container.
+		var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+		builder.Services.AddDbContext<ApplicationDbContext>(options =>
+			options.UseSqlServer(connectionString));
+		builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+		builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			.AddRoles<IdentityRole>()
+			.AddEntityFrameworkStores<ApplicationDbContext>();
 
         //Works without builder.Services.AddAuthentication().AddIdentityServerJwt()
         builder.Services.AddIdentityServer()
@@ -58,47 +58,48 @@ public class Program
         //    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
         //});
 
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddRazorPages();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddAutoMapper(typeof(ActivitiesMappings));
+		builder.Services.AddControllersWithViews();
+		builder.Services.AddRazorPages();
+		builder.Services.AddSwaggerGen();
+		builder.Services.AddAutoMapper(typeof(ActivitiesMappings));
 
-        var app = builder.Build();
+		var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseMigrationsEndPoint();
-            app.UseWebAssemblyDebugging();
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            // ----------------------------------------
-            // NOTE: Uncomment the following line to delete the database each time on startup
-            // Leave this commented out when committing to git
-            // ----------------------------------------
-            await app.SeedDataAsync();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-        }
+		// Configure the HTTP request pipeline.
+		if (app.Environment.IsDevelopment())
+		{
+			app.UseMigrationsEndPoint();
+			app.UseWebAssemblyDebugging();
+			app.UseSwagger();
+			app.UseSwaggerUI();
+			// ----------------------------------------
+			// NOTE: Uncomment the following line to delete the database each time on startup
+			// Leave this commented out when committing to git
+			// ----------------------------------------
+			await app.SeedDataAsync();
+		}
+		else
+		{
+			app.UseExceptionHandler("/Error");
+			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+			app.UseHsts();
+		}
 
-        app.UseHttpsRedirection();
+		app.UseHttpsRedirection();
 
-        app.UseBlazorFrameworkFiles();
-        app.UseStaticFiles();
+		app.UseBlazorFrameworkFiles();
+		app.UseStaticFiles();
 
-        app.UseRouting();
+		app.UseRouting();
 
-        app.UseIdentityServer();
-        app.UseAuthorization();
+		app.UseIdentityServer();
+		app.UseAuthorization();
 
-        app.MapRazorPages();
-        app.MapControllers();
-        app.MapFallbackToFile("index.html");
 
-        app.Run();
-    }
+		app.MapRazorPages();
+		app.MapControllers();
+		app.MapFallbackToFile("index.html");
+
+		app.Run();
+	}
 }

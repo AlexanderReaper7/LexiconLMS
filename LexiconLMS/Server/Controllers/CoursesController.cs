@@ -8,9 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
-using LexiconLMS.Shared.Dtos;
-using NuGet.DependencyResolver;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace LexiconLMS.Server.Controllers
 {
