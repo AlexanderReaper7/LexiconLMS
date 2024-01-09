@@ -35,19 +35,17 @@ namespace LexiconLMS.Client.Pages
 		private async Task HandleValidSubmit()
 		{
 			// Sets Íd to Correct FK
-			Response = await GenericDataService.GetAsync<Document>($"documentsetfk/{Id}") ?? Response;
-			
+			Response = await GenericDataService.GetAsync<Document>($"documentsetfk/{Id}") ?? Response;			
 			Response.Description = Document.Description;
 			Response.Name = Document.Name;
 			try
 			{
-
 				Response.Path = $"api/documents/{Response.Name}";
 				Response.UploadDate = DateTime.Now;
 				// TODO ActivityDocument.Uploaderrole = 
 				if (await GenericDataService.AddAsync("api/documents", Response))
 				{
-					NavigationManager.NavigateTo(UriHelper.GetActivityDetailsUri(Id));
+					NavigationManager.NavigateTo("/listofcourses");
 				}
 				else
 				{
