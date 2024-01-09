@@ -2,6 +2,7 @@
 using LexiconLMS.Shared.Dtos;
 using LexiconLMS.Shared.Dtos.ApplicationUserDtos;
 using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,7 @@ namespace LexiconLMS.Server.Controllers
 
         // POST: api/ApplicationUsers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPost("/applicationuser")]
         public async Task<ActionResult<ApplicationUserDtoAdd>> PostApplicationUserDto(ApplicationUserDtoAdd ApplicationUserDto)
         {
@@ -107,7 +109,7 @@ namespace LexiconLMS.Server.Controllers
             return applicationUserDto;
         }
 
-        
+        [Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateApplicationUser(Guid id, ApplicationUserDtoUpdate updatedUser)
         {
@@ -137,6 +139,7 @@ namespace LexiconLMS.Server.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteApplicationUser(Guid id)
         {

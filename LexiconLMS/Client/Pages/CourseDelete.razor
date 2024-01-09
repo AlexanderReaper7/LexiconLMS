@@ -1,5 +1,4 @@
-﻿
-@page "/coursedelete/{CourseId}"
+﻿@attribute [Route(UriHelper.CourseDelete)]
 @using Microsoft.AspNetCore.Authorization
 
 @* @attribute [Authorize(Roles = "Teacher")] *@
@@ -26,7 +25,7 @@
         </tr>
     </tbody>
 </table>
-<a href="@($"listofcourses")" class="btn btn-outline-primary">Back to Course list</a>
+<a href="@UriHelper.GetCourseListUri()" class="btn btn-outline-primary">Back to Course list</a>
 
 <AuthorizeView Roles="Teacher">
     <Authorized>

@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using LexiconLMS.Client.Services;
 using LexiconLMS.Shared.Entities;
+using LexiconLMS.Client.Helpers;
 
 namespace LexiconLMS.Client.Pages
 {
@@ -36,7 +37,7 @@ namespace LexiconLMS.Client.Pages
         protected async Task Delete()
         {
             if (await CourseDataService.DeleteCourse(Course.Id))
-                NavigationManager.NavigateTo($"listofcourses");
+                NavigationManager.NavigateTo(UriHelper.GetCourseListUri());
         }
                 
     }

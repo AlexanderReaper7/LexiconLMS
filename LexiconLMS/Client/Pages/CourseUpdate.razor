@@ -1,4 +1,4 @@
-﻿@page "/courseupdate/{CourseId}"
+﻿@attribute [Route(UriHelper.CourseUpdate)]
 
 @using Microsoft.AspNetCore.Authorization
 
@@ -40,6 +40,6 @@
             </tr>
         </tbody>
     </table>
-    <a href="@($"listofcourses")" class="btn btn-outline-primary">Back to Course list</a>&nbsp;
+    <a href="@UriHelper.GetCourseListUri()" class="btn btn-outline-primary">Back to Course list</a>&nbsp;
     <button type="submit" class="btn btn-primary me-1">Save Course</button>
 </EditForm>

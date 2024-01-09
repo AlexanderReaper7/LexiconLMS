@@ -1,12 +1,57 @@
-﻿@page "/course/{CourseId}"
+﻿@attribute [Route(UriHelper.CourseDetails)]
 @using LexiconLMS.Shared.Entities
 @using Microsoft.EntityFrameworkCore
 @using LexiconLMS.Client.Services
 @using LexiconLMS.Client.Helpers
+@using Microsoft.AspNetCore.Authorization
 
 <h3>Course Details</h3>
 
-<ActivitiesSchedule/>
-<ModulesList List="Modules"/>
-<StudentList StudentLst="Students" Course="Course" />
+<div class="row">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Modules</div>
+			<div class="card-body">
+				<ModulesList List="Modules" />
+			</div>
+		</div>
+	</div>
+
+    <div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Documents</div>
+			<div class="card-body">
+				<DocumentList List="CourseDocuments"></DocumentList>
+			</div>
+			<div class="card-footer">
+				<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"coursedocumentupload/{Course.Id}");})">Upload Document</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Activities</div>
+			<div class="card-body">
+				<ActivitiesSchedule />
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Students</div>
+			<div class="card-body">
+				<StudentList StudentLst="Students" Course="Course" />
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+</div>
 

@@ -99,3 +99,12 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+.hidden-link {
+    text-decoration: none;
+    color: black;
+}
+
+.hidden-link:hover{
+    text-decoration: underline;
+}

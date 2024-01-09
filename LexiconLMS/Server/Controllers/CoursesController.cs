@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -29,6 +30,7 @@ namespace LexiconLMS.Server.Controllers
             {
                 return NotFound();
             }
+
             return await _context.Courses.ToListAsync();
         }
 
@@ -52,6 +54,7 @@ namespace LexiconLMS.Server.Controllers
 
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCourse(Guid id, Course course)
         {
@@ -84,6 +87,7 @@ namespace LexiconLMS.Server.Controllers
 
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
@@ -98,6 +102,7 @@ namespace LexiconLMS.Server.Controllers
         }
 
         // DELETE: api/Courses/5
+        [Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(Guid id)
         {

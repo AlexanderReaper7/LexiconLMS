@@ -1,10 +1,11 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
+﻿using Azure;
+using Duende.IdentityServer.EntityFramework.Options;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
 
 namespace LexiconLMS.Server.Data;
 public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
@@ -19,6 +20,8 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<ActivityType> ActivityTypes { get; set; } = null!;
     public DbSet<Course> Courses { get; set; } = null!;
     public DbSet<Module> Modules { get; set; } = null!;
+    public DbSet<Document> Documents { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,7 +35,27 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
        .WithOne(e => e.Course)
        .OnDelete(DeleteBehavior.SetNull);
 
+        modelBuilder.Entity<IdentityRole>(b =>
+        {
+            b.HasMany<ApplicationUser>()
+            .WithMany(u => u.Roles)
+            .UsingEntity<IdentityUserRole<string>>(
+                l => l.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId").HasPrincipalKey(nameof(ApplicationUser.Id)),
+                r => r.HasOne<IdentityRole>().WithMany().HasForeignKey("RoleId").HasPrincipalKey(nameof(IdentityRole.Id)),
+                j => j.HasKey("RoleId", "UserId")
+                );
+        });
+
         base.OnModelCreating(modelBuilder);
     }
+
+
+    public DbSet<LexiconLMS.Shared.Entities.ActivityDocument> ActivityDocument { get; set; } = default!;
+
+
+    public DbSet<LexiconLMS.Shared.Entities.CourseDocument> CourseDocument { get; set; } = default!;
+
+
+    public DbSet<LexiconLMS.Shared.Entities.ModuleDocument> ModuleDocument { get; set; } = default!;
 
 }

@@ -4,9 +4,12 @@ using static System.Net.WebRequestMethods;
 using System.Text.Json;
 using LexiconLMS.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Shared.Dtos;
 
 namespace LexiconLMS.Client.Components
 {
+    [Authorize(Roles = "Teacher,Student")]
     public partial class CourseList
     {
         [Inject]

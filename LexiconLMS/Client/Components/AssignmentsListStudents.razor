@@ -1,0 +1,31 @@
+﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Entities
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Assigment</th>
+            <th>Status</th>
+            <th>Deadline</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Assignments != null)
+        {
+            @foreach (var activity in Assignments)
+            {
+                <tr>
+                    <td><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
+                    <td>
+                        <div class="@activity.SubmissionState.GetCSSClass() text-center text-lowercase">
+                            @activity.SubmissionState.AsText()
+                        </div>
+                    </td>
+                    <td>@activity.DueDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

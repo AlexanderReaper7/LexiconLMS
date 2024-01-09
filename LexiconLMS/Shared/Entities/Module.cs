@@ -10,4 +10,5 @@ public class Module
     public Guid? CourseId { get; set; }
     public Course? Course { get; set; }
     public ICollection<Activity>? Activities { get; set; }
+    public ICollection<ModuleDocument>? ModuleDocuments { get; set; }
 }

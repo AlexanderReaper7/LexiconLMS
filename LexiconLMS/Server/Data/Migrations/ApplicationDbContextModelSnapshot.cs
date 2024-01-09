@@ -310,6 +310,45 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.Document", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UploaderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UploaderId");
+
+                    b.ToTable("Documents");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Document");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
                 {
                     b.Property<Guid>("Id")
@@ -477,6 +516,42 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.ActivityDocument", b =>
+                {
+                    b.HasBaseType("LexiconLMS.Shared.Entities.Document");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasDiscriminator().HasValue("ActivityDocument");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.CourseDocument", b =>
+                {
+                    b.HasBaseType("LexiconLMS.Shared.Entities.Document");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasDiscriminator().HasValue("CourseDocument");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.ModuleDocument", b =>
+                {
+                    b.HasBaseType("LexiconLMS.Shared.Entities.Document");
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("ModuleId");
+
+                    b.HasDiscriminator().HasValue("ModuleDocument");
+                });
+
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Activity", b =>
                 {
                     b.HasOne("LexiconLMS.Shared.Entities.Module", "Module")
@@ -504,6 +579,15 @@ namespace LexiconLMS.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.Document", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.ApplicationUser", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId");
+
+                    b.Navigation("Uploader");
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
@@ -567,8 +651,42 @@ namespace LexiconLMS.Server.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.ActivityDocument", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.Activity", null)
+                        .WithMany("ActivityDocument")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.CourseDocument", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.Course", null)
+                        .WithMany("CourseDocuments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.ModuleDocument", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.Module", null)
+                        .WithMany("ModuleDocuments")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.Activity", b =>
+                {
+                    b.Navigation("ActivityDocument");
+                });
+
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Course", b =>
                 {
+                    b.Navigation("CourseDocuments");
+
                     b.Navigation("Modules");
 
                     b.Navigation("Users");
@@ -577,6 +695,8 @@ namespace LexiconLMS.Server.Data.Migrations
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
                 {
                     b.Navigation("Activities");
+
+                    b.Navigation("ModuleDocuments");
                 });
 #pragma warning restore 612, 618
         }

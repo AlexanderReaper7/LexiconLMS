@@ -1,0 +1,90 @@
+﻿@using LexiconLMS.Shared.Dtos
+@attribute [Route(UriHelper.ModuleDetails)]
+
+<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(Module.CourseId)))">To course</button>
+
+<div class="d-flex justify-content-between flex-wrap">
+
+	@if (string.IsNullOrEmpty(Module.Name))
+	{
+		<h3>Module details</h3>
+	}
+	else
+	{
+		<div>
+			<h3>@Module.Name</h3>
+			<p class="fs-6 text-muted">@Module.StartDate.ToShortDateString() − @Module.EndDate.ToShortDateString()</p>
+		</div>
+	}
+
+	<div class="mb-3">
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"moduledocumentupload/{Module.Id}");})">Upload Document</button>
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleUpdateUri(Module.Id));})">Update module</button>
+		<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleDeleteUri(Module.Id));})">Delete module</button>
+	</div>
+
+</div>
+
+
+<div class="card bg-light mb-3 shadow-sm">
+	<div class="card-body">
+		<div class="card-title fw-bold">Description</div>
+		@Module.Description
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Activities:</div>
+			<div class="card-body">
+				@* type="button" data-bs-toggle="modal" data-bs-target="#addActivity" *@
+				<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetActivityAddUri(Module.Id));})">Add activity</button>
+				<div class="overflow-auto" style="max-height: 400px;">
+					<ActivityList ActivityLst="Activities"></ActivityList>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 400px;">
+				<DocumentList List="ModuleDocuments"></DocumentList>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row flex-row-reverse">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Assignments:</div>
+			<div class="card-body overflow-auto" style="max-height: 400px;">
+				@if (Module.CourseId != null)
+				{
+					<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
+						<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentAddUri(Module.Id));})">Add assignment</button>
+						<AssignmentsListTeachers CourseId="Module.CourseId" ModuleId="Module.Id"></AssignmentsListTeachers>
+					</AuthorizeView>
+					<AuthorizeView Roles="@StaticUserRoles.Student.ToString()">
+						<AssignmentsListStudents ModuleId="Module.Id"></AssignmentsListStudents>
+					</AuthorizeView>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+@* <div class="modal fade" id="addActivity" tabindex="-1" aria-labelledby="Add Activity" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="d-flex flex-row-reverse">
+				<button type="button" class="btn-close mt-3 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<ActivityAdd></ActivityAdd>
+			</div>
+		</div>
+	</div>
+</div> *@

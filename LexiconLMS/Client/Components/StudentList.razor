@@ -31,15 +31,12 @@ else
                     <td scope="row">@student.LastName</td>
                     <td scope="row">@student.Email</td>
                     <td scope="row">
-                        <a href="@($"userdetails/{student.Id}")" class="btn btn-outline-primary">Details</a>
-
-                        <a href="@($"userupdate/{student.Id}")" class="btn btn-outline-primary">Update</a>
-                        <a href="@($"userdelete/{student.Id}")" class="btn btn-outline-primary">Delete</a>
+                        <a href="@($"userdetails/{student.Id}")" class="btn"><span class="text-dark oi oi-external-link"></span></a>
                         
                         <AuthorizeView Roles="Teacher">
                             <Authorized>
-                                <a href="@($"userupdate/{student.Id}")" class="btn btn-outline-primary">Update</a>
-                                <a href="@($"userdelete/{student.Id}")" class="btn btn-outline-primary">Delete</a>
+                                <a href="@($"userupdate/{student.Id}")" class="btn"><span class="text-dark oi oi-pencil"></span></a>
+                                <a href="@($"userdelete/{student.Id}")" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
                             </Authorized>
                         </AuthorizeView>
                     </td>
