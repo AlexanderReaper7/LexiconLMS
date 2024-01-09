@@ -1,11 +1,13 @@
-﻿@using LexiconLMS.Shared.Entities;
+﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Entities;
 
 <table class="table">
     <thead>
         <tr>
             <th scope="col">Student</th>
             <th scope="col">Assigment</th>
-            <th scope="col">Submitted</th>
+            <th scope="col">Status</th>
+            <th scope="col">Deadline</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -15,14 +17,24 @@
             @foreach (var activity in Assignments)
             {
                 <tr>
-                    <td scope="row">@activity.StudentName</td>
-                    <td scope="row">@activity.AssignmentName</td>
+                    <td scope="row">@* <a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.StudentId)"> *@@activity.StudentName@* </a>*@</td>
+                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
                     <td scope="row">
-                        <div class="@GetStatusCSSClass(activity.SubmissionState) text-center text-lowercase">
+                        <div class="@activity.SubmissionState.GetCSSClass() text-center text-lowercase">
                             @activity.SubmissionState.AsText()
                         </div>
                     </td>
                     <td scope="row">@activity.DueDate</td>
+                    <td scope="row">
+                        <div class="d-flex">
+                            <AuthorizeView Roles="Teacher">
+                                <Authorized>
+                                    <a href="@UriHelper.GetAssignmentUpdateUri(activity.AssignmentId)" class="btn"><span class="text-dark oi oi-pencil"></span></a>
+                                    <a href="@UriHelper.GetActivityDeleteUri(activity.AssignmentId)" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
+                                </Authorized>
+                            </AuthorizeView>
+                        </div>
+                    </td>
                 </tr>
             }
         }

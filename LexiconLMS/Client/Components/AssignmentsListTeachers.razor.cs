@@ -5,6 +5,7 @@ using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace LexiconLMS.Client.Components
 {
@@ -23,7 +24,6 @@ namespace LexiconLMS.Client.Components
         [Parameter]
         [EditorRequired]
         public Guid? CourseId { get; set; }
-
         public IEnumerable<AssigmentDtoForTeachers> Assignments { get; set; } = null;
 
 
@@ -33,22 +33,9 @@ namespace LexiconLMS.Client.Components
             {
                 return;
             }
-            
-			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssigmentDtoForTeachers>>(UriHelper.GetAssignmentsTeachersUri(CourseId, ModuleId)))!;
+            Assignments = (await GenericDataService.GetAsync<IEnumerable<AssigmentDtoForTeachers>>(UriHelper.GetAssignmentsTeachersUri(CourseId, ModuleId)))!;
 
             await base.OnInitializedAsync();
-        }
-
-        private string GetStatusCSSClass(SubmissionState status)
-        {
-            return status switch
-            {
-                SubmissionState.Submitted => "alert-success",
-                SubmissionState.NotSubmitted => "alert-warning",
-                SubmissionState.Late => "alert-danger",
-                SubmissionState.SubmittedLate => "alert-info",
-                _ => ""
-            };
         }
     }
 }

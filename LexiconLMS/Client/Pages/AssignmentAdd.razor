@@ -1,0 +1,8 @@
+﻿@attribute [Route(UriHelper.AssignmentAdd)]
+
+<ActivityForm OnlyAssignments="true" ModuleId="ModuleId"></ActivityForm>
+
+@code {
+	[Parameter]
+	public Guid ModuleId { get; set; }
+}

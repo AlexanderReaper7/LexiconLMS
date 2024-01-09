@@ -23,11 +23,11 @@ else
             <td scope="row">@module.StartDate</td>
             <td scope="row">@module.EndDate</td>
             <td scope="row">
-                <a href="@UriHelper.GetModuleDetailsUri(module.Id)" class="btn btn-outline-primary">Details</a>
+                        <a href="@UriHelper.GetModuleDetailsUri(module.Id)" class="btn"><span class="text-dark oi oi-external-link"></span></a>
                 <AuthorizeView Roles="Teacher">
                     <Authorized>
-                        <a href="@UriHelper.GetModuleUpdateUri(module.Id)" class="btn btn-outline-primary">Update</a>
-                        <a href="@UriHelper.GetModuleDeleteUri(module.Id)" class="btn btn-outline-primary">Delete</a>
+                                <a href="@UriHelper.GetModuleUpdateUri(module.Id)" class="btn"><span class="text-dark oi oi-pencil"></span></a>
+                                <a href="@UriHelper.GetModuleDeleteUri(module.Id)" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
                     </Authorized>
                 </AuthorizeView>
             </td>

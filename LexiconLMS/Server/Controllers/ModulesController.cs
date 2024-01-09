@@ -63,7 +63,7 @@ namespace LexiconLMS.Server.Controllers
 
 			if (includeActivities)
 			{
-			//	query = query.Include(m => m.Assignments)!.ThenInclude(a => a.Type);
+			//	query = query.Include(m => m.Assignment)!.ThenInclude(a => a.Type);
 			}
 			var @module = await query.FirstOrDefaultAsync(m=> m.Id == id);
 

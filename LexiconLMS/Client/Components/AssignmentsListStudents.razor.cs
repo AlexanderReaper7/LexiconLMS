@@ -5,6 +5,7 @@ using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace LexiconLMS.Client.Components
 {
@@ -21,9 +22,9 @@ namespace LexiconLMS.Client.Components
         public Guid? ModuleId { get; set; }
 
         [Inject]
-        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
-        public IEnumerable<AssigmentDtoForStudents> Assignments { get; set; } = null;
+        public IEnumerable<AssignmentsDtoForStudents> Assignments { get; set; } = null!;
 
 
         protected override async Task OnInitializedAsync()
@@ -32,25 +33,16 @@ namespace LexiconLMS.Client.Components
             {
                 return;
             }
-			string username = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.Name!;
+            string userId = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue("sub")!;
 
-            ApplicationUser user = (await GenericDataService.GetAsync<ApplicationUser>(UriHelper.GetApplicationUserByNameUri(username)))!;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return;
+            }
 
-			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssigmentDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, user.Id)))!;
+			Assignments = (await GenericDataService.GetAsync<IEnumerable<AssignmentsDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, userId)))!;
 
             await base.OnInitializedAsync();
-        }
-
-        private string GetStatusCSSClass(SubmissionState status)
-        {
-            return status switch
-            {
-                SubmissionState.Submitted => "alert-success",
-                SubmissionState.NotSubmitted => "alert-warning",
-                SubmissionState.Late => "alert-danger",
-                SubmissionState.SubmittedLate => "alert-info",
-                _ => ""
-            };
         }
     }
 }

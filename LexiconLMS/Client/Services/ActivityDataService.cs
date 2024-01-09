@@ -81,7 +81,7 @@ namespace LexiconLMS.Client.Services
                     PropertyNameCaseInsensitive = true,
                 };
 
-              //  return (List<Activity>)JsonSerializer.Deserialize<IEnumerable<Activity>>(responseData, options);
+              //  return (List<Assignment>)JsonSerializer.Deserialize<IEnumerable<Assignment>>(responseData, options);
                 return JsonSerializer.Deserialize<List<Activity>>(responseData, options)!;
             }
             else

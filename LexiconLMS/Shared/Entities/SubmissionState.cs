@@ -15,18 +15,5 @@ namespace LexiconLMS.Shared.Entities
 		SubmittedLate
 	}
 
-	public static class SubmissionStateExtensions
-	{
-		public static string AsText(this SubmissionState s)
-		{
-			return s switch
-			{
-				SubmissionState.Submitted => "Submitted",
-				SubmissionState.NotSubmitted => "Not submitted",
-				SubmissionState.Late => "Late",
-				SubmissionState.SubmittedLate => "Submitted late",
-				_ => "",
-			};
-		}
-	}
+	
 }

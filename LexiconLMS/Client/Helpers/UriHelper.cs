@@ -6,6 +6,7 @@
         private const string course = "course";
         private const string module = "module";
         private const string activity = "activity";
+		private const string assignment = "assignment";
 		private const string add = "add";
 		private const string update = "update";
 		private const string delete = "delete";
@@ -29,6 +30,10 @@
 		public const string ActivityAdd = $"/{activity}{add}/{{moduleId:guid}}";
 		public const string ActivityDelete = $"/{activity}{delete}/{{activityId:guid}}";
 
+		public const string AssignmentDetails = $"/{assignment}{details}/{{activityId:guid}}";
+		public const string AssignmentUpdate = $"/{assignment}{update}/{{activityId:guid}}";
+		public const string AssignmentAdd = $"/{assignment}{add}/{{moduleId:guid}}";
+
 		//Course uri
 		public static string GetCourseAddUri() =>  CourseAdd;
         public static string GetCourseUpdateUri<T>(T courseId) =>  $"/{course}{update}/{courseId}";
@@ -48,6 +53,11 @@
 		public static string GetActivityDeleteUri<T>(T activityId) =>  $"/{activity}{delete}/{activityId}";
 		public static string GetActivityDetailsUri<T>(T activityId)=>  $"/{activity}{details}/{activityId}";
 		public static string GetActivityListUri()=>  ActivityList;
+		
+		//Assignment uri
+		public static string GetAssignmentAddUri<T>(T moduleId) => $"/{assignment}{add}/{moduleId}";
+		public static string GetAssignmentUpdateUri<T>(T assignmentId) =>  $"/{assignment}{update}/{assignmentId}";
+		public static string GetAssignmentDetailsUri<T>(T assignmentId) => $"/{assignment}{details}/{assignmentId}";
         #endregion
 
         #region API's URIs
@@ -113,10 +123,16 @@
 
 		public static string GetAssignmentsStudentsUri<TModuleId, TStudentId>(TModuleId moduleId, TStudentId studentId)
 		{
-			return $"{ActivitiesBaseUri}modules/{moduleId}/assignments/{studentId}";
+			return $"{ActivitiesBaseUri}students/{studentId}/modules/{moduleId}/assignments";
 		}
+        public static string GetAssignmentStudentsUri<TStudentId, TAssignmentId>(TStudentId studentId, TAssignmentId assignmentId)
+        {
+			var s = $"{ActivitiesBaseUri}students/{studentId}/assignments/{assignmentId}";
 
-		public static string CoursesBaseUri => "api/Courses/";
+			return s;
+        }
+
+        public static string CoursesBaseUri => "api/Courses/";
 
 		public static string GetCourseUri<T>(T courseId)
 		{

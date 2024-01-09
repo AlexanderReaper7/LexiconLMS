@@ -38,7 +38,7 @@ namespace LexiconLMS.Client.Pages
                 Course = await CourseDataService.GetCourse(Guid.Parse(CourseId));
                 Modules = await ModuleDataService.GetModulesByCourseId(Guid.Parse(CourseId));
                 Students = await ApplicationUserDataService.GetStudentsByCourseId(Guid.Parse(CourseId));
-				CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{CourseId}") ?? CourseDocuments;
+				//CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{CourseId}") ?? CourseDocuments;
 			}
             
             await base.OnInitializedAsync();

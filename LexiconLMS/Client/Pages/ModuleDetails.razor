@@ -63,10 +63,11 @@
 			<div class="card-body overflow-auto" style="max-height: 400px;">
 				@if (Module.CourseId != null)
 				{
-					<AuthorizeView Roles="@StaticUserRoles.Teacher">
+					<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
+						<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentAddUri(Module.Id));})">Add assignment</button>
 						<AssignmentsListTeachers CourseId="Module.CourseId" ModuleId="Module.Id"></AssignmentsListTeachers>
 					</AuthorizeView>
-					<AuthorizeView Roles="@StaticUserRoles.Student">
+					<AuthorizeView Roles="@StaticUserRoles.Student.ToString()">
 						<AssignmentsListStudents ModuleId="Module.Id"></AssignmentsListStudents>
 					</AuthorizeView>
 				}

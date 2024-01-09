@@ -10,6 +10,8 @@
     <Compile Remove="Services\IDeviceDataService.cs" />
   </ItemGroup>
 
+  
+
   <ItemGroup>
     <None Remove="Components\NewFile.txt" />
     <None Remove="Pages\NewFile.txt" />
@@ -26,5 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Shared\LexiconLMS.Shared.csproj" />
   </ItemGroup>
+
+  
 
 </Project>
