@@ -9,37 +9,56 @@ namespace LexiconLMS.Client.Pages
     public partial class CourseDetails
     {
         [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
+        public required NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        public ICourseDataService? CourseDataService { get; set; }
+        public required ICourseDataService CourseDataService { get; set; }
 
         [Inject]
-        public IModuleDataService? ModuleDataService { get; set; }
+        public required IModuleDataService ModuleDataService { get; set; }
 		
         [Inject]
-		public IGenericDataService GenericDataService { get; set; } = default!;
+		public required IGenericDataService GenericDataService { get; set; }
 
 		[Inject]
-        public IApplicationUserDataService? ApplicationUserDataService { get; set; }
+        public required IApplicationUserDataService ApplicationUserDataService { get; set; }
 
         [Parameter]
         public string? CourseId { get; set; }
 
-        public Course Course { get; set; }
-        public List<Module> Modules { get; set; }
-		public List<Document> CourseDocuments { get; set; } = new List<Document>();
+        public Course Course { get; set; } = default!;
+        public List<Module> Modules { get; set; } = default!;
+		public List<Document> CourseDocuments { get; set; } = default!;
 
-		public List<ApplicationUser> Students { get; set; }
+		public required List<ApplicationUser> Students { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            if (!string.IsNullOrEmpty(CourseId))
+            Guid courseId;
+            if (string.IsNullOrEmpty(CourseId))
             {
-                Course = await CourseDataService.GetCourse(Guid.Parse(CourseId));
-                Modules = await ModuleDataService.GetModulesByCourseId(Guid.Parse(CourseId));
-                Students = await ApplicationUserDataService.GetStudentsByCourseId(Guid.Parse(CourseId));
-				CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{CourseId}") ?? CourseDocuments;
+                // If no course id is provided, use the logged in user's course
+                Course = await CourseDataService.GetMyCourse();
+                CourseId = Course.Id.ToString();
+                courseId = Course.Id;
+            }
+            else
+            {
+                // If a course id is provided, try to use it and if it failed, show not found.
+                try
+                {
+                    courseId = Guid.Parse(CourseId);
+                }
+                catch (Exception)
+                {
+                    // not found
+                    throw new NotImplementedException();
+                    return;
+                }
+                Course = await CourseDataService.GetCourse(courseId);
 			}
+            Modules = await ModuleDataService.GetModulesByCourseId(courseId);
+            Students = await ApplicationUserDataService.GetStudentsByCourseId(courseId);
+			CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{courseId}") ?? new List<Document>();
             
             await base.OnInitializedAsync();
         }

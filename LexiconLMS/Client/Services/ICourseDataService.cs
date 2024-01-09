@@ -7,6 +7,7 @@ namespace LexiconLMS.Client.Services
         Task<List<Course>> GetCourses();
 
         Task<Course> GetCourse(Guid Id);
+        Task<Course> GetMyCourse();
 
         Task<bool> DeleteCourse(Guid Id);
 
