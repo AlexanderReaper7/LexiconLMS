@@ -33,6 +33,11 @@ namespace LexiconLMS.Client.Services
             return await _GService.GetAsync<Course>(UriHelper.GetCourseUri(Id));
         }
 
+        public async Task<Course> GetMyCourse()
+        {
+            return await _GService.GetAsync<Course>(UriHelper.GetMyCourseUri());
+        }
+
         public async Task<List<Course>> GetCourses()
         {
             return await _GService.GetAsync<List<Course>>(UriHelper.GetCoursesUri());
