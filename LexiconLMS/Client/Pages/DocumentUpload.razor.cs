@@ -8,16 +8,23 @@ using static System.Net.WebRequestMethods;
 using LexiconLMS.Client.Helpers;
 using System.Reflection;
 using System.Net.Security;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace LexiconLMS.Client.Pages
 {
 	public partial class DocumentUpload
 	{
+		
+
 		[Inject]
 		NavigationManager NavigationManager { get; set; }
 
 		[Inject]
 		public IGenericDataService GenericDataService { get; set; } = default!;
+
+		[Inject]
+		AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
 		[Parameter]
 		public Guid Id { get; set; }
 		public Document Document { get; set; } = new Document();
@@ -25,10 +32,20 @@ namespace LexiconLMS.Client.Pages
 		public Document Response { get; set; } = new Document();
 
 		public string ErrorMessage { get; set; }
+		private string userRole { get; set; }
 
-		protected override void OnInitialized()
+		protected override async Task OnInitializedAsync()
 		{
-			base.OnInitialized();
+			var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+			var user = authenticationState.User;
+			if (user.Identity.IsAuthenticated)
+			{
+				// Get user role
+				userRole = user.FindFirst("role")?.Value;
+			}
+
+
+			await base.OnInitializedAsync();
 
 		}
 
@@ -42,7 +59,7 @@ namespace LexiconLMS.Client.Pages
 			{
 				Response.Path = $"api/documents/{Response.Name}";
 				Response.UploadDate = DateTime.Now;
-				// TODO ActivityDocument.Uploaderrole = 
+				Response.RoleOfUploader = userRole;
 				if (await GenericDataService.AddAsync("api/documents", Response))
 				{
 					NavigationManager.NavigateTo("/listofcourses");
