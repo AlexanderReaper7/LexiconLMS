@@ -1,0 +1,65 @@
+﻿@attribute [Route(UriHelper.ModuleDelete)]
+
+
+<section class="card p-3">
+
+	@if (!string.IsNullOrEmpty(ErrorMessage))
+	{
+		<p class="alert alert-danger">@ErrorMessage</p>
+	}
+	else if (!string.IsNullOrEmpty(Message))
+	{
+		<p class="alert alert-success">@Message</p>
+	}
+	<div>
+		<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(Module.CourseId)))">To course</button>
+	</div>
+	<h5>Are you sure that you want to delete this Module?</h5>
+	<hr />
+
+	<div class="d-lg-table col-lg-8">
+		<div class="row d-lg-table-row mb-3 mb-lg-0">
+			<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+				<p class="fw-bold">Name: </p>
+			</div>
+			<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+				<p>@Module.Name</p>
+			</div>
+		</div>
+
+		<div class="row d-lg-table-row mb-3 mb-lg-0">
+			<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+				<p class="fw-bold">Description: </p>
+			</div>
+			<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+				<p>@Module.Description</p>
+			</div>
+		</div>
+
+		<div class="row d-lg-table-row mb-3 mb-lg-0">
+			<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+				<p class="fw-bold">Start date: </p>
+			</div>
+			<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+				<p>@Module.StartDate</p>
+			</div>
+		</div>
+
+		<div class="row d-lg-table-row mb-3 mb-lg-0">
+			<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
+				<p class="fw-bold">End date: </p>
+			</div>
+			<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
+				<p>@Module.EndDate</p>
+			</div>
+		</div>
+	</div>
+	<div>
+		<button type="button" class="btn btn-danger" @onclick="@DeleteModule">
+			Delete
+		</button>
+		<button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Module.Id)))">Module details</button>
+	</div>
+</section>
+
+

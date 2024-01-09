@@ -11,6 +11,11 @@ public static class DbInitializerExtension
         var serviceProvider = scope.ServiceProvider;
         var db = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
+		if (await db.Database.CanConnectAsync() && await db.Courses.AnyAsync())
+        {
+            return;
+        }
+
         // Delete the database if it exists
         await db.Database.EnsureDeletedAsync();
 

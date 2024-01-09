@@ -1,4 +1,5 @@
 using LexiconLMS.Client;
+using LexiconLMS.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -19,6 +20,13 @@ public class Program
         builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("LexiconLMS.ServerAPI"));
 
         builder.Services.AddApiAuthorization();
+
+
+        builder.Services.AddScoped<ICourseDataService, CourseDataService>();
+        builder.Services.AddScoped<IGenericDataService, GenericDataService>();
+        builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
+        builder.Services.AddScoped<IModuleDataService, ModuleDataService>();
+        builder.Services.AddScoped<IApplicationUserDataService, ApplicationUserDataService>(); 
 
         await builder.Build().RunAsync();
     }

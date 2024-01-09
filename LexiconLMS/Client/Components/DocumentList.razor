@@ -1,0 +1,30 @@
+﻿@using LexiconLMS.Shared.Entities
+
+
+@if (!string.IsNullOrEmpty(Message))
+{
+	<p class="alert alert-success">@Message</p>
+}
+
+@if (List != null && List.Any())
+{
+	<p>Documents:</p>
+	<ul>
+		@foreach (var item in List)
+		{
+			<li>
+				@item.Name
+				<button @onclick="() => DownloadDocument(item)">Download</button>
+			</li>
+		}
+	</ul>
+}
+else
+{
+	<p>No documents available for this activity.</p>
+}
+
+@code {
+	[Parameter]
+	public List<Document>? List { get; set; }
+}

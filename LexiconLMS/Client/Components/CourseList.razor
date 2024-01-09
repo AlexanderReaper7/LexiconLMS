@@ -1,0 +1,44 @@
+﻿@using LexiconLMS.Shared.Dtos
+@attribute [Route(UriHelper.CourseList)]
+
+<h3>Course List</h3>
+
+<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
+    <Authorized>
+        <a href="@UriHelper.GetCourseAddUri()" class="btn btn-outline-primary">Add new Course</a>
+    </Authorized>
+</AuthorizeView>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Course Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in CourseLst)
+                {
+                <tr>
+                    <td scope="row">@course.Id</td>
+                    <td scope="row">@course.Name</td>
+                    <td scope="row">@course.StartDate</td>
+                    <td scope="row">@course.EndDate</td>
+                    <td scope="row">
+                    <a href="@UriHelper.GetCourseDetailsUri(course.Id)" class="btn"><span class="text-dark oi oi-external-link"></span></a>
+                        <AuthorizeView Roles="Teacher">
+                            <Authorized>
+                            <a href="@UriHelper.GetCourseUpdateUri(course.Id)" class="btn"><span class="text-dark oi oi-pencil"></span></a>
+                            <a href="@UriHelper.GetCourseDeleteUri(course.Id)" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
+                            </Authorized>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+  
+

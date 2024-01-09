@@ -1,0 +1,63 @@
+﻿@page "/useradd/{CourseId}"
+
+@using LexiconLMS.Shared.Dtos
+@using Microsoft.AspNetCore.Authorization
+
+@* @attribute [Authorize(Roles = "Teacher")] *@
+
+<h3>Add User</h3>
+
+<section class="course-edit">
+
+    <EditForm Model="@ApplicationUserDto" OnValidSubmit="@HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">User Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    
+                    <td scope="row">
+                        <InputText id="FirstName" @bind-Value="ApplicationUserDto.FirstName" class="form-control col-md-8"></InputText>
+                        <ValidationMessage For="@(() => ApplicationUserDto.FirstName)" />
+                    </td>
+                    <td scope="row">
+                        <InputText id="LastName" @bind-Value="ApplicationUserDto.LastName" class="form-control col-md-8"></InputText>
+                        <ValidationMessage For="@(() => ApplicationUserDto.LastName)" />
+                    </td>
+                    <td scope="row">
+                        <InputText type="password" id="Password" @bind-Value="ApplicationUserDto.Password" class="form-control col-md-8"></InputText>
+                        <ValidationMessage For="@(() => ApplicationUserDto.Password)" />
+                    </td>
+                    <td scope="row">
+                        <InputText id="Email" @bind-Value="ApplicationUserDto.Email" class="form-control col-md-8"></InputText>
+                        <ValidationMessage For="@(() => ApplicationUserDto.Email)" />
+                    </td>
+                    <td scope="row">
+                        <InputSelect id="Role" @bind-Value="ApplicationUserDto.Role" class="form-control col-md-8">
+                            <option value="">Select...</option>
+                            @foreach (var role in Enum.GetValues(typeof(StaticUserRoles)))
+                            {
+                                <option value="@role">@role</option>
+                            }
+                        </InputSelect>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <a href="@($"listofcourses")" class="btn btn-outline-primary">Back to Course list</a>&nbsp;
+        <button type="submit" class="btn btn-primary me-1">Add User</button>
+    </EditForm>
+</section>

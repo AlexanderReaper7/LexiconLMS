@@ -1,0 +1,37 @@
+﻿@attribute [Route(UriHelper.CourseDelete)]
+@using Microsoft.AspNetCore.Authorization
+
+@* @attribute [Authorize(Roles = "Teacher")] *@
+
+<h3>Delete Course</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Course Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td scope="row">@Course.Id</td>
+            <td scope="row">@Course.Name</td>
+            <td scope="row">@Course.StartDate</td>
+            <td scope="row">@Course.EndDate</td>
+            <td scope="row">@Course.Description</td>
+        </tr>
+    </tbody>
+</table>
+<a href="@UriHelper.GetCourseListUri()" class="btn btn-outline-primary">Back to Course list</a>
+
+<AuthorizeView Roles="Teacher">
+    <Authorized>
+        <a class="btn btn-outline-primary" @onclick="@(() => Delete())">Delete</a>
+    </Authorized>
+    <NotAuthorized>
+        <br /><b>No access to delete Courses!</b><br />
+    </NotAuthorized>
+</AuthorizeView>

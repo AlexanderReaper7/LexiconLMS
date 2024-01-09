@@ -1,0 +1,79 @@
+﻿@attribute [Route(UriHelper.ActivityDetails)]
+
+<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Activity.ModuleId)))">To Module</button>
+
+<div class="d-flex justify-content-between flex-wrap">
+	@if (string.IsNullOrEmpty(Activity.Name))
+	{
+		<h3>Activity details</h3>
+	}
+	else
+	{
+		<div>
+			<h3>Activity: @Activity.Name</h3>
+			<p class="fs-6 text-muted">@Activity.StartDate. − @Activity.EndDate</p>
+		</div>
+	}
+
+	@if (!string.IsNullOrEmpty(ErrorMessage))
+	{
+		<p class="alert alert-danger">@ErrorMessage</p>
+	}
+	else if (!string.IsNullOrEmpty(Message))
+	{
+		<p class="alert alert-success">@Message</p>
+	}
+@* 	 <AuthorizeView Roles="Teacher">
+          <Authorized> *@
+	<div class="mb-3">
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Activity.Id}");})">Upload Document</button>
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Activity.Id}");})">Update Activty</button>
+		<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
+	</div>
+@* 		</Authorized>
+	</AuthorizeView> *@
+
+</div>
+
+
+<div class="card bg-light mb-3 shadow-sm">
+	<div class="card-body">
+		<div class="card-title fw-bold">Activity Description</div>
+		@Activity.Description
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Activity Details:</div>
+			<div class="card-body">
+				<span style="font-weight: bold;">Module:</span> @Module.Name <br />
+				<span style="font-weight: bold;">Activity Type:</span> @Activity.Type.Name <br />
+				<span style="font-weight: bold;">Start:</span> @Module.StartDate <br />
+				<span style="font-weight: bold;">End:</span> @Module.EndDate <br />
+				  <br />
+				
+				
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Documents:</div>
+			<div class="card-body">
+				<DocumentList List="ActivityDocuments"></DocumentList>
+			</div>
+		</div>
+	</div>
+</div>
+
+@* <div class="row flex-row-reverse">
+	<div class="col-lg-6 mb-3">
+		<div class="card bg-light shadow">
+			<div class="card-header bg-light fw-bold">Students:</div>
+			<div class="card-body">
+			</div>
+		</div>
+	</div>
+</div> *@
