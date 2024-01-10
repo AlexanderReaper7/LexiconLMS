@@ -13,6 +13,7 @@ namespace LexiconLMS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApplicationUserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

@@ -28,6 +28,7 @@ namespace LexiconLMS.Server.Controllers
 
         // GET: api/Courses
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
             if (_context.Courses == null)
@@ -40,6 +41,7 @@ namespace LexiconLMS.Server.Controllers
 
         // GET: api/Courses/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<Course>> GetCourse(Guid id)
         {
             if (_context.Courses == null)
