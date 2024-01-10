@@ -1,5 +1,7 @@
 ﻿@using LexiconLMS.Shared.Dtos
+@using Microsoft.AspNetCore.Authorization
 @attribute [Route(UriHelper.ModuleDetails)]
+@attribute [Authorize]
 
 <button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(Module.CourseId)))">To course</button>
 

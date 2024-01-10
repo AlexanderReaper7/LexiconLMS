@@ -61,7 +61,7 @@ namespace LexiconLMS.Client.Components
                 ErrorMessage = "Assignment not found";
                 return;
             }
-            ActivityDocuments = (await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}?includeStudentsDocuments=false"))!;
+            ActivityDocuments = (await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}"))!;
 
             ClaimsPrincipal user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
 

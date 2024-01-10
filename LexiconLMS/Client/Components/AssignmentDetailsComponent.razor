@@ -29,8 +29,8 @@
 	<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
 		<div class="mb-3">
 			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Assignment.Id}");})">Upload Document</button>
-			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Assignment.Id}");})">Update Activty</button>
-			<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
+			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentUpdateUri(Assignment.Id));})">Update Assignment</button>
+			<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Assignment</button>
 		</div>
 	</AuthorizeView>
 </div>

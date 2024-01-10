@@ -2,7 +2,9 @@
 @using LexiconLMS.Shared.Dtos
 @using LexiconLMS.Shared.Dtos.ActivitiesDtos
 @using LexiconLMS.Shared.Entities
+@using Microsoft.AspNetCore.Authorization
 @attribute [Route(UriHelper.AssignmentDetails)]
+@attribute [Authorize]
 
 <AssignmentDetailsComponent ActivityId="ActivityId"></AssignmentDetailsComponent>
 

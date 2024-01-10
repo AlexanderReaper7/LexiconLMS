@@ -1,4 +1,7 @@
-﻿@attribute [Route(UriHelper.ModuleDelete)]
+﻿@using LexiconLMS.Shared.Dtos
+@using Microsoft.AspNetCore.Authorization
+@attribute [Route(UriHelper.ModuleDelete)]
+@attribute [Authorize(Roles = $"{nameof(StaticUserRoles.Teacher)}")]
 
 
 <section class="card p-3">
