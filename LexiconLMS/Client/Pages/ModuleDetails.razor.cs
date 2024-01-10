@@ -28,6 +28,9 @@ namespace LexiconLMS.Client.Pages
 		public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 		public IEnumerable<AssignmentDtoForTeachers> AssignmentsForTeachers { get; set; } = default!;
         public IEnumerable<AssignmentDtoForStudents> AssignmentsForStudents { get; set; } = default!;
+		public List<Document> StudentDocuments { get; set; } = new List<Document>();
+
+			
 		public string ErrorMessage { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
 
@@ -41,7 +44,7 @@ namespace LexiconLMS.Client.Pages
 
 			Module = (await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(ModuleId.Value)))!;
 			ModuleDocuments = await GenericDataService.GetAsync<List<Document>>($"moduledocumentsbymodule/{ModuleId}") ?? ModuleDocuments;
-
+			StudentDocuments = await GenericDataService.GetAsync<List<Document>>($"studentdocumentsbymodule/{ModuleId}") ?? StudentDocuments;
 			if (Module == null)
 			{
 				ErrorMessage = "Module not found";

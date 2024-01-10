@@ -101,16 +101,19 @@ namespace LexiconLMS.Server.Controllers
             {
                 return NotFound();
             }
-
-            var query = _context.Documents.Where(m => m.ActivityId == id);
-
-            if (!includeStudentsDocuments)
-            {
-                query = query.Include(d => d.Uploader).Where(d => d.Uploader!.Roles.All(r => r.Name != StaticUserRoles.Student.ToString()));
-            }
-
-            return await query.ToListAsync();
+            return await _context.Documents.Where(m => m.ActivityId == id && m.RoleOfUploader == "Teacher").ToListAsync();
         }
+
+		// GET: api/ActivityDocuments from acivity
+		[HttpGet("/studentdocumentsbyactivity/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetStudentActivityDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.ActivityId == id && m.RoleOfUploader == "Student").ToListAsync();
+		}
 
 		[HttpGet("/moduledocumentsbymodule/{id}")]
 		public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(Guid id)
@@ -119,7 +122,17 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-			return await _context.Documents.Where(m => m.ModuleId == id).ToListAsync();
+			return await _context.Documents.Where(m => m.ModuleId == id && m.RoleOfUploader == "Teacher").ToListAsync();
+		}
+
+		[HttpGet("/studentdocumentsbymodule/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetStudentModuleDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.ModuleId == id && m.RoleOfUploader == "Student").ToListAsync();
 		}
 
 		[HttpGet("/coursedocumentsbycourse/{id}")]
@@ -129,7 +142,17 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-			return await _context.Documents.Where(m => m.CourseId == id).ToListAsync();
+			return await _context.Documents.Where(m => m.CourseId == id && m.RoleOfUploader == "Teacher").ToListAsync();
+		}
+
+		[HttpGet("/studentdocumentsbycourse/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetStudentCourseDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.CourseId == id && m.RoleOfUploader == "Student").ToListAsync();
 		}
 
 		// PUT: api/Documents/5
