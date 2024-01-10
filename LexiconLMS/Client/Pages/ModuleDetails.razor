@@ -69,7 +69,7 @@
 						<AssignmentsListTeachers Assignments="AssignmentsForTeachers" ></AssignmentsListTeachers>
 					</AuthorizeView>
 					<AuthorizeView Roles="@StaticUserRoles.Student.ToString()">
-						<AssignmentsListStudents ModuleId="Module.Id"></AssignmentsListStudents>
+						<AssignmentsListStudents Assignments="AssignmentsForStudents"></AssignmentsListStudents>
 					</AuthorizeView>
 				}
 			</div>

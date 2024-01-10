@@ -150,7 +150,7 @@ namespace LexiconLMS.Server.Controllers
 					a.ActivityDocument,
 					a.Module!.CourseId
 				})
-				.Join(_context.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.Name == StaticUserRoles.Student)).DefaultIfEmpty(),
+				.Join(_context.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.Name == StaticUserRoles.Student.ToString())).DefaultIfEmpty(),
 					a => a.CourseId,
 					s => s.CourseId,
 

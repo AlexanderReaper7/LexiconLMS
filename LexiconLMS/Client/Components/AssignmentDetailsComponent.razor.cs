@@ -65,16 +65,15 @@ namespace LexiconLMS.Client.Components
 
             ClaimsPrincipal user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
 
-            if (StudentId != null || user.IsInRole(StaticUserRoles.Student))
+            if (StudentId != null || user.IsInRole(StaticUserRoles.Student.ToString()))
             {
                 await InitWhenStudent(user);
 			}
-            else if (user.IsInRole(StaticUserRoles.Teacher))
+            else if (user.IsInRole(StaticUserRoles.Teacher.ToString()))
             {
                 //Init when teacher
                 AssignmentForTeachers = (await GenericDataService.GetAsync<IEnumerable<AssignmentDtoStudentAndStatusOnly>>(UriHelper.GetAssignmentOnlyStudentsUri(ActivityId)));
             }
-
             await base.OnInitializedAsync();
         }
 

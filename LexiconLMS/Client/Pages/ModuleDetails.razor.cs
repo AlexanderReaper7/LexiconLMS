@@ -52,7 +52,7 @@ namespace LexiconLMS.Client.Pages
 
 			ClaimsPrincipal user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
 			
-			if (user.IsInRole(StaticUserRoles.Teacher))
+			if (user.IsInRole(StaticUserRoles.Teacher.ToString()))
 			{
 				if (ModuleId == null || Module.CourseId == null)
 				{
@@ -60,7 +60,7 @@ namespace LexiconLMS.Client.Pages
 				}
 				AssignmentsForTeachers = (await GenericDataService.GetAsync<IEnumerable<AssignmentDtoForTeachers>>(UriHelper.GetAssignmentsTeachersUri(Module.CourseId, ModuleId)))!;
 			}
-			else if (user.IsInRole(StaticUserRoles.Student))
+			else if (user.IsInRole(StaticUserRoles.Student.ToString()))
 			{
 				if (ModuleId == null)
 				{

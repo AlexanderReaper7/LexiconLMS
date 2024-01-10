@@ -26,14 +26,13 @@
 	{
 		<p class="alert alert-success">@Message</p>
 	}
-	<AuthorizeView Roles="@StaticUserRoles.Teacher">
+	<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
 		<div class="mb-3">
-			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activitydocumentupload/{Assignment.Id}");})">Upload Document</button>
+			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Assignment.Id}");})">Upload Document</button>
 			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Assignment.Id}");})">Update Activty</button>
 			<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
 		</div>
 	</AuthorizeView>
-
 </div>
 
 
@@ -82,7 +81,7 @@
 			</div>
 		</div>
 	</div>
-	<AuthorizeView Roles="@StaticUserRoles.Teacher">
+	<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
 		@if (StudentId == null)
 		{
 			<div class="col-lg-6 mb-3">
@@ -111,11 +110,11 @@
 			</div>
 		}
 	</AuthorizeView>
-	<AuthorizeView Roles="@StaticUserRoles.Student">
+	<AuthorizeView Roles="@StaticUserRoles.Student.ToString()">
 		<div class="col-lg-6 mb-3">
 			<div class="card bg-light shadow">
 				<div class="card-header bg-light">
-					<button class="btn btn-outline-primary" @onclick="@(() => {NavigationManager.NavigateTo($"activitydocumentupload/{Assignment.Id}");})">Submit assignment</button>
+					<button class="btn btn-outline-primary" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Assignment.Id}");})">Submit assignment</button>
 				</div>
 				<div class="card-body">
 					<DocumentList List="StudentDocuments"></DocumentList>
