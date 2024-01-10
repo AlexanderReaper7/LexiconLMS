@@ -13,8 +13,15 @@
 		@foreach (var item in List)
 		{
 			<li>
+				<div class="row">
+				<div class="col-lg-6 mb-1">
 				@item.Name
-				<button @onclick="() => DownloadDocument(item)">Download</button>
+				</div>
+				<div class="col-lg-2 mb-1">
+					<button @onclick="() => DownloadDocument(item)">Download</button>
+				</div>
+				</div>
+				
 			</li>
 		}
 	</ul>
