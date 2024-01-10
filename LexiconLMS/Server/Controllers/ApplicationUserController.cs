@@ -26,8 +26,27 @@ namespace LexiconLMS.Server.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: api/ApplicationUser
-        [HttpGet("/applicationuserbycourse/{id}")]
+		// GET: api/applicationuser/5
+		[HttpGet("{id}")]
+		public async Task<ActionResult<ApplicationUser>> GetApplicationUser(string id)
+		{
+			if (_context.Users == null)
+			{
+				return NotFound();
+			}
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+			return user;
+		}
+
+		// GET: api/ApplicationUser
+		[HttpGet("/applicationuserbycourse/{id}")]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetApplicationUseres(Guid id)
         {
             if (_context.Users == null)
@@ -73,24 +92,6 @@ namespace LexiconLMS.Server.Controllers
             await _userManager.AddToRoleAsync(newUser, StaticUserRoles.Student);
 
             return Ok("User created successfully");
-        }
-
-        // GET: api/applicationuser/5
-        [HttpGet("byname/{name}")]
-        public async Task<ActionResult<ApplicationUser>> GetApplicationUser(string name)
-        {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == name);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
         }
     }
 }

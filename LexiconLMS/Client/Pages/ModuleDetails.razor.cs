@@ -1,7 +1,11 @@
 using LexiconLMS.Client.Helpers;
 using LexiconLMS.Client.Services;
+using LexiconLMS.Shared.Dtos;
+using LexiconLMS.Shared.Dtos.ActivitiesDtos;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace LexiconLMS.Client.Pages
 {
@@ -20,10 +24,12 @@ namespace LexiconLMS.Client.Pages
 
         public IEnumerable<Activity> Activities { get; set; } = new List<Activity>();
 		public List<Document> ModuleDocuments { get; set; } = new List<Document>();
-
+		[Inject]
+		public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+		public IEnumerable<AssignmentDtoForTeachers> AssignmentsForTeachers { get; set; } = default!;
+        public IEnumerable<AssignmentDtoForStudents> AssignmentsForStudents { get; set; } = default!;
 		public string ErrorMessage { get; set; } = string.Empty;
-
-		public string Message { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -43,7 +49,33 @@ namespace LexiconLMS.Client.Pages
 			}
 
 			Activities = (await GenericDataService.GetAsync<IEnumerable<Activity>>(UriHelper.GetActivitiesUri(ModuleId.Value.ToString())))!;
+
+			ClaimsPrincipal user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
 			
+			if (user.IsInRole(StaticUserRoles.Teacher))
+			{
+				if (ModuleId == null || Module.CourseId == null)
+				{
+					return;
+				}
+				AssignmentsForTeachers = (await GenericDataService.GetAsync<IEnumerable<AssignmentDtoForTeachers>>(UriHelper.GetAssignmentsTeachersUri(Module.CourseId, ModuleId)))!;
+			}
+			else if (user.IsInRole(StaticUserRoles.Student))
+			{
+				if (ModuleId == null)
+				{
+					return;
+				}
+				string userId = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue("sub")!;
+
+				if (string.IsNullOrEmpty(userId))
+				{
+					return;
+				}
+
+				AssignmentsForStudents = (await GenericDataService.GetAsync<IEnumerable<AssignmentDtoForStudents>>(UriHelper.GetAssignmentsStudentsUri(ModuleId, userId)))!;
+			}
+
 			await base.OnInitializedAsync();
 		}
 	}

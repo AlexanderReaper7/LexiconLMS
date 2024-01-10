@@ -1,0 +1,14 @@
+﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Dtos
+@using LexiconLMS.Shared.Dtos.ActivitiesDtos
+@using LexiconLMS.Shared.Entities
+@attribute [Route(UriHelper.AssignmentDetailsOfAStudent)]
+
+<AssignmentDetailsComponent ActivityId="@ActivityId" StudentId="@StudentId"></AssignmentDetailsComponent>
+
+@code{
+	[Parameter]
+	public Guid? ActivityId { get; set; }
+	[Parameter]
+	public string? StudentId { get; set; }
+}

@@ -1,77 +1,12 @@
 ﻿@using LexiconLMS.Client.Extensions
 @using LexiconLMS.Shared.Dtos
+@using LexiconLMS.Shared.Dtos.ActivitiesDtos
 @using LexiconLMS.Shared.Entities
 @attribute [Route(UriHelper.AssignmentDetails)]
-<div class="d-flex justify-content-between flex-wrap">
-	@if (string.IsNullOrEmpty(Assignment.Name))
-	{
-		<h3>Activity details</h3>
-	}
-	else
-	{
-		<div>
-			<h3>Assignment: @Assignment.Name</h3>
-			<p class="fs-6 text-muted">@Assignment.DueDate</p>
-		</div>
-	}
 
-	@if (!string.IsNullOrEmpty(ErrorMessage))
-	{
-		<p class="alert alert-danger">@ErrorMessage</p>
-	}
-	else if (!string.IsNullOrEmpty(Message))
-	{
-		<p class="alert alert-success">@Message</p>
-	}
-	<AuthorizeView Roles="@StaticUserRoles.Teacher">
-		<div class="mb-3">
-			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activitydocumentupload/{Assignment.Id}");})">Upload Document</button>
-			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Assignment.Id}");})">Update Activty</button>
-			<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
-		</div>
-	</AuthorizeView>
+<AssignmentDetailsComponent ActivityId="ActivityId"></AssignmentDetailsComponent>
 
-</div>
-
-
-<div class="card bg-light mb-3 shadow-sm">
-	<div class="card-body">
-		<div class="card-title fw-bold">Assignment Description</div>
-		@Assignment.Description
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-6 mb-3">
-		<div class="card bg-light shadow">
-			<div class="card-header bg-light fw-bold">Assignment Details:</div>
-			<div class="card-body">
-				<ul class="list-unstyled">
-					<li><span class="fw-bold">Name:</span> @Assignment.Name</li>
-					<li><span class="fw-bold">State:</span> <span class="fs-6 text-nowrap @Assignment.SubmissionState.GetCSSClass()">@Assignment.SubmissionState.AsText()</span></li>
-					<li><span class="fw-bold">Deadline:</span> @Assignment.DueDate</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-6 mb-3">
-		<div class="card bg-light shadow">
-			<div class="card-header bg-light fw-bold">Documents:</div>
-			<div class="card-body">
-				<DocumentList List="ActivityDocuments"></DocumentList>
-			</div>
-		</div>
-	</div>
-	<AuthorizeView Roles="@StaticUserRoles.Student">
-		<div class="col-lg-6 mb-3">
-			<div class="card bg-light shadow">
-				<div class="card-header bg-light">
-					<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activitydocumentupload/{Assignment.Id}");})">Submit assignment</button>
-				</div>
-				<div class="card-body">
-					<DocumentList List="Assignment.Documents"></DocumentList>
-				</div>
-			</div>
-		</div>
-	</AuthorizeView>
-</div>
+@code{
+	[Parameter]
+	public Guid? ActivityId { get; set; }
+}
