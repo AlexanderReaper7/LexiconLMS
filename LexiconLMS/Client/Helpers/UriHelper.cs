@@ -16,7 +16,8 @@
 
 		public const string CourseList = $"/{list}of{course}s";
 		public const string CourseDetails = $"/{course}/{{courseId}}";
-		public const string CourseUpdate = $"/{course}{update}/{{courseId}}";
+        public const string MyCourse = course;
+        public const string CourseUpdate = $"/{course}{update}/{{courseId}}";
 		public const string CourseAdd = $"/{course}{add}";
 		public const string CourseDelete = $"/{course}{delete}/{{courseId}}";
 
@@ -36,7 +37,7 @@
 		public const string AssignmentUpdate = $"/{assignment}{update}/{{activityId:guid}}";
 		public const string AssignmentAdd = $"/{assignment}{add}/{{moduleId:guid}}";
 
-		//Course uri
+        //Course uri
 		public static string GetCourseAddUri() =>  CourseAdd;
         public static string GetCourseUpdateUri<T>(T courseId) =>  $"/{course}{update}/{courseId}";
         public static string GetCourseDeleteUri<T>(T courseId) =>  $"/{course}{delete}/{courseId}";
@@ -150,7 +151,12 @@
 			return CoursesBaseUri + courseId!.ToString();
 		}
 
-		public static string GetCoursesUri()
+        public static string GetMyCourseUri()
+        {
+            return CoursesBaseUri + "mycourse";
+        }
+
+        public static string GetCoursesUri()
 		{
 			return CoursesBaseUri;
 		}
@@ -183,5 +189,6 @@
 			return ApplicationUserBaseUri;
 		}
         #endregion
+
     }
 }

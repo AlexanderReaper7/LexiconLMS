@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using LexiconLMS.Server.Mappings;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using System.Security.Claims;
@@ -58,10 +59,14 @@ public class Program
         //    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
         //});
 
-		builder.Services.AddControllersWithViews();
-		builder.Services.AddRazorPages();
-		builder.Services.AddSwaggerGen();
-		builder.Services.AddAutoMapper(typeof(ActivitiesMappings));
+        builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+
+        builder.Services.AddRazorPages();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddAutoMapper(typeof(ActivitiesMappings));
 
 		var app = builder.Build();
 

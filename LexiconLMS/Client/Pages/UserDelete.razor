@@ -1,0 +1,37 @@
+﻿@page "/userdelete/{UserId}"
+@using Microsoft.AspNetCore.Authorization
+
+@* @attribute [Authorize(Roles = "Teacher")] *@
+
+<h3>Delete User</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">User Id</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">User Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td scope="row">@ApplicationUser.Id</td>
+            <td scope="row">@ApplicationUser.FirstName</td>
+            <td scope="row">@ApplicationUser.LastName</td>
+            <td scope="row">@ApplicationUser.Email</td>
+            <td scope="row">@ApplicationUser.Role</td>
+        </tr>
+    </tbody>
+</table>
+<a href="@($"listofcourses")" class="btn btn-outline-primary">Back to Course list</a>
+
+<AuthorizeView Roles="Teacher">
+    <Authorized>
+        <a class="btn btn-outline-primary" @onclick="@(() => Delete())">Delete</a>
+    </Authorized>
+    <NotAuthorized>
+        <br /><b>No access to delete Users!</b><br />
+    </NotAuthorized>
+</AuthorizeView>

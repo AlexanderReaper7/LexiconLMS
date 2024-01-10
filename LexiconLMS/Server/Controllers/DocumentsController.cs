@@ -50,9 +50,79 @@ namespace LexiconLMS.Server.Controllers
             return document;
         }
 
-        // PUT: api/Documents/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+		// GET: api/Documents/5
+		[HttpGet("/documentsetfk/{id}")]
+		public async Task<ActionResult<Document>> GetDocumentSetFK(Guid id)
+		{
+            var document = new Document();
+            if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+
+            var activityresponse =  await _context.Activities.FindAsync(id);
+
+            if (activityresponse != null) 
+            {
+                document.ActivityId = id;
+                return Ok(document);
+            }
+            
+
+            var moduleresponse =  await _context.Modules.FindAsync(id);
+
+            if (moduleresponse != null)
+            {
+                document.ModuleId = id;
+                return Ok(document);
+            }
+
+            var courseresponse = await _context.Courses.FindAsync(id);
+
+			if (courseresponse != null)
+			{
+                document.CourseId = id;
+				return Ok(document);
+			}
+		
+                return NotFound();
+	
+		}
+
+        // GET: api/ActivityDocuments from acivity
+        [HttpGet("/activitydocumentsbyactivity/{id}")]
+        public async Task<ActionResult<IEnumerable<Document>>> GetActivityDocuments(Guid id)
+        {
+            if (_context.Documents == null)
+            {
+                return NotFound();
+            }
+            return await _context.Documents.Where(m => m.ActivityId == id).ToListAsync();
+        }
+
+		[HttpGet("/moduledocumentsbymodule/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.ModuleId == id).ToListAsync();
+		}
+
+		[HttpGet("/coursedocumentsbycourse/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetCourseDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.CourseId == id).ToListAsync();
+		}
+
+		// PUT: api/Documents/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutDocument(Guid id, Document document)
         {
             if (id != document.Id)

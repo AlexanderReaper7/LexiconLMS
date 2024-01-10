@@ -8,18 +8,22 @@ using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace LexiconLMS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CoursesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Courses
@@ -52,8 +56,31 @@ namespace LexiconLMS.Server.Controllers
             return course;
         }
 
+        /// <summary>
+        /// Gets the course that the requester is a member of
+        /// </summary>
+        [HttpGet("mycourse")]
+        public async Task<ActionResult<Course>> GetMyCourse()
+        {
+            if (_context.Courses == null)
+            {
+                return NotFound();
+            }
+            var userId = _userManager.GetUserId(User)!;
+            // Get the course that the user is a member of
+            var course = await _context.Courses.Where(c => c.Users.Any(u => u.Id == userId)).FirstOrDefaultAsync();
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            return course;
+        }
+
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCourse(Guid id, Course course)
         {
@@ -86,6 +113,7 @@ namespace LexiconLMS.Server.Controllers
 
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
@@ -100,6 +128,7 @@ namespace LexiconLMS.Server.Controllers
         }
 
         // DELETE: api/Courses/5
+        [Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(Guid id)
         {

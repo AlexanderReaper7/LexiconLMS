@@ -6,6 +6,9 @@ namespace LexiconLMS.Client.Services
     public interface IApplicationUserDataService
     {
         Task<List<ApplicationUser>> GetStudentsByCourseId(Guid Id);
-        Task<bool> AddApplicationUser(ApplicationUserDto ApplicationUserDto);
+        Task<bool> AddApplicationUser(ApplicationUserDtoAdd ApplicationUserDto);
+        public Task<ApplicationUserDtoUpdate> GetUser(Guid Id);
+        public Task<bool> UpdateUser(ApplicationUserDtoUpdate updatedUser);
+        Task<bool> DeleteUser(Guid Id);
     }
 }
