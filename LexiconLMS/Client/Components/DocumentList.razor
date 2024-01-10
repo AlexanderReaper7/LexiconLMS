@@ -8,7 +8,7 @@
 
 @if (List != null && List.Any())
 {
-	<p>Documents:</p>
+	
 	<ul>
 		@foreach (var item in List)
 		{
@@ -21,7 +21,7 @@
 }
 else
 {
-	<p>No documents available for this activity.</p>
+	<p>No documents currently uploaded</p>
 }
 
 @code {

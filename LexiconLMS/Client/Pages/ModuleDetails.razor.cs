@@ -20,7 +20,9 @@ namespace LexiconLMS.Client.Pages
 
         public IEnumerable<Activity> Activities { get; set; } = new List<Activity>();
 		public List<Document> ModuleDocuments { get; set; } = new List<Document>();
+		public List<Document> StudentDocuments { get; set; } = new List<Document>();
 
+			
 		public string ErrorMessage { get; set; } = string.Empty;
 
 		public string Message { get; set; } = string.Empty;
@@ -35,7 +37,7 @@ namespace LexiconLMS.Client.Pages
 
 			Module = (await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(ModuleId.Value)))!;
 			ModuleDocuments = await GenericDataService.GetAsync<List<Document>>($"moduledocumentsbymodule/{ModuleId}") ?? ModuleDocuments;
-
+			StudentDocuments = await GenericDataService.GetAsync<List<Document>>($"studentdocumentsbymodule/{ModuleId}") ?? StudentDocuments;
 			if (Module == null)
 			{
 				ErrorMessage = "Module not found";

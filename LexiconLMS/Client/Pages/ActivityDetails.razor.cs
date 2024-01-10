@@ -25,6 +25,7 @@ namespace LexiconLMS.Client.Pages
 
 		public Activity Activity { get; set; } = new Activity();
 		public List<Document> ActivityDocuments { get; set; } = new List<Document>();
+		public List<Document> StudentActivityDocuments { get; set; } = new List<Document>();
 
 		public Module Module { get; set; } = new Module();
 
@@ -50,7 +51,7 @@ namespace LexiconLMS.Client.Pages
 				return;
 			}
 			ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}") ?? ActivityDocuments;
-
+			StudentActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"studentdocumentsbyactivity/{ActivityId}") ?? StudentActivityDocuments;
 			await base.OnInitializedAsync();
 
 		}
