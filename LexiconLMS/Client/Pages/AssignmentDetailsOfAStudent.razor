@@ -3,12 +3,14 @@
 @using LexiconLMS.Shared.Dtos.ActivitiesDtos
 @using LexiconLMS.Shared.Entities
 @using Microsoft.AspNetCore.Authorization
-@attribute [Route(UriHelper.AssignmentDetails)]
+@attribute [Route(UriHelper.AssignmentDetailsOfAStudent)]
 @attribute [Authorize]
 
-<AssignmentDetailsComponent ActivityId="ActivityId"></AssignmentDetailsComponent>
+<AssignmentDetailsComponent ActivityId="@ActivityId" StudentId="@StudentId"></AssignmentDetailsComponent>
 
 @code{
 	[Parameter]
 	public Guid? ActivityId { get; set; }
+	[Parameter]
+	public string? StudentId { get; set; }
 }

@@ -9,16 +9,20 @@ using System.Security.Claims;
 
 namespace LexiconLMS.Client.Components
 {
-    public partial class AssignmentsListTeachers
-    {
+    public partial class AssignmentsOnlyStudentsList
+	{
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
         [Parameter]
 		[EditorRequired]
-		public IEnumerable<AssignmentDtoForTeachers> Assignments { get; set; } = default!;
+		public IEnumerable<AssignmentDtoStudentAndStatusOnly> Assignments { get; set; } = default!;
+		[Parameter]
+		[EditorRequired]
+		public Guid AssignmentId { get; set; } = default!;
 
         public string Message { get; set; } = string.Empty;
+
         private void ShowMessage(string message)
         {
             Message = message;

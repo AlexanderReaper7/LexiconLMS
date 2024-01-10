@@ -43,13 +43,19 @@ namespace LexiconLMS.Client.Pages
 			}
 
 			Activity = await GenericDataService.GetAsync<Activity>(UriHelper.GetActivityUri(ActivityId)) ?? Activity;
-			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(Activity.ModuleId)) ?? Module;
 
 			if (Activity == null)
 			{
 				ErrorMessage = "Activity not found";
 				return;
 			}
+
+			if (Activity.Type.Name == "Assignment")
+			{
+				NavigationManager.NavigateTo(UriHelper.GetAssignmentDetailsUri(ActivityId));
+			}
+
+			Module = await GenericDataService.GetAsync<Module>(UriHelper.GetModuleUri(Activity.ModuleId)) ?? Module;
 			ActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"activitydocumentsbyactivity/{ActivityId}") ?? ActivityDocuments;
 			StudentActivityDocuments = await GenericDataService.GetAsync<List<Document>>($"studentdocumentsbyactivity/{ActivityId}") ?? StudentActivityDocuments;
 			await base.OnInitializedAsync();

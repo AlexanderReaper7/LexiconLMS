@@ -22,7 +22,14 @@
                     <td scope="row">@activity.EndDate</td>
                     <td scope="row">
                         <div class="d-flex">
-                            <a href="@UriHelper.GetActivityDetailsUri(activity.Id)" class="btn"><span class="text-dark oi oi-external-link"></span></a>
+                            @if (activity.Type.Name == "Assignment")
+                            {
+                                <a href="@UriHelper.GetAssignmentDetailsUri(activity.Id)" class="btn"><span class="text-dark oi oi-external-link"></span></a>
+                            }
+                            else
+                            {
+                                <a href="@UriHelper.GetActivityDetailsUri(activity.Id)" class="btn"><span class="text-dark oi oi-external-link"></span></a>
+                            }
                             <AuthorizeView Roles="Teacher">
                                 <Authorized>
                                     <a href="@UriHelper.GetActivityUpdateUri(activity.Id)" class="btn"><span class="text-dark oi oi-pencil"></span></a>

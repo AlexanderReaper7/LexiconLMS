@@ -1,4 +1,7 @@
-﻿@attribute [Route(UriHelper.AssignmentAdd)]
+﻿@using LexiconLMS.Shared.Dtos
+@using Microsoft.AspNetCore.Authorization
+@attribute [Route(UriHelper.AssignmentAdd)]
+@attribute [Authorize(Roles = $"{nameof(StaticUserRoles.Teacher)}")]
 
 <ActivityForm OnlyAssignments="true" ModuleId="ModuleId"></ActivityForm>
 

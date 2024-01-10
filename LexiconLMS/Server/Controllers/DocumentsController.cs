@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Identity;
+using LexiconLMS.Shared.Dtos;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -15,10 +17,12 @@ namespace LexiconLMS.Server.Controllers
     public class DocumentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public DocumentsController(ApplicationDbContext context)
+        public DocumentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: api/Documents
@@ -91,7 +95,7 @@ namespace LexiconLMS.Server.Controllers
 
         // GET: api/ActivityDocuments from acivity
         [HttpGet("/activitydocumentsbyactivity/{id}")]
-        public async Task<ActionResult<IEnumerable<Document>>> GetActivityDocuments(Guid id)
+        public async Task<ActionResult<IEnumerable<Document>>> GetActivityDocuments(Guid id, bool includeStudentsDocuments = true)
         {
             if (_context.Documents == null)
             {
@@ -191,6 +195,7 @@ namespace LexiconLMS.Server.Controllers
           {
               return Problem("Entity set 'ApplicationDbContext.Documents'  is null.");
           }
+            document.UploaderId = userManager.GetUserId(User);
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 

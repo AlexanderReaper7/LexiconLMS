@@ -1,7 +1,12 @@
 ﻿@using LexiconLMS.Client.Extensions
 @using LexiconLMS.Shared.Entities;
 
-<table class="table">
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-success py-1">@Message</div>
+}
+<div class="overflow-auto" style="max-height: 400px;">
+    <table class="table">
     <thead>
         <tr>
             <th scope="col">Student</th>
@@ -17,12 +22,23 @@
             @foreach (var activity in Assignments)
             {
                 <tr>
-                    <td scope="row">@* <a class="hidden-link" href="@UriHelper.GetActivityDetailsUri(activity.StudentId)"> *@@activity.StudentName@* </a>*@</td>
+                    <td scope="row"><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsOfAStudentUri(activity.AssignmentId, activity.StudentId)">@activity.StudentName</a></td>
                     <td scope="row"><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsUri(activity.AssignmentId)">@activity.AssignmentName</a></td>
                     <td scope="row">
-                        <div class="@activity.SubmissionState.GetCSSClass() text-center text-lowercase">
-                            @activity.SubmissionState.AsText()
-                        </div>
+                        @if (activity.SubmissionState == SubmissionState.Submitted || activity.SubmissionState == SubmissionState.SubmittedLate)
+                        {
+                            <ButtonDownloadSubmission AssignmnetId="@activity.AssignmentId" 
+                            StudentId="@activity.StudentId" 
+                            SubmissionState="@activity.SubmissionState" 
+                            DownloadedEvent="@ShowMessage"></ButtonDownloadSubmission>
+                        }
+                        else
+                        {
+                            <div class="rounded-3 @activity.SubmissionState.GetCSSClass() text-center text-lowercase">
+                                @activity.SubmissionState.AsText()
+                            </div>
+                        }
+
                     </td>
                     <td scope="row">@activity.DueDate</td>
                     <td scope="row">
@@ -40,5 +56,6 @@
         }
     </tbody>
 </table>
+</div>
 
 
