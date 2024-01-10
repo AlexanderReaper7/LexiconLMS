@@ -135,6 +135,11 @@ namespace LexiconLMS.Server.Controllers
 				return NotFound();
 			}
 
+			var documents = _context.Documents.Where(d => d.ModuleId == id);
+
+			_context.Documents.RemoveRange(documents);
+		
+
 			_context.Modules.Remove(@module);
 			await _context.SaveChangesAsync();
 

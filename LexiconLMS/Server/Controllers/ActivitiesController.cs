@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -325,9 +326,17 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-
+			
 			_context.Activities.Remove(activity);
-			await _context.SaveChangesAsync();
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch(Exception message) 
+			{
+				Console.WriteLine($"Exception message: {message.Message}");
+			}
 
 			return NoContent();
 		}
