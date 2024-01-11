@@ -15,8 +15,9 @@
 	else
 	{
 		<div>
-			<h3>@Course.Name</h3>
+			<h3>Course: @Course.Name</h3>
 			<p class="fs-6 text-muted">@Course.StartDate.ToShortDateString() − @Course.EndDate.ToShortDateString()</p>
+			<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleAddUri(Course.Id));})">Add Module</button>
 		</div>
 	}
 

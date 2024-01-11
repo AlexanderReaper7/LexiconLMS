@@ -96,10 +96,13 @@ namespace LexiconLMS.Server.Controllers
 			if (module.StartDate < courseInQuery.StartDate || module.EndDate > courseInQuery.EndDate) { Verification = false; }
 
 			foreach (var item in modulesInQuery)
-			{
-				if (module.StartDate > item.StartDate && module.StartDate < item.EndDate) { Verification = false; }
-				if (module.StartDate < item.StartDate && module.EndDate > item.StartDate) { Verification = false; }
-			}
+				if (item.Id != id)
+				{
+					{
+						if (module.StartDate > item.StartDate && module.StartDate < item.EndDate) { Verification = false; }
+						if (module.StartDate < item.StartDate && module.EndDate > item.StartDate) { Verification = false; }
+					}
+				}
 
 			_context.Entry(@module).State = EntityState.Modified;
 
@@ -143,10 +146,11 @@ namespace LexiconLMS.Server.Controllers
 			if (module.StartDate < courseInQuery.StartDate || module.EndDate > courseInQuery.EndDate) { Verification = false; }
 
 			foreach (var item in modulesInQuery)
-			{
+			
+				{
 				if (module.StartDate > item.StartDate && module.StartDate < item.EndDate) { Verification = false; }
 				if (module.StartDate < item.StartDate && module.EndDate > item.StartDate) { Verification = false; }
-			}
+				}
 
 			if (Verification)
 			{

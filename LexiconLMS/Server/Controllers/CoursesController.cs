@@ -104,11 +104,14 @@ namespace LexiconLMS.Server.Controllers
 
 			if (course.StartDate > course.EndDate) { Verification = false; }
 
-			foreach (var item in coursesInQuery)
-			{
-				if (course.StartDate > item.StartDate && course.StartDate < item.EndDate) { Verification = false; }
-				if (course.StartDate < item.StartDate && course.EndDate > item.StartDate) { Verification = false; }
-			}
+            foreach (var item in coursesInQuery)
+                if (item.Id != id)
+                {
+                    {
+                        if (course.StartDate > item.StartDate && course.StartDate < item.EndDate) { Verification = false; }
+                        if (course.StartDate < item.StartDate && course.EndDate > item.StartDate) { Verification = false; }
+                    }
+                }
 
 			_context.Entry(course).State = EntityState.Modified;
 

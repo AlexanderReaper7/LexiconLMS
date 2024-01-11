@@ -289,10 +289,13 @@ namespace LexiconLMS.Server.Controllers
 			if (activity.StartDate < moduleInQuery.StartDate || activity.EndDate > moduleInQuery.EndDate) { Verification = false; }
 
 			foreach (var item in activitiesInQuery)
-			{
-				if (activity.StartDate > item.StartDate && activity.StartDate < item.EndDate) { Verification = false; }
-				if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
-			}
+				if (item.Id != id)
+				{
+					{
+						if (activity.StartDate > item.StartDate && activity.StartDate < item.EndDate) { Verification = false; }
+						if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
+					}
+				}
 
 			try
 			{

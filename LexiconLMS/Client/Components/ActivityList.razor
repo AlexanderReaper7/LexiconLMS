@@ -15,7 +15,7 @@
         {
             @foreach (var activity in ActivityLst)
             {
-                <tr>
+                <tr style="@GetRowStyle(activity)">
                     <td scope="row">@activity.Name</td>
                     <td scope="row">@activity.Type.Name</td>
                     <td scope="row">@activity.StartDate</td>
