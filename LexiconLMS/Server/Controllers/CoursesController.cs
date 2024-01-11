@@ -9,6 +9,8 @@ using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using LexiconLMS.Shared.Dtos;
+using LexiconLMS.Server.Services;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -20,10 +22,15 @@ namespace LexiconLMS.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly IMailService _mailService;
+        private MailData _mailData;
+
+        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IMailService mailService)
         {
             _context = context;
             _userManager = userManager;
+            _mailService = mailService;
+            _mailData = new MailData();
         }
 
         // GET: api/Courses
@@ -94,6 +101,17 @@ namespace LexiconLMS.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                var users = await _context.Users.Where(u => u.CourseId == id).ToListAsync();
+                foreach (var user in users)
+                {
+                    _mailData.EmailTo = user.Email;
+                    _mailData.EmailToName = $"{user.FirstName} {user.LastName}";
+                    _mailData.EmailSubject = "Course updated";
+                    _mailData.EmailBody = $"{course.Name} course has been updated.";
+
+                    _mailService.SendMail(_mailData);
+                }
                 return Ok();
             }
             catch (DbUpdateConcurrencyException)
@@ -123,6 +141,17 @@ namespace LexiconLMS.Server.Controllers
             }
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
+
+            var users = await _context.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                _mailData.EmailTo = user.Email;
+                _mailData.EmailToName = $"{user.FirstName} {user.LastName}";
+                _mailData.EmailSubject = "New course added";
+                _mailData.EmailBody = $"New {course.Name} course has been added.";
+
+                _mailService.SendMail(_mailData);
+            }
 
             return CreatedAtAction("GetCourse", new { id = course.Id }, course);
         }
