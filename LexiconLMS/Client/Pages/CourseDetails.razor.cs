@@ -16,6 +16,8 @@ namespace LexiconLMS.Client.Pages
 
         [Inject]
         public required IModuleDataService ModuleDataService { get; set; }
+        [Inject]
+        public required IActivityDataService ActivityDataService { get; set; }
 		
         [Inject]
 		public required IGenericDataService GenericDataService { get; set; }
@@ -30,9 +32,10 @@ namespace LexiconLMS.Client.Pages
         public List<Module> Modules { get; set; } = default!;
 		public List<Document> CourseDocuments { get; set; } = new List<Document>();
 		public List<Document> StudentCourseDocuments { get; set; } = new List<Document>();
+		public List<Activity> Activities { get; set; } = new List<Activity>();
+		public List<ApplicationUser> Students { get; set; } = new List<ApplicationUser>();
 
-		public required List<ApplicationUser> Students { get; set; }
-        protected override async Task OnInitializedAsync()
+		protected override async Task OnInitializedAsync()
         {
             Guid courseId;
             if (string.IsNullOrEmpty(CourseId))
@@ -59,6 +62,8 @@ namespace LexiconLMS.Client.Pages
 			}
             Modules = await ModuleDataService.GetModulesByCourseId(courseId);
             Students = await ApplicationUserDataService.GetStudentsByCourseId(courseId);
+            // TODO: Get activities by course id
+            //Activities = await ActivityDataService.GetActivitiesByCourseId(courseId);
 			CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{courseId}") ?? CourseDocuments;
 			StudentCourseDocuments = await GenericDataService.GetAsync<List<Document>>($"studentdocumentsbycourse/{courseId}") ?? StudentCourseDocuments;
 			await base.OnInitializedAsync();
