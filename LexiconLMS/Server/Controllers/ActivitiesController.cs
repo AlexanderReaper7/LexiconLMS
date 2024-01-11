@@ -281,7 +281,6 @@ namespace LexiconLMS.Server.Controllers
 				return BadRequest();
 			}
 
-
 			var moduleInQuery = _context.Modules.Find(activity.ModuleId);
 			var activitiesInQuery = _context.Activities.Where(a => a.ModuleId == moduleInQuery.Id).AsNoTracking();
 
@@ -296,9 +295,7 @@ namespace LexiconLMS.Server.Controllers
 						if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
 					}
 				}
-		
-				
-	
+
 			if (Verification)
 			{
 				try
