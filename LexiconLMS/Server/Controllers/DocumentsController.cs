@@ -9,11 +9,13 @@ using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Identity;
 using LexiconLMS.Shared.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DocumentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

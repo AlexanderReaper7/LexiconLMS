@@ -24,7 +24,8 @@ namespace LexiconLMS.Server.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ActivitiesController : ControllerBase
+    [Authorize]
+    public class ActivitiesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper mapper;
@@ -267,9 +268,10 @@ namespace LexiconLMS.Server.Controllers
 		}
 
 
-		// PUT: api/Assignment/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+        // PUT: api/Assignment/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+		[Authorize(Roles = "Teacher")]
 		public async Task<IActionResult> PutActivity(Guid id, Activity activity)
 		{
 			bool Verification = true;
@@ -326,7 +328,8 @@ namespace LexiconLMS.Server.Controllers
 		// POST: api/Assignment
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+        [Authorize(Roles = "Teacher")]
+        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
 		{
 
 			bool Verification = true;
@@ -367,7 +370,8 @@ namespace LexiconLMS.Server.Controllers
 
 		// DELETE: api/Assignment/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteActivity(Guid id)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> DeleteActivity(Guid id)
 		{
 			if (_context.Activities == null)
 			{

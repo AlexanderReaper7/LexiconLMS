@@ -14,23 +14,29 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="course">
-                <span class="oi oi-plus" aria-hidden="true"></span> My Course
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="activitieslist">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Activities
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="listofcourses">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Courses
-            </NavLink>
-        </div>
-
+        <AuthorizeView> @* Any authenticated user. *@
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="course">
+                        <span class="oi oi-plus" aria-hidden="true"></span> My Course
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="activitieslist">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Activities
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Teacher"> @* This shows only to Teachers. *@
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="listofcourses">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Courses
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
     </nav>
 </div>
 

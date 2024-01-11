@@ -19,6 +19,7 @@ namespace LexiconLMS.Server.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class ModulesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
@@ -79,7 +80,8 @@ namespace LexiconLMS.Server.Controllers
 		// PUT: api/Modules/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutModule(Guid id, Module @module)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> PutModule(Guid id, Module @module)
 		{
 			bool Verification = true;
 			if (id != @module.Id)
@@ -126,7 +128,8 @@ namespace LexiconLMS.Server.Controllers
 		// POST: api/Modules
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Module>> PostModule(Module @module)
+        [Authorize(Roles = "Teacher")]
+        public async Task<ActionResult<Module>> PostModule(Module @module)
 		{
 			bool Verification = true;
 			if (_context.Modules == null)
@@ -157,7 +160,8 @@ namespace LexiconLMS.Server.Controllers
 
 		// DELETE: api/Modules/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteModule(Guid id)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> DeleteModule(Guid id)
 		{
 			if (_context.Modules == null)
 			{

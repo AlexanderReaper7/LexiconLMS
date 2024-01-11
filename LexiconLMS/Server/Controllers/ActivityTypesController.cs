@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ActivityTypesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -53,6 +55,7 @@ namespace LexiconLMS.Server.Controllers
         // PUT: api/ActivityTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> PutActivityType(string id, ActivityType activityType)
         {
             if (id != activityType.Name)
@@ -84,6 +87,7 @@ namespace LexiconLMS.Server.Controllers
         // POST: api/ActivityTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<ActivityType>> PostActivityType(ActivityType activityType)
         {
           if (_context.ActivityTypes == null)
@@ -112,6 +116,7 @@ namespace LexiconLMS.Server.Controllers
 
         // DELETE: api/ActivityTypes/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteActivityType(string id)
         {
             if (_context.ActivityTypes == null)

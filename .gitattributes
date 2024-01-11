@@ -3,6 +3,11 @@
 ###############################################################################
 * text=auto
 
+# Ignore .SCSS files
+*.scss linguist-vendored
+LexiconLMS/Client/wwwroot/lib/** linguist-vendored
+LexiconLMS/Server/wwwroot/lib/** linguist-vendored
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
