@@ -39,7 +39,6 @@ namespace LexiconLMS.Client.Pages
 
             Activity = await GenericDataService.GetAsync<Activity>(UriHelper.GetActivityUri(ActivityId)) ?? Activity;
 
-         
             
             if (Activity == null)
             {

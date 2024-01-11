@@ -30,10 +30,15 @@
 
 			<div class="row d-lg-table-row mb-3 mb-lg-0">
 				<div class="d-lg-table-cell w-auto pe-1 pb-lg-3">
-					<label for="activityType" class="col-form-label text-nowrap">Activity Type: </label>
+					<label for="name" class="col-form-labelo text-nowrap">Activity Type: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputText id="activityType" class="form-control" @bind-Value="@Activity.Type.Name" placeholder="Activity Type"></InputText>
+					<select id="name" class="form-control" placeholder="Choose Activity Type" @bind="@Activity.Type.Name">
+						<option value="Assignment">Assignment</option>
+						<option value="E-Learning">E-Learning</option>
+						<option value="Practice session">Practice session</option>
+						<option value="Lecture">Lecture</option>
+					</select>
 					<ValidationMessage class="offset-md-3" For="@(() => Activity.Type.Name)" />
 				</div>
 			</div>
@@ -75,7 +80,8 @@
 		<button type="button" class="btn btn-danger my-1" @onclick="@DeleteActivity">
 			Delete
 		</button>
-		<a href="@UriHelper.GetActivityListUri()" class="btn btn-outline-primary">Back to Activity list</a>
+		<button type="button" class="btn btn-primary my-1" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Activity.ModuleId)))">To Module</button>
+		
 
 		@* <button type="button" class="btn btn-outline-primary ms-1" @onclick="@(()=> {navigationManager.NavigateTo("/");})">Back</button> *@
 
