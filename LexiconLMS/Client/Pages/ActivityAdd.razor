@@ -29,8 +29,13 @@
 					<label for="name" class="col-form-labelo text-nowrap">Activity Type: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputText id="name" class="form-control" @bind-Value="@Activity.Type.Name" placeholder="Name"></InputText>
-					<ValidationMessage class="offset-md-3" For="@(() => Activity.Type.Name)" />
+					<select id="name" class="form-control" placeholder="Choose Activity Type" @bind="@Activity.Type.Name">					
+						<option value="Assignment">Assignment</option>
+						<option value="E-Learning">E-Learning</option>
+						<option value="Practice session">Practice session</option>
+						<option value="Lecture">Lecture</option>
+					</select>
+					<ValidationMessage class="offset-md-3" For="@(() => Activity.Type.Name)" />			
 				</div>
 			</div>
 

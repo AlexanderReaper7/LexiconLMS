@@ -23,10 +23,16 @@ namespace LexiconLMS.Client.Pages
 
         public string responseData = string.Empty;
 
-        private async Task HandleValidSubmit()
+		public string ErrorMessage { get; set; } = string.Empty;
+
+		private async Task HandleValidSubmit()
         {
             if (await CourseDataService.AddCourse(Course))
                 NavigationManager.NavigateTo(UriHelper.GetCourseListUri());
+            else
+            {
+				ErrorMessage = "Could not add Course";
+			}
         }
     }
 }

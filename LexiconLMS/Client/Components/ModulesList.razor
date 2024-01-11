@@ -18,7 +18,7 @@ else
     <tbody>
     @foreach (var module in List)
     {
-        <tr>
+                <tr style="@GetRowStyle(module)">
             <td scope="row">@module.Name</td>
             <td scope="row">@module.StartDate</td>
             <td scope="row">@module.EndDate</td>

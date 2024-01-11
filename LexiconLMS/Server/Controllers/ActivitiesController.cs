@@ -18,12 +18,14 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LexiconLMS.Server.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ActivitiesController : ControllerBase
+    [Authorize]
+    public class ActivitiesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper mapper;
@@ -264,33 +266,62 @@ namespace LexiconLMS.Server.Controllers
 		}
 
 
-		// PUT: api/Assignment/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+        // PUT: api/Assignment/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+		[Authorize(Roles = "Teacher")]
 		public async Task<IActionResult> PutActivity(Guid id, Activity activity)
 		{
+			bool Verification = true;
+			
 			if (id != activity.Id)
 			{
 				return BadRequest();
 			}
 
-			_context.Entry(activity).State = EntityState.Modified;
+
+			var moduleInQuery = _context.Modules.Find(activity.ModuleId);
+			var activitiesInQuery = _context.Activities.Where(a => a.ModuleId == moduleInQuery.Id).AsNoTracking();
+
+			if (activity.StartDate > activity.EndDate) { Verification = false; }
+			if (activity.StartDate < moduleInQuery.StartDate || activity.EndDate > moduleInQuery.EndDate) { Verification = false; }
+
+			foreach (var item in activitiesInQuery)
+				if (item.Id != id)
+				{
+					{
+						if (activity.StartDate > item.StartDate && activity.StartDate < item.EndDate) { Verification = false; }
+						if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
+					}
+				}
 
 			try
 			{
-				await _context.SaveChangesAsync();
+				_context.Entry(activity).State = EntityState.Modified;
 			}
-			catch (DbUpdateConcurrencyException)
+			catch (Exception ex) { Console.Write(ex.ToString()); }
+			
+
+			if (Verification)
 			{
-				if (!ActivityExists(id))
+				try
 				{
-					return NotFound();
+					await _context.SaveChangesAsync();
 				}
-				else
+
+				catch (DbUpdateConcurrencyException)
 				{
-					throw;
+					if (!ActivityExists(id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
 				}
 			}
+			
 
 			return NoContent();
 		}
@@ -298,22 +329,50 @@ namespace LexiconLMS.Server.Controllers
 		// POST: api/Assignment
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+        [Authorize(Roles = "Teacher")]
+        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
 		{
+
+			bool Verification = true;
+
 			if (_context.Activities == null)
 			{
 				return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
 			}
-			_context.Entry(activity).State = EntityState.Unchanged;
-			_context.Activities.Add(activity);
-			await _context.SaveChangesAsync();
 
-			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+			var moduleInQuery = _context.Modules.Find(activity.ModuleId);
+			var activitiesInQuery = _context.Activities.Where(a => a.ModuleId == moduleInQuery.Id);
+
+			if (activity.StartDate > activity.EndDate) { Verification = false; }
+			if (activity.StartDate < moduleInQuery.StartDate || activity.EndDate > moduleInQuery.EndDate) { Verification = false; }
+
+			foreach (var item in activitiesInQuery)
+			{
+				if (activity.StartDate > item.StartDate && activity.StartDate < item.EndDate) { Verification = false; }
+				if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
+			}
+
+			if (Verification)
+			{
+				_context.Entry(activity).State = EntityState.Unchanged;
+				_context.Activities.Add(activity);
+
+				try
+				{
+
+					await _context.SaveChangesAsync();
+				}
+				catch (Exception ex) { Console.Write(ex.ToString()); }
+
+				return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+			}
+			return Problem("overlapping activities or out of bounds of module.");
 		}
 
 		// DELETE: api/Assignment/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteActivity(Guid id)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> DeleteActivity(Guid id)
 		{
 			if (_context.Activities == null)
 			{

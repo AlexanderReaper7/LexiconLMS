@@ -13,11 +13,13 @@ using LexiconLMS.Shared.Dtos.ModulesDtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using LexiconLMS.Shared.Dtos;
+using System.Diagnostics;
 
 namespace LexiconLMS.Server.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class ModulesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
@@ -78,28 +80,48 @@ namespace LexiconLMS.Server.Controllers
 		// PUT: api/Modules/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutModule(Guid id, Module @module)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> PutModule(Guid id, Module @module)
 		{
+			bool Verification = true;
 			if (id != @module.Id)
 			{
 				return BadRequest();
 			}
 
+			var courseInQuery = _context.Courses.Find(module.CourseId);
+			var modulesInQuery = _context.Modules.Where(m => m.CourseId == courseInQuery.Id).AsNoTracking();
+
+			if (module.StartDate > module.EndDate) { Verification = false; }
+			if (module.StartDate < courseInQuery.StartDate || module.EndDate > courseInQuery.EndDate) { Verification = false; }
+
+			foreach (var item in modulesInQuery)
+				if (item.Id != id)
+				{
+					{
+						if (module.StartDate > item.StartDate && module.StartDate < item.EndDate) { Verification = false; }
+						if (module.StartDate < item.StartDate && module.EndDate > item.StartDate) { Verification = false; }
+					}
+				}
+
 			_context.Entry(@module).State = EntityState.Modified;
 
-			try
+			if (Verification)
 			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!ModuleExists(id))
+				try
 				{
-					return NotFound();
+					await _context.SaveChangesAsync();
 				}
-				else
+				catch (DbUpdateConcurrencyException)
 				{
-					throw;
+					if (!ModuleExists(id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
 				}
 			}
 
@@ -109,21 +131,41 @@ namespace LexiconLMS.Server.Controllers
 		// POST: api/Modules
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Module>> PostModule(Module @module)
+        [Authorize(Roles = "Teacher")]
+        public async Task<ActionResult<Module>> PostModule(Module @module)
 		{
+			bool Verification = true;
 			if (_context.Modules == null)
 			{
 				return Problem("Entity set 'ApplicationDbContext.Modules'  is null.");
 			}
-			_context.Modules.Add(@module);
-			await _context.SaveChangesAsync();
+			var courseInQuery = _context.Courses.Find(module.CourseId);
+			var modulesInQuery = _context.Modules.Where(m => m.CourseId == courseInQuery.Id);
 
-			return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
+			if (module.StartDate > module.EndDate) { Verification = false; }
+			if (module.StartDate < courseInQuery.StartDate || module.EndDate > courseInQuery.EndDate) { Verification = false; }
+
+			foreach (var item in modulesInQuery)
+			
+				{
+				if (module.StartDate > item.StartDate && module.StartDate < item.EndDate) { Verification = false; }
+				if (module.StartDate < item.StartDate && module.EndDate > item.StartDate) { Verification = false; }
+				}
+
+			if (Verification)
+			{
+				_context.Modules.Add(@module);
+				await _context.SaveChangesAsync();
+				return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
+			}
+
+			return Problem("overlapping modules or out of bounds of Course.");
 		}
 
 		// DELETE: api/Modules/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteModule(Guid id)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> DeleteModule(Guid id)
 		{
 			if (_context.Modules == null)
 			{
