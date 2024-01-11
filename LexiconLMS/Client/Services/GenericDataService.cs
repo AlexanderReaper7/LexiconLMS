@@ -9,9 +9,9 @@ namespace LexiconLMS.Client.Services;
 
 public interface IGenericDataService
 {
-    protected const string json = "application/json";
-    Task<T?> GetAsync<T>(string path, string contentType = json);
-    Task<bool> AddAsync<T>(string path, T objectToAdd);
+	protected const string json = "application/json";
+	Task<T?> GetAsync<T>(string path, string contentType = json);
+	Task<bool> AddAsync<T>(string path, T objectToAdd);
 	Task<bool> UpdateAsync<T>(string path, T objectToUpdate);
 	Task<bool> DeleteAsync(string path);
 }
@@ -40,63 +40,66 @@ public class GenericDataService : IGenericDataService
 		var result = JsonSerializer.Deserialize<T>(stream, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 		return result;
 	}
-	
 
-    public async Task<bool> AddAsync<T>(string path, T objectToAdd)
-    {
 
-        string json = JsonSerializer.Serialize(objectToAdd);
+	public async Task<bool> AddAsync<T>(string path, T objectToAdd)
+	{
 
-        var request = new HttpRequestMessage(HttpMethod.Post, path);
-        var httpContent = new StringContent(json, new MediaTypeHeaderValue(Application.Json));
-        request.Content = httpContent;
+		string json = JsonSerializer.Serialize(objectToAdd);
 
-        var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+		var request = new HttpRequestMessage(HttpMethod.Post, path);
+		var httpContent = new StringContent(json, new MediaTypeHeaderValue(Application.Json));
+		request.Content = httpContent;
 
-        if (response.IsSuccessStatusCode)
-        {
-            return true;
-        }
-        return false;
-    }
+		var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-    public async Task<bool> UpdateAsync<T>(string path, T objectToUpdate)
-    {
-        try
-        {
-            string json = JsonSerializer.Serialize(objectToUpdate);
+		response.EnsureSuccessStatusCode();
 
-            var request = new HttpRequestMessage(HttpMethod.Put, path);
-            var httpContent = new StringContent(json, new MediaTypeHeaderValue(Application.Json));
-            request.Content = httpContent;
+		if (response.IsSuccessStatusCode)
+		{
+			return true;
+		}
+		return false;
+	}
 
-            var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+	public async Task<bool> UpdateAsync<T>(string path, T objectToUpdate)
+	{
+		try
+		{
+			string json = JsonSerializer.Serialize(objectToUpdate);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            return false;
-        }
-        catch (Exception ex) {
-            var ex1 = ex.InnerException;
-            return false;
-        }
-        
-    }
+			var request = new HttpRequestMessage(HttpMethod.Put, path);
+			var httpContent = new StringContent(json, new MediaTypeHeaderValue(Application.Json));
+			request.Content = httpContent;
 
-    public async Task<bool> DeleteAsync(string path)
-    {
+			var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-        var request = new HttpRequestMessage(HttpMethod.Delete, path);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+			return false;
+		}
+		catch (Exception ex)
+		{
+			var ex1 = ex.InnerException;
+			return false;
+		}
 
-        var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+	}
 
-        if (response.IsSuccessStatusCode)
-        {
-            return true;
-        }
-        return false;
+	public async Task<bool> DeleteAsync(string path)
+	{
 
-    }
+		var request = new HttpRequestMessage(HttpMethod.Delete, path);
+
+		var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+		if (response.IsSuccessStatusCode)
+		{
+			return true;
+		}
+		return false;
+
+	}
 }

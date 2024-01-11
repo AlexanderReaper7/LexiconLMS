@@ -4,7 +4,14 @@
 @using LexiconLMS.Shared.Entities
 
 <button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Assignment.ModuleId)))">To Module</button>
-
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+	<p class="alert alert-danger">@ErrorMessage</p>
+}
+else if (!string.IsNullOrEmpty(Message))
+{
+	<p class="alert alert-success">@Message</p>
+}
 <div class="d-flex justify-content-between flex-wrap">
 	@if (string.IsNullOrEmpty(Assignment.Name))
 	{
@@ -17,21 +24,14 @@
 			<p class="fs-6 text-muted">@Assignment.DueDate</p>
 		</div>
 	}
-
-	@if (!string.IsNullOrEmpty(ErrorMessage))
-	{
-		<p class="alert alert-danger">@ErrorMessage</p>
-	}
-	else if (!string.IsNullOrEmpty(Message))
-	{
-		<p class="alert alert-success">@Message</p>
-	}
 	<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
-		<div class="mb-3">
-			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Assignment.Id}");})">Upload Document</button>
-			<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentUpdateUri(Assignment.Id));})">Update Assignment</button>
-			<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Assignment</button>
-		</div>
+		<Authorized>
+			<div class="mb-3">
+				<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Assignment.Id}");})">Upload Document</button>
+				<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentUpdateUri(Assignment.Id));})">Update Assignment</button>
+				<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Assignment</button>
+			</div>
+		</Authorized>
 	</AuthorizeView>
 </div>
 
@@ -49,17 +49,17 @@
 			<div class="card-header bg-light fw-bold">Assignment Details:</div>
 			<div class="card-body">
 				<ul class="list-unstyled">
-					@if (StudentId==null)
+					@if (StudentId == null)
 					{
 						<li><span class="fw-bold">Name:</span> @Assignment.Name</li>
 					}
 					else
 					{
 						<li><span class="fw-bold">Student Name:</span> @StudentName</li>
-						<li><span class="fw-bold">Assignment Name:</span> @Assignment.Name</li>
+						<li><span class="fw-bold">Assignment Name:</span><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsUri(Assignment.Id)">@Assignment.Name</a></li>
 					}
 
-					@if (SubmissionState!=null)
+					@if (SubmissionState != null)
 					{
 						<li><span class="fw-bold">Status:</span> <span class="fs-6 text-nowrap @SubmissionState.Value.GetCSSClass()">@SubmissionState.Value.AsText()</span></li>
 					}
@@ -76,12 +76,13 @@
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Documents:</div>
-			<div class="card-body">
+			<div class="card-body overflow-auto" style="max-height: 210px;">
 				<DocumentList List="ActivityDocuments"></DocumentList>
 			</div>
 		</div>
 	</div>
 	<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
+		
 		@if (StudentId == null)
 		{
 			<div class="col-lg-6 mb-3">
@@ -103,11 +104,33 @@
 					<div class="card-header bg-light fw-bold">
 						Student work:
 					</div>
-					<div class="card-body">
+					<div class="card-body overflow-auto" style="max-height: 185px;">
 						<DocumentList List="StudentDocuments"></DocumentList>
 					</div>
 				</div>
 			</div>
+			if (StudentDocuments.Any() || Feedback.Id != null)
+			{
+				<div class="col-lg-6 mb-3">
+					<div class="card bg-light shadow">
+						<div class="card-header bg-light fw-bold">
+							Feedback:
+						</div>
+						<div class="card-body">
+							<EditForm Model="@Feedback" OnValidSubmit="@HandleFeedbackValidSubmit" Context="context2">
+								<DataAnnotationsValidator></DataAnnotationsValidator>
+								@if (Feedback.Id != null && UserId != Feedback.TeacherId)
+								{
+									<div class="ps-1 fw-bold">@(Feedback.TeacherName):</div>
+								}
+								<InputTextArea id="feedback" class="form-control w-100 mb-3" @bind-Value="@Feedback.Message" rows="5" placeholder="Feedback"></InputTextArea>
+								<ValidationMessage class="offset-md-3" For="@(() => Feedback.Message)" />
+								<button type="submit" class="btn btn-success me-1">Save</button>
+							</EditForm>
+						</div>
+					</div>
+				</div>
+			}
 		}
 	</AuthorizeView>
 	<AuthorizeView Roles="@StaticUserRoles.Student.ToString()">
@@ -116,10 +139,30 @@
 				<div class="card-header bg-light">
 					<button class="btn btn-outline-primary" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Assignment.Id}");})">Submit assignment</button>
 				</div>
-				<div class="card-body">
+				<div class="card-body overflow-auto" style="max-height: 185px;">
 					<DocumentList List="StudentDocuments"></DocumentList>
 				</div>
 			</div>
 		</div>
+		@if (!string.IsNullOrEmpty(Feedback.Message))
+		{
+			<div class="col-lg-6 mb-3">
+				<div class="card bg-light shadow">
+					<div class="card-header bg-light fw-bold">
+						Feedback:
+					</div>
+					<div class="card-body overflow-auto" style="max-height: 300px;">
+						<div id="feedback" class="card bg-white">
+							<div class="card-header bg-white fw-bold">
+								@Feedback.TeacherName
+							</div>
+							<div class="card-body">
+								@Feedback.Message
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
 	</AuthorizeView>
 </div>
