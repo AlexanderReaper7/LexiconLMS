@@ -8,20 +8,19 @@
 
 @if (List != null && List.Any())
 {
-	
-	<ul>
+
+	<ul class="list-group-flush px-0">
 		@foreach (var item in List)
 		{
-			<li>
+			<li class="list-group-item bg-transparent">
 				<div class="row">
-				<div class="col-lg-6 mb-1">
-				@item.Name
+					<div class="col mb-1 overflow-hidden text-nowrap" style="white-space: nowrap; text-overflow:ellipsis;">
+						@item.Name
+					</div>
+					<div class="col-auto mb-1">
+						<button class="btn btn-primary lh-1 py-1 px-2" @onclick="() => DownloadDocument(item)"><span class="oi oi-cloud-download"></span></button>
+					</div>
 				</div>
-				<div class="col-lg-2 mb-1">
-					<button @onclick="() => DownloadDocument(item)">Download</button>
-				</div>
-				</div>
-				
 			</li>
 		}
 	</ul>

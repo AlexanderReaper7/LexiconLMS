@@ -36,7 +36,7 @@ namespace LexiconLMS.Server.Controllers
 			this.mapper = mapper;
 		}
 
-		// GET: api/Assignment
+		// GET: api/Activities
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Activity>>> GetActivities(Guid? moduleId = null)
 		{
@@ -249,8 +249,6 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-
-			DateTime now = DateTime.Now;
 
 			var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
 				.Where(a => a.Id == assignmentId && a.Type.Name == "Assignment");

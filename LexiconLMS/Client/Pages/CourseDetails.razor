@@ -1,5 +1,6 @@
 ﻿@attribute [Route(UriHelper.CourseDetails)]
 @attribute [Route(UriHelper.MyCourse)]
+@attribute [Authorize]
 @using LexiconLMS.Shared.Entities
 @using Microsoft.EntityFrameworkCore
 @using LexiconLMS.Client.Services
@@ -23,8 +24,12 @@
 
 	<div class="mb-3">
 		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Course.Id}");})">Upload Document</button>
-		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetCourseUpdateUri(Course.Id));})">Update Course</button>
-		<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetCourseDeleteUri(Course.Id));})">Delete Course</button>
+		<AuthorizeView Roles="Teacher">
+			<Authorized>
+				<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetCourseUpdateUri(Course.Id));})">Update Course</button>
+				<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetCourseDeleteUri(Course.Id));})">Delete Course</button>
+			</Authorized>
+		</AuthorizeView>
 	</div>
 
 </div>
@@ -46,13 +51,13 @@
 		</div>
 	</div>
 
-    <div class="col-lg-6 mb-3">
+	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow mb-5">
 			<div class="card-header bg-light fw-bold">Course Documents:</div>
 			<div class="card-body overflow-auto" style="max-height: 210px;">
 				<DocumentList List="CourseDocuments"></DocumentList>
 			</div>
-	
+
 		</div>
 		<div class="card bg-light shadow ">
 			<div class="card-header bg-light fw-bold">Student Documents:</div>

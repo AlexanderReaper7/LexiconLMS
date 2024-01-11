@@ -21,6 +21,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
 	public DbSet<Course> Courses { get; set; } = null!;
 	public DbSet<Module> Modules { get; set; } = null!;
 	public DbSet<Document> Documents { get; set; } = null!;
+	public DbSet<Feedback> Feedbacks { get; set; } = null!;
 
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -49,6 +50,15 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
 			HasMany(m => m.CourseDocuments)
 			.WithOne()
 			.OnDelete(DeleteBehavior.Cascade);
+
+		modelBuilder.Entity<Feedback>(b =>
+		{
+			b.HasOne<Activity>()
+			.WithMany()
+			.HasForeignKey(a => a.AssignmentId);
+			b.HasOne(f => f.Student).WithMany().OnDelete(DeleteBehavior.NoAction);
+			b.HasOne(f => f.Teacher).WithMany().OnDelete(DeleteBehavior.NoAction);
+		});
 
 		modelBuilder.Entity<IdentityRole>(b =>
 		{
