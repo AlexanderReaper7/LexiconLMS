@@ -26,9 +26,10 @@ namespace LexiconLMS.Client.Pages
         [Parameter]
         public string? CourseId { get; set; }
 
-        public Course Course { get; set; } = default!;
+        public Course Course { get; set; } = new Course();
         public List<Module> Modules { get; set; } = default!;
-		public List<Document> CourseDocuments { get; set; } = default!;
+		public List<Document> CourseDocuments { get; set; } = new List<Document>();
+		public List<Document> StudentCourseDocuments { get; set; } = new List<Document>();
 
 		public required List<ApplicationUser> Students { get; set; }
         protected override async Task OnInitializedAsync()
@@ -58,9 +59,9 @@ namespace LexiconLMS.Client.Pages
 			}
             Modules = await ModuleDataService.GetModulesByCourseId(courseId);
             Students = await ApplicationUserDataService.GetStudentsByCourseId(courseId);
-			CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{courseId}") ?? new List<Document>();
-            
-            await base.OnInitializedAsync();
+			CourseDocuments = await GenericDataService.GetAsync<List<Document>>($"coursedocumentsbycourse/{courseId}") ?? CourseDocuments;
+			StudentCourseDocuments = await GenericDataService.GetAsync<List<Document>>($"studentdocumentsbycourse/{courseId}") ?? StudentCourseDocuments;
+			await base.OnInitializedAsync();
         }
     }
 }

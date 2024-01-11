@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
+using Microsoft.AspNetCore.Identity;
+using LexiconLMS.Shared.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Server.Controllers
@@ -17,10 +19,12 @@ namespace LexiconLMS.Server.Controllers
     public class DocumentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public DocumentsController(ApplicationDbContext context)
+        public DocumentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: api/Documents
@@ -93,14 +97,25 @@ namespace LexiconLMS.Server.Controllers
 
         // GET: api/ActivityDocuments from acivity
         [HttpGet("/activitydocumentsbyactivity/{id}")]
-        public async Task<ActionResult<IEnumerable<Document>>> GetActivityDocuments(Guid id)
+        public async Task<ActionResult<IEnumerable<Document>>> GetActivityDocuments(Guid id, bool includeStudentsDocuments = true)
         {
             if (_context.Documents == null)
             {
                 return NotFound();
             }
-            return await _context.Documents.Where(m => m.ActivityId == id).ToListAsync();
+            return await _context.Documents.Where(m => m.ActivityId == id && m.RoleOfUploader == "Teacher").ToListAsync();
         }
+
+		// GET: api/ActivityDocuments from acivity
+		[HttpGet("/studentdocumentsbyactivity/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetStudentActivityDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.ActivityId == id && m.RoleOfUploader == "Student").ToListAsync();
+		}
 
 		[HttpGet("/moduledocumentsbymodule/{id}")]
 		public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(Guid id)
@@ -109,7 +124,17 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-			return await _context.Documents.Where(m => m.ModuleId == id).ToListAsync();
+			return await _context.Documents.Where(m => m.ModuleId == id && m.RoleOfUploader == "Teacher").ToListAsync();
+		}
+
+		[HttpGet("/studentdocumentsbymodule/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetStudentModuleDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.ModuleId == id && m.RoleOfUploader == "Student").ToListAsync();
 		}
 
 		[HttpGet("/coursedocumentsbycourse/{id}")]
@@ -119,7 +144,17 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-			return await _context.Documents.Where(m => m.CourseId == id).ToListAsync();
+			return await _context.Documents.Where(m => m.CourseId == id && m.RoleOfUploader == "Teacher").ToListAsync();
+		}
+
+		[HttpGet("/studentdocumentsbycourse/{id}")]
+		public async Task<ActionResult<IEnumerable<Document>>> GetStudentCourseDocuments(Guid id)
+		{
+			if (_context.Documents == null)
+			{
+				return NotFound();
+			}
+			return await _context.Documents.Where(m => m.CourseId == id && m.RoleOfUploader == "Student").ToListAsync();
 		}
 
 		// PUT: api/Documents/5
@@ -162,6 +197,7 @@ namespace LexiconLMS.Server.Controllers
           {
               return Problem("Entity set 'ApplicationDbContext.Documents'  is null.");
           }
+            document.UploaderId = userManager.GetUserId(User);
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 

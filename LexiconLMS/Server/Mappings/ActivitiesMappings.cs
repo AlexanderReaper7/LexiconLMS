@@ -15,6 +15,13 @@ namespace LexiconLMS.Server.Mappings
                     a => a.Type.Name
                     )
                 );
-        }
+			CreateMap<Activity, AssignmentDto>()
+				.ForMember(
+				dest => dest.DueDate,
+				from => from.MapFrom(
+					a => a.EndDate
+					)
+				);
+		}
     }
 }

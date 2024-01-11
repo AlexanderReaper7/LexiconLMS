@@ -62,7 +62,26 @@ namespace LexiconLMS.Client.Pages
 				Response.RoleOfUploader = userRole;
 				if (await GenericDataService.AddAsync("api/documents", Response))
 				{
-					NavigationManager.NavigateTo("/listofcourses");
+					string detailsUri = null;
+
+					if (Response.ActivityId != null)
+					{
+						detailsUri = UriHelper.GetActivityDetailsUri(Response.ActivityId);
+					}
+					else if (Response.ModuleId != null)
+					{
+						detailsUri = UriHelper.GetModuleDetailsUri(Response.ModuleId);
+					}
+					else if (Response.CourseId != null)
+					{
+						detailsUri = UriHelper.GetCourseDetailsUri(Response.CourseId);
+					}
+
+					if (detailsUri != null)
+					{
+						NavigationManager.NavigateTo(detailsUri);
+					}
+
 				}
 				else
 				{

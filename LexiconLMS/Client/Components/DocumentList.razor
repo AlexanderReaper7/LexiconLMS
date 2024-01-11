@@ -8,20 +8,27 @@
 
 @if (List != null && List.Any())
 {
-	<p>Documents:</p>
+	
 	<ul>
 		@foreach (var item in List)
 		{
 			<li>
+				<div class="row">
+				<div class="col-lg-6 mb-1">
 				@item.Name
-				<button @onclick="() => DownloadDocument(item)">Download</button>
+				</div>
+				<div class="col-lg-2 mb-1">
+					<button @onclick="() => DownloadDocument(item)">Download</button>
+				</div>
+				</div>
+				
 			</li>
 		}
 	</ul>
 }
 else
 {
-	<p>No documents available for this activity.</p>
+	<p>No documents currently uploaded</p>
 }
 
 @code {

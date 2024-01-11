@@ -1,6 +1,9 @@
 ﻿@attribute [Route(UriHelper.ModuleUpdate)]
+@attribute [Authorize(Roles = $"{nameof(StaticUserRoles.Teacher)}")]
 
+@using LexiconLMS.Shared.Dtos
 @using LexiconLMS.Shared.Entities
+@using Microsoft.AspNetCore.Authorization
 
 <section class="card p-3">
 

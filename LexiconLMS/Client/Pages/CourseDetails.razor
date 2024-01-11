@@ -6,7 +6,34 @@
 @using LexiconLMS.Client.Helpers
 @using Microsoft.AspNetCore.Authorization
 
-<h3>Course Details</h3>
+<div class="d-flex justify-content-between flex-wrap">
+
+	@if (string.IsNullOrEmpty(Course.Name))
+	{
+		<h3>Module details</h3>
+	}
+	else
+	{
+		<div>
+			<h3>@Course.Name</h3>
+			<p class="fs-6 text-muted">@Course.StartDate.ToShortDateString() − @Course.EndDate.ToShortDateString()</p>
+		</div>
+	}
+
+	<div class="mb-3">
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Course.Id}");})">Upload Document</button>
+		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetCourseUpdateUri(Course.Id));})">Update Course</button>
+		<button class="btn btn-danger" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetCourseDeleteUri(Course.Id));})">Delete Course</button>
+	</div>
+
+</div>
+
+<div class="card bg-light mb-3 shadow-sm">
+	<div class="card-body">
+		<div class="card-title fw-bold">Description</div>
+		@Course.Description
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-lg-6 mb-3">
@@ -19,13 +46,17 @@
 	</div>
 
     <div class="col-lg-6 mb-3">
-		<div class="card bg-light shadow">
-			<div class="card-header bg-light fw-bold">Documents</div>
-			<div class="card-body">
+		<div class="card bg-light shadow mb-5">
+			<div class="card-header bg-light fw-bold">Course Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 210px;">
 				<DocumentList List="CourseDocuments"></DocumentList>
 			</div>
-			<div class="card-footer">
-				<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Course.Id}");})">Upload Document</button>
+	
+		</div>
+		<div class="card bg-light shadow ">
+			<div class="card-header bg-light fw-bold">Student Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 185px;">
+				<DocumentList List="StudentCourseDocuments"></DocumentList>
 			</div>
 		</div>
 	</div>

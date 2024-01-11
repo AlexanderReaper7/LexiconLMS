@@ -1,5 +1,7 @@
 ﻿@using LexiconLMS.Shared.Dtos
+@using Microsoft.AspNetCore.Authorization
 @attribute [Route(UriHelper.ModuleDetails)]
+@attribute [Authorize]
 
 <button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetCourseDetailsUri(Module.CourseId)))">To course</button>
 
@@ -47,28 +49,36 @@
 		</div>
 	</div>
 	<div class="col-lg-6 mb-3">
-		<div class="card bg-light shadow">
-			<div class="card-header bg-light fw-bold">Documents:</div>
-			<div class="card-body overflow-auto" style="max-height: 400px;">
+		<div class="card bg-light shadow mb-5">
+			<div class="card-header bg-light fw-bold">Module Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 210px;">
 				<DocumentList List="ModuleDocuments"></DocumentList>
 			</div>
 		</div>
+		<div class="card bg-light shadow ">
+			<div class="card-header bg-light fw-bold">Student Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 185px;">
+				<DocumentList List="StudentDocuments"></DocumentList>
+			</div>
+		</div>
 	</div>
+	
 </div>
 
 <div class="row flex-row-reverse">
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Assignments:</div>
-			<div class="card-body overflow-auto" style="max-height: 400px;">
+			<div class="card-body">
+				
 				@if (Module.CourseId != null)
 				{
 					<AuthorizeView Roles="@StaticUserRoles.Teacher.ToString()">
 						<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetAssignmentAddUri(Module.Id));})">Add assignment</button>
-						<AssignmentsListTeachers CourseId="Module.CourseId" ModuleId="Module.Id"></AssignmentsListTeachers>
+						<AssignmentsListTeachers Assignments="AssignmentsForTeachers" ></AssignmentsListTeachers>
 					</AuthorizeView>
 					<AuthorizeView Roles="@StaticUserRoles.Student.ToString()">
-						<AssignmentsListStudents ModuleId="Module.Id"></AssignmentsListStudents>
+						<AssignmentsListStudents Assignments="AssignmentsForStudents"></AssignmentsListStudents>
 					</AuthorizeView>
 				}
 			</div>

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using System.Security.Claims;
 using LexiconLMS.Shared.Dtos;
+using LexiconLMS.Server.Services;
 
 namespace LexiconLMS;
 public class Program
@@ -63,6 +64,9 @@ public class Program
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
+
+        builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+        builder.Services.AddTransient<IMailService, MailService>();
 
         builder.Services.AddRazorPages();
         builder.Services.AddSwaggerGen();

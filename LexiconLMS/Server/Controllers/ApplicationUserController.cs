@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Server.Data;
+using LexiconLMS.Server.Services;
 using LexiconLMS.Shared.Dtos;
 using LexiconLMS.Shared.Dtos.ApplicationUserDtos;
 using LexiconLMS.Shared.Entities;
@@ -20,12 +21,17 @@ namespace LexiconLMS.Server.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMailService _mailService;
 
-        public ApplicationUserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private MailData _mailData;
+
+        public ApplicationUserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IMailService mailService)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _mailService = mailService;
+            _mailData = new MailData();
         }
 
         // GET: api/ApplicationUser
@@ -49,14 +55,14 @@ namespace LexiconLMS.Server.Controllers
             if (isExist is not null)
                 return BadRequest("UserName already exists");
 
-            var course = _context.Courses.Where(c => c.Id == ApplicationUserDto.Course.Id).FirstOrDefault();
+            var course = _context.Courses.Where(c => c.Id == ApplicationUserDto.CourseID).FirstOrDefault();
             ApplicationUser newUser = new ApplicationUser()
             {
                 UserName = ApplicationUserDto.Email,
                 Email = ApplicationUserDto.Email,
                 FirstName = ApplicationUserDto.FirstName,
                 LastName = ApplicationUserDto.LastName,
-                Course = course != null? course: ApplicationUserDto.Course,
+                Course = course,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
@@ -76,6 +82,13 @@ namespace LexiconLMS.Server.Controllers
             //await _userManager.AddToRoleAsync(newUser, Enum.GetName(typeof(StaticUserRoles), 1));
             await _userManager.AddToRoleAsync(newUser, ApplicationUserDto.Role);
 
+            _mailData.EmailTo = newUser.Email;
+            _mailData.EmailToName = $"{newUser.FirstName} {newUser.LastName}";
+            _mailData.EmailSubject = "User created successfully";
+            _mailData.EmailBody = $"You have been added to {course.Name} course as {ApplicationUserDto.Role}.";
+
+            _mailService.SendMail(_mailData);
+
             return Ok("User created successfully");
         }
 
@@ -87,8 +100,10 @@ namespace LexiconLMS.Server.Controllers
             {
                 return NotFound();
             }
-            
-            var user = await _context.Users.Where(u => u.Id == id.ToString()).Include(u => u.Course).FirstOrDefaultAsync();
+
+            var user = await _context.Users.Where(u => u.Id == id.ToString())
+                .Include(u => u.Course)
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -103,7 +118,7 @@ namespace LexiconLMS.Server.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Course = user.Course,
+                CourseID = user.Course.Id,
                 Role = roles.Count !=0 ? roles.ElementAt(0) : "Student"
             };
 
@@ -119,11 +134,13 @@ namespace LexiconLMS.Server.Controllers
                 return BadRequest();
             }
 
+            var course = _context.Courses.Where(c => c.Id == updatedUser.CourseID).FirstOrDefault();
+
             var user = await _context.Users.AsNoTracking().Where(u => u.Id == id.ToString()).Include(u => u.Course).FirstOrDefaultAsync();
             user.FirstName = updatedUser.FirstName;
             user.LastName = updatedUser.LastName;
             user.Email = updatedUser.Email;
-            user.Course = updatedUser.Course;
+            user.Course = course;
             user.UserName = updatedUser.Email;
 
             _context.Entry(user.Course).State = EntityState.Unchanged;
@@ -136,7 +153,14 @@ namespace LexiconLMS.Server.Controllers
                 await _userManager.RemoveFromRoleAsync(user, updatedUser.OldRole);
                 await _userManager.AddToRoleAsync(user, updatedUser.Role);
             }
-            
+
+            _mailData.EmailTo = user.Email;
+            _mailData.EmailToName = $"{user.FirstName} {user.LastName}";
+            _mailData.EmailSubject = "Update user data";
+            _mailData.EmailBody = $"Your data has been successfully updated.";
+
+            _mailService.SendMail(_mailData);
+
             return Ok();
         }
 
@@ -156,6 +180,13 @@ namespace LexiconLMS.Server.Controllers
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            _mailData.EmailTo = user.Email;
+            _mailData.EmailToName = $"{user.FirstName} {user.LastName}";
+            _mailData.EmailSubject = "Remove user data";
+            _mailData.EmailBody = $"You have been removed from {user.Course.Name} course.";
+
+            _mailService.SendMail(_mailData);
 
             return Ok();
         }

@@ -1,4 +1,5 @@
 ﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Dtos.ActivitiesDtos
 @using LexiconLMS.Shared.Entities
 
 <table class="table">
@@ -27,5 +28,14 @@
         }
     </tbody>
 </table>
+
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public IEnumerable<AssignmentDtoForStudents> Assignments { get; set; } = null!;
+}
 
 
