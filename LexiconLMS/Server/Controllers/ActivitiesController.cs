@@ -296,32 +296,30 @@ namespace LexiconLMS.Server.Controllers
 						if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
 					}
 				}
-
-			try
-			{
-				_context.Entry(activity).State = EntityState.Modified;
-			}
-			catch (Exception ex) { Console.Write(ex.ToString()); }
-			
-
+		
+				
+	
 			if (Verification)
 			{
 				try
 				{
-					await _context.SaveChangesAsync();
+                    _context.Entry(activity).State = EntityState.Modified;
+                    _context.Entry(activity.Type).State = EntityState.Modified;              
+                     await _context.SaveChangesAsync();
 				}
+			catch (Exception ex) { Console.Write(ex.ToString()); }
 
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!ActivityExists(id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
+    //            catch (DbUpdateConcurrencyException)
+				//{
+				//	if (!ActivityExists(id))
+				//	{
+				//		return NotFound();
+				//	}
+				//	else
+				//	{
+				//		throw;
+				//	}
+				//}
 			}
 			
 
