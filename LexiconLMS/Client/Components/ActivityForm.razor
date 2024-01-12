@@ -60,7 +60,7 @@
 					<label for="start-date" class="col-form-label">Start date: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputDate id="start-date" class="form-control" @bind-Value="@Activity.StartDate" placeholder="Start date"></InputDate>
+					<InputDate Type="InputDateType.DateTimeLocal" id="start-date" class="form-control" @bind-Value="@Activity.StartDate" placeholder="Start date"></InputDate>
 				</div>
 			</div>
 
@@ -69,7 +69,7 @@
 					<label for="end-date" class="col-form-label">End date: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputDate id="end-date" class="form-control" @bind-Value="@Activity.EndDate" placeholder="End date"></InputDate>
+					<InputDate Type="InputDateType.DateTimeLocal" id="end-date" class="form-control" @bind-Value="@Activity.EndDate" placeholder="End date"></InputDate>
 				</div>
 			</div>
 		</div>

@@ -44,7 +44,8 @@ namespace LexiconLMS.Client.Helpers
         public static string GetCourseUpdateUri<T>(T courseId) =>  $"/{course}{update}/{courseId}";
         public static string GetCourseDeleteUri<T>(T courseId) =>  $"/{course}{delete}/{courseId}";
         public static string GetCourseDetailsUri<T>(T courseId) =>  $"/{course}/{courseId}";
-        public static string GetCourseListUri() => CourseList;
+		public static string GetCourseMyUri() => $"/{course}";
+		public static string GetCourseListUri() => CourseList;
 
 		//Module uri
 		public static string GetModuleAddUri<T>(T courseId) => $"/{module}{add}/{courseId}";
