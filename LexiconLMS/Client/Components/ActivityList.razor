@@ -33,7 +33,7 @@
                             <AuthorizeView Roles="Teacher">
                                 <Authorized>
                                     <a href="@UriHelper.GetActivityUpdateUri(activity.Id)" class="btn"><span class="text-dark oi oi-pencil"></span></a>
-                                    <a href="@UriHelper.GetActivityDeleteUri(activity.Id)" class="btn"><span class="text-dark oi oi-circle-x"></span></a>
+                               @*      <a href="@UriHelper.GetActivityDeleteUri(activity.Id)" class="btn"><span class="text-dark oi oi-circle-x"></span></a> *@
                                 </Authorized>
                             </AuthorizeView>
                         </div>
