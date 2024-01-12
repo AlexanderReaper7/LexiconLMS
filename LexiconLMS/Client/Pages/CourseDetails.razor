@@ -18,7 +18,11 @@
 		<div>
 			<h3>Course: @Course.Name</h3>
 			<p class="fs-6 text-muted">@Course.StartDate.ToShortDateString() − @Course.EndDate.ToShortDateString()</p>
+			<AuthorizeView Roles="Teacher">
+				<Authorized>
 			<button class="btn btn-outline-primary py-1 mb-3" @onclick="@(() => {NavigationManager.NavigateTo(UriHelper.GetModuleAddUri(Course.Id));})">Add Module</button>
+			</Authorized>
+		</AuthorizeView>
 		</div>
 	}
 
@@ -69,14 +73,14 @@
 </div>
 
 <div class="row">
-	<div class="col-lg-6 mb-3">
+@* 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
 			<div class="card-header bg-light fw-bold">Activities</div>
 			<div class="card-body">
 				<ActivityList ActivityLst="Activities" />
 			</div>
 		</div>
-	</div>
+	</div> *@
 
 	<div class="col-lg-6 mb-3">
 		<div class="card bg-light shadow">
