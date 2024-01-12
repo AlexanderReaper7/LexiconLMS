@@ -53,7 +53,8 @@ namespace LexiconLMS.Server.Controllers
 			}
 
 
-			return await query.ToListAsync();
+			return await query.OrderBy(a => a.StartDate)
+							   .ToListAsync();
 		}
 
 		// GET: api/Modules
@@ -64,7 +65,9 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-			return await _context.Activities.Where(a => a.ModuleId == id).ToListAsync();
+			return await _context.Activities.Where(a => a.ModuleId == id)
+											.OrderBy(a => a.StartDate)	
+											.ToListAsync();
 		}
 
 		// GET: api/Activities/5
