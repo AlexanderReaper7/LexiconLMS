@@ -359,6 +359,38 @@ namespace LexiconLMS.Server.Data.Migrations
                     b.ToTable("Documents");
                 });
 
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Feedbacks");
+                });
+
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>
                 {
                     b.Property<Guid>("Id")
@@ -559,21 +591,49 @@ namespace LexiconLMS.Server.Data.Migrations
                 {
                     b.HasOne("LexiconLMS.Shared.Entities.Activity", null)
                         .WithMany("ActivityDocument")
-                        .HasForeignKey("ActivityId");
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("LexiconLMS.Shared.Entities.Course", null)
                         .WithMany("CourseDocuments")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("LexiconLMS.Shared.Entities.Module", null)
                         .WithMany("ModuleDocuments")
-                        .HasForeignKey("ModuleId");
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("LexiconLMS.Shared.Entities.ApplicationUser", "Uploader")
                         .WithMany()
                         .HasForeignKey("UploaderId");
 
                     b.Navigation("Uploader");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Shared.Entities.Feedback", b =>
+                {
+                    b.HasOne("LexiconLMS.Shared.Entities.Activity", null)
+                        .WithMany()
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Shared.Entities.ApplicationUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Shared.Entities.ApplicationUser", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("LexiconLMS.Shared.Entities.Module", b =>

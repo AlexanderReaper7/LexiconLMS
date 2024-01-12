@@ -1,0 +1,46 @@
+﻿@using LexiconLMS.Client.Extensions
+@using LexiconLMS.Shared.Entities;
+
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-success py-1">@Message</div>
+}
+
+<div class="overflow-auto" style="max-height: 400px;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Assignments != null)
+            {
+                @foreach (var activity in Assignments)
+                {
+                    <tr>
+                        <td scope="row"><a class="hidden-link" href="@UriHelper.GetAssignmentDetailsOfAStudentUri(AssignmentId, activity.StudentId)">@activity.StudentName</a></td>
+                        <td scope="row">
+                            @if (activity.SubmissionState == SubmissionState.Submitted || activity.SubmissionState == SubmissionState.SubmittedLate)
+                            {
+                                <ButtonDownloadSubmission AssignmnetId="@AssignmentId"
+                                                          StudentId="@activity.StudentId"
+                                                          SubmissionState="@activity.SubmissionState"
+                                                          DownloadedEvent="@ShowMessage"></ButtonDownloadSubmission>
+                            }
+                            else
+                            {
+                                <div class="rounded-3 @activity.SubmissionState.GetCSSClass() text-center text-lowercase">
+                                    @activity.SubmissionState.AsText()
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+

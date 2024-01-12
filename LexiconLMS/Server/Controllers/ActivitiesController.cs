@@ -16,21 +16,27 @@ using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LexiconLMS.Server.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ActivitiesController : ControllerBase
+    [Authorize]
+    public class ActivitiesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly IMapper mapper;
 
-		public ActivitiesController(ApplicationDbContext context)
+		public ActivitiesController(ApplicationDbContext context, IMapper mapper)
 		{
 			_context = context;
+			this.mapper = mapper;
 		}
 
-		// GET: api/Assignment
+		// GET: api/Activities
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Activity>>> GetActivities(Guid? moduleId = null)
 		{
@@ -106,7 +112,7 @@ namespace LexiconLMS.Server.Controllers
                 .Join(_context.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.Name == StaticUserRoles.Student.ToString())).DefaultIfEmpty(),
                     a => a.CourseId,
                     s => s.CourseId,
-                    (a, s) => new AssigmentDtoForTeachers
+                    (a, s) => new AssignmentDtoForTeachers
                     {
                         StudentId = s.Id,
                         StudentName = s.FirstName + " " + s.LastName,
@@ -114,7 +120,7 @@ namespace LexiconLMS.Server.Controllers
                         AssignmentName = a.Name,
 
                         SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == s.Id) ?
-						a.EndDate >= now ? SubmissionState.Submitted : SubmissionState.SubmittedLate
+						a.EndDate >= a.ActivityDocument!.Min(d=>d.UploadDate) ? SubmissionState.Submitted : SubmissionState.SubmittedLate
 						: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
 
                         DueDate = a.EndDate
@@ -126,7 +132,62 @@ namespace LexiconLMS.Server.Controllers
             return Ok(assignments);
         }
 
-        [HttpGet("students/{studentId}/modules/{moduleId}/assignments")]
+		[HttpGet("students/assignments/{assignmentId}")]
+		public async Task<ActionResult> GetAssignments(Guid assignmentId)
+		{
+			if (_context.Activities == null)
+			{
+				return NotFound();
+			}
+
+			DateTime now = DateTime.Now;
+
+			var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument).Include(a => a.Module)
+				.Where(a => a.Id == assignmentId && a.Type.Name == "Assignment")
+				.Select(a => new
+				{
+					a.Id,
+					a.Name,
+					a.StartDate,
+					a.EndDate,
+					a.ActivityDocument,
+					a.Module!.CourseId
+				})
+				.Join(_context.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.Name == StaticUserRoles.Student.ToString())).DefaultIfEmpty(),
+					a => a.CourseId,
+					s => s.CourseId,
+
+					(a, s) => new AssignmentDtoStudentAndStatusOnly
+					{
+						StudentId = s.Id,
+						StudentName = s.FirstName + " " + s.LastName,
+
+						SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == s.Id) ?
+						a.EndDate >= a.ActivityDocument!.Min(d => d.UploadDate) ? SubmissionState.Submitted : SubmissionState.SubmittedLate
+						: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late
+					}
+				);
+
+			//new AssignmentDtoForTeachers
+			//{
+			//	StudentId = s.Id,
+			//	StudentName = s.FirstName + " " + s.LastName,
+			//	AssignmentId = a.Id,
+			//	AssignmentName = a.Name,
+
+			//	SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == s.Id) ?
+			//			a.EndDate >= a.ActivityDocument!.Min(d => d.UploadDate) ? SubmissionState.Submitted : SubmissionState.SubmittedLate
+			//			: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
+
+			//	DueDate = a.EndDate
+			//}
+
+			var assignments = await query.ToListAsync();
+
+			return Ok(assignments);
+		}
+
+		[HttpGet("students/{studentId}/modules/{moduleId}/assignments")]
         public async Task<ActionResult> GetAssignments(string studentId, Guid moduleId)
         {
             if (_context.Activities == null)
@@ -138,16 +199,17 @@ namespace LexiconLMS.Server.Controllers
 
             var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
                 .Where(a => a.ModuleId == moduleId && a.Type.Name == "Assignment" && a.StartDate <= now)
-                .Select(a => new AssignmentsDtoForStudents
+                .Select(a => new AssignmentDtoForStudents
                 {
                     AssignmentId = a.Id,
                     AssignmentName = a.Name,
 
 					SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == studentId)? 
-					a.EndDate >= now? SubmissionState.Submitted : SubmissionState.SubmittedLate
+					a.EndDate >= a.ActivityDocument!.Min(d => d.UploadDate) ? SubmissionState.Submitted : SubmissionState.SubmittedLate
 					: a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
 
 					DueDate = a.EndDate
+					
                 });
 
             var assignments = await query.ToListAsync();
@@ -163,25 +225,14 @@ namespace LexiconLMS.Server.Controllers
                 return NotFound();
             }
 
-            DateTime now = DateTime.Now;
 
             var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
-                .Where(a => a.Type.Name == "Assignment")
-                .Select(a => new AssignmentDtoForStudents
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-					Description = a.Description,
+                .Where(a => a.Id == assignmentId && a.Type.Name == "Assignment")
+                .Select(a =>
+					a.ActivityDocument!.Where(d => d.UploaderId == studentId).Cast<Document>().ToList()
+                );
 
-                    SubmissionState = a.ActivityDocument!.Any(d => d.UploaderId == studentId) ?
-                    a.EndDate >= now ? SubmissionState.Submitted : SubmissionState.SubmittedLate
-                    : a.EndDate >= now ? SubmissionState.NotSubmitted : SubmissionState.Late,
-
-                    DueDate = a.EndDate,
-					Documents = a.ActivityDocument!.Where(d => d.UploaderId == studentId).Cast<Document>().ToList()
-                });
-
-            var assignment = await query.FirstOrDefaultAsync(a => a.Id == assignmentId);
+            var assignment = await query.FirstOrDefaultAsync();
 
 			if (assignment == null)
 			{
@@ -191,34 +242,81 @@ namespace LexiconLMS.Server.Controllers
             return Ok(assignment);
         }
 
+		[HttpGet("assignments/{assignmentId}")]
+		public async Task<ActionResult> GetAssignment(Guid assignmentId)
+		{
+			if (_context.Activities == null)
+			{
+				return NotFound();
+			}
+
+			var query = _context.Activities.Include(a => a.Type).Include(a => a.ActivityDocument)
+				.Where(a => a.Id == assignmentId && a.Type.Name == "Assignment");
+
+			var activity = await query.FirstOrDefaultAsync();
+
+			if (activity == null)
+			{
+				return NotFound();
+			}
+
+			var assignment = mapper.Map<AssignmentDto>(activity);
+
+			return Ok(assignment);
+		}
+
 
         // PUT: api/Assignment/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+		[Authorize(Roles = "Teacher")]
 		public async Task<IActionResult> PutActivity(Guid id, Activity activity)
 		{
+			bool Verification = true;
+			
 			if (id != activity.Id)
 			{
 				return BadRequest();
 			}
 
-			_context.Entry(activity).State = EntityState.Modified;
+			var moduleInQuery = _context.Modules.Find(activity.ModuleId);
+			var activitiesInQuery = _context.Activities.Where(a => a.ModuleId == moduleInQuery.Id).AsNoTracking();
 
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!ActivityExists(id))
+			if (activity.StartDate > activity.EndDate) { Verification = false; }
+			if (activity.StartDate < moduleInQuery.StartDate || activity.EndDate > moduleInQuery.EndDate) { Verification = false; }
+
+			foreach (var item in activitiesInQuery)
+				if (item.Id != id)
 				{
-					return NotFound();
+					{
+						if (activity.StartDate > item.StartDate && activity.StartDate < item.EndDate) { Verification = false; }
+						if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
+					}
 				}
-				else
+
+			if (Verification)
+			{
+				try
 				{
-					throw;
+                    _context.Entry(activity).State = EntityState.Modified;
+                    _context.Entry(activity.Type).State = EntityState.Modified;              
+                     await _context.SaveChangesAsync();
 				}
+			catch (Exception ex) { Console.Write(ex.ToString()); }
+
+    //            catch (DbUpdateConcurrencyException)
+				//{
+				//	if (!ActivityExists(id))
+				//	{
+				//		return NotFound();
+				//	}
+				//	else
+				//	{
+				//		throw;
+				//	}
+				//}
 			}
+			
 
 			return NoContent();
 		}
@@ -226,22 +324,50 @@ namespace LexiconLMS.Server.Controllers
 		// POST: api/Assignment
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+        [Authorize(Roles = "Teacher")]
+        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
 		{
+
+			bool Verification = true;
+
 			if (_context.Activities == null)
 			{
 				return Problem("Entity set 'ApplicationDbContext.Activities'  is null.");
 			}
-			_context.Entry(activity).State = EntityState.Unchanged;
-			_context.Activities.Add(activity);
-			await _context.SaveChangesAsync();
 
-			return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+			var moduleInQuery = _context.Modules.Find(activity.ModuleId);
+			var activitiesInQuery = _context.Activities.Where(a => a.ModuleId == moduleInQuery.Id);
+
+			if (activity.StartDate > activity.EndDate) { Verification = false; }
+			if (activity.StartDate < moduleInQuery.StartDate || activity.EndDate > moduleInQuery.EndDate) { Verification = false; }
+
+			foreach (var item in activitiesInQuery)
+			{
+				if (activity.StartDate > item.StartDate && activity.StartDate < item.EndDate) { Verification = false; }
+				if (activity.StartDate < item.StartDate && activity.EndDate > item.StartDate) { Verification = false; }
+			}
+
+			if (Verification)
+			{
+				_context.Entry(activity).State = EntityState.Unchanged;
+				_context.Activities.Add(activity);
+
+				try
+				{
+
+					await _context.SaveChangesAsync();
+				}
+				catch (Exception ex) { Console.Write(ex.ToString()); }
+
+				return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
+			}
+			return Problem("overlapping activities or out of bounds of module.");
 		}
 
 		// DELETE: api/Assignment/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteActivity(Guid id)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> DeleteActivity(Guid id)
 		{
 			if (_context.Activities == null)
 			{
@@ -252,9 +378,17 @@ namespace LexiconLMS.Server.Controllers
 			{
 				return NotFound();
 			}
-
+			
 			_context.Activities.Remove(activity);
-			await _context.SaveChangesAsync();
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch(Exception message) 
+			{
+				Console.WriteLine($"Exception message: {message.Message}");
+			}
 
 			return NoContent();
 		}

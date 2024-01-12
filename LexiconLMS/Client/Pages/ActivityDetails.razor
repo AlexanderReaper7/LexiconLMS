@@ -1,4 +1,6 @@
-﻿@attribute [Route(UriHelper.ActivityDetails)]
+﻿@using Microsoft.AspNetCore.Authorization
+@attribute [Route(UriHelper.ActivityDetails)]
+@attribute [Authorize]
 
 <button class="btn btn-outline-primary py-1 mb-3" @onclick="@(()=> NavigationManager.NavigateTo(UriHelper.GetModuleDetailsUri(Activity.ModuleId)))">To Module</button>
 
@@ -23,15 +25,15 @@
 	{
 		<p class="alert alert-success">@Message</p>
 	}
-@* 	 <AuthorizeView Roles="Teacher">
-          <Authorized> *@
 	<div class="mb-3">
 		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"documentupload/{Activity.Id}");})">Upload Document</button>
-		<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Activity.Id}");})">Update Activty</button>
-		<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
+		<AuthorizeView Roles="Teacher">
+			<Authorized>
+				<button class="btn btn-info" @onclick="@(() => {NavigationManager.NavigateTo($"activityUpdate/{Activity.Id}");})">Update Activty</button>
+				<button class="btn btn-danger" @onclick="@(() => DeleteActivity())">Delete Activity</button>
+			</Authorized>
+		</AuthorizeView>
 	</div>
-@* 		</Authorized>
-	</AuthorizeView> *@
 
 </div>
 
@@ -52,17 +54,23 @@
 				<span style="font-weight: bold;">Activity Type:</span> @Activity.Type.Name <br />
 				<span style="font-weight: bold;">Start:</span> @Module.StartDate <br />
 				<span style="font-weight: bold;">End:</span> @Module.EndDate <br />
-				  <br />
-				
-				
+				<br />
+
+
 			</div>
 		</div>
 	</div>
 	<div class="col-lg-6 mb-3">
-		<div class="card bg-light shadow">
-			<div class="card-header bg-light fw-bold">Documents:</div>
-			<div class="card-body">
+		<div class="card bg-light shadow mb-5">
+			<div class="card-header bg-light fw-bold">Activity Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 210px;">
 				<DocumentList List="ActivityDocuments"></DocumentList>
+			</div>
+		</div>
+		<div class="card bg-light shadow ">
+			<div class="card-header bg-light fw-bold">Student Documents:</div>
+			<div class="card-body overflow-auto" style="max-height: 185px;">
+				<DocumentList List="StudentActivityDocuments"></DocumentList>
 			</div>
 		</div>
 	</div>

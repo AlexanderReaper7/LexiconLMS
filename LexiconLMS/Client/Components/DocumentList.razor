@@ -8,20 +8,26 @@
 
 @if (List != null && List.Any())
 {
-	<p>Documents:</p>
-	<ul>
+
+	<ul class="list-group-flush px-0">
 		@foreach (var item in List)
 		{
-			<li>
-				@item.Name
-				<button @onclick="() => DownloadDocument(item)">Download</button>
+			<li class="list-group-item bg-transparent">
+				<div class="row">
+					<div class="col mb-1 overflow-hidden text-nowrap" style="white-space: nowrap; text-overflow:ellipsis;">
+						@item.Name
+					</div>
+					<div class="col-auto mb-1">
+						<button class="btn btn-primary lh-1 py-1 px-2" @onclick="() => DownloadDocument(item)"><span class="oi oi-cloud-download"></span></button>
+					</div>
+				</div>
 			</li>
 		}
 	</ul>
 }
 else
 {
-	<p>No documents available for this activity.</p>
+	<p>No documents currently uploaded</p>
 }
 
 @code {

@@ -30,7 +30,7 @@ namespace LexiconLMS.Client.Pages
                 ApplicationUserUpdate.LastName = ApplicationUser.LastName;
                 ApplicationUserUpdate.Email = ApplicationUser.Email;
                 ApplicationUserUpdate.Role = ApplicationUser.Role;
-                ApplicationUserUpdate.Course = ApplicationUser.Course;
+                ApplicationUserUpdate.CourseID = ApplicationUser.CourseID;
                 ApplicationUserUpdate.OldRole = ApplicationUser.Role;
             }
 

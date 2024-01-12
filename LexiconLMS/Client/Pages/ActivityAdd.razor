@@ -29,8 +29,13 @@
 					<label for="name" class="col-form-labelo text-nowrap">Activity Type: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputText id="name" class="form-control" @bind-Value="@Activity.Type.Name" placeholder="Name"></InputText>
-					<ValidationMessage class="offset-md-3" For="@(() => Activity.Type.Name)" />
+					<select id="name" class="form-control" placeholder="Choose Activity Type" @bind="@Activity.Type.Name">					
+						<option value="Assignment">Assignment</option>
+						<option value="E-Learning">E-Learning</option>
+						<option value="Practice session">Practice session</option>
+						<option value="Lecture">Lecture</option>
+					</select>
+					<ValidationMessage class="offset-md-3" For="@(() => Activity.Type.Name)" />			
 				</div>
 			</div>
 
@@ -49,7 +54,8 @@
 					<label for="start-date" class="col-form-label">Start date: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputDate id="start-date" class="form-control" @bind-Value="@Activity.StartDate" placeholder="Start date"></InputDate>
+					<InputDate id="start-date" class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="@Activity.StartDate" placeholder="Start date"></InputDate>
+				
 				</div>
 			</div>
 
@@ -58,7 +64,7 @@
 					<label for="end-date" class="col-form-label">End date: </label>
 				</div>
 				<div class="d-lg-table-cell ps-lg-0 pb-lg-3">
-					<InputDate id="end-date" class="form-control" @bind-Value="@Activity.EndDate" placeholder="End date"></InputDate>
+					<InputDate id="end-date" class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="@Activity.EndDate" placeholder="End date"></InputDate>
 				</div>
 			</div>
 

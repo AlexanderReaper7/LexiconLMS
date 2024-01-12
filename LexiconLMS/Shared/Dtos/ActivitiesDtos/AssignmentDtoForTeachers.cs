@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Shared.Dtos.ActivitiesDtos
 {
-    public class AssigmentDtoForTeachers
+    public class AssignmentDtoForTeachers
     {
         public string StudentId { get; set; } = string.Empty;
         public string StudentName { get; set; } = string.Empty;
@@ -17,4 +17,12 @@ namespace LexiconLMS.Shared.Dtos.ActivitiesDtos
         public DateTime DueDate { get; set; }
 
     }
+
+	public class AssignmentDtoStudentAndStatusOnly
+	{
+		public string StudentId { get; set; } = string.Empty;
+		public string StudentName { get; set; } = string.Empty;
+		public SubmissionState SubmissionState { get; set; }
+
+	}
 }

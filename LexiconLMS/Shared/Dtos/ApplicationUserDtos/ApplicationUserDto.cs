@@ -16,7 +16,7 @@ namespace LexiconLMS.Shared.Dtos.ApplicationUserDtos
         public string Email { get; set;}
         [Required]
         public string Role { get; set; }
-        public Course Course { get; set; }
+        public Guid CourseID { get; set; }
     }
 
     public class ApplicationUserDtoUpdate : ApplicationUserDto

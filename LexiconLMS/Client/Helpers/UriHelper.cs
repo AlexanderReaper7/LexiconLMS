@@ -1,4 +1,6 @@
-﻿namespace LexiconLMS.Client.Helpers
+﻿using System.Diagnostics;
+
+namespace LexiconLMS.Client.Helpers
 {
     public static class UriHelper
     {
@@ -7,6 +9,7 @@
         private const string module = "module";
         private const string activity = "activity";
 		private const string assignment = "assignment";
+		private const string student = "student";
 		private const string add = "add";
 		private const string update = "update";
 		private const string delete = "delete";
@@ -32,6 +35,7 @@
 		public const string ActivityDelete = $"/{activity}{delete}/{{activityId:guid}}";
 
 		public const string AssignmentDetails = $"/{assignment}{details}/{{activityId:guid}}";
+		public const string AssignmentDetailsOfAStudent = $"/{assignment}{details}/{{activityId:guid}}/{student}/{{studentId}}";
 		public const string AssignmentUpdate = $"/{assignment}{update}/{{activityId:guid}}";
 		public const string AssignmentAdd = $"/{assignment}{add}/{{moduleId:guid}}";
 
@@ -59,6 +63,8 @@
 		public static string GetAssignmentAddUri<T>(T moduleId) => $"/{assignment}{add}/{moduleId}";
 		public static string GetAssignmentUpdateUri<T>(T assignmentId) =>  $"/{assignment}{update}/{assignmentId}";
 		public static string GetAssignmentDetailsUri<T>(T assignmentId) => $"/{assignment}{details}/{assignmentId}";
+		public static string GetAssignmentDetailsOfAStudentUri<TAssignmentId, TStudentId>(TAssignmentId assignmentId, TStudentId studentId) 
+			=> $"/{assignment}{details}/{assignmentId}/{student}/{studentId}";
         #endregion
 
         #region API's URIs
@@ -98,6 +104,29 @@
 			return ActivitiesBaseUri;
 		}
 
+		public static string GetAssignmentsTeachersUri<TCourseId, TModuleId>(TCourseId courseId, TModuleId moduleId)
+		{
+			return $"{ActivitiesBaseUri}courses/{courseId}/modules/{moduleId}/assignments";
+		}
+
+		public static string GetAssignmentsStudentsUri<TModuleId, TStudentId>(TModuleId moduleId, TStudentId studentId)
+		{
+			return $"{ActivitiesBaseUri}students/{studentId}/modules/{moduleId}/assignments";
+		}
+		public static string GetAssignmentStudentUri<TStudentId, TAssignmentId>(TStudentId studentId, TAssignmentId assignmentId)
+		{
+			return $"{ActivitiesBaseUri}students/{studentId}/assignments/{assignmentId}";
+		}
+
+		public static string GetAssignmentUri<TAssignmentId>(TAssignmentId assignmentId)
+		{
+			return $"{ActivitiesBaseUri}assignments/{assignmentId}";
+		}
+		public static string GetAssignmentOnlyStudentsUri<TAssignmentId>(TAssignmentId assignmentId)
+		{
+			return $"{ActivitiesBaseUri}students/assignments/{assignmentId}";
+		}
+
 		public static string ActivityDocumentsBaseUri => "api/ActivityDocuments/";
 
 		public static string GetActivityDocumentsUri(string? activityId = null)
@@ -117,23 +146,7 @@
 			return ActivityDocumentsBaseUri;
 		}
 
-		public static string GetAssignmentsTeachersUri<TCourseId, TModuleId>(TCourseId courseId, TModuleId moduleId)
-		{
-            return $"{ActivitiesBaseUri}courses/{courseId}/modules/{moduleId}/assignments";
-        }
-
-		public static string GetAssignmentsStudentsUri<TModuleId, TStudentId>(TModuleId moduleId, TStudentId studentId)
-		{
-			return $"{ActivitiesBaseUri}students/{studentId}/modules/{moduleId}/assignments";
-		}
-        public static string GetAssignmentStudentsUri<TStudentId, TAssignmentId>(TStudentId studentId, TAssignmentId assignmentId)
-        {
-			var s = $"{ActivitiesBaseUri}students/{studentId}/assignments/{assignmentId}";
-
-			return s;
-        }
-
-        public static string CoursesBaseUri => "api/Courses/";
+		public static string CoursesBaseUri => "api/Courses/";
 
 		public static string GetCourseUri<T>(T courseId)
 		{
@@ -161,23 +174,35 @@
 		{
 			return ActivityTypesBaseUri;
 		}
-		
+
 		public static string ApplicationUserBaseUri => "api/applicationuser/";
 
 		public static string GetApplicationUserUri<T>(T applicationUserId)
 		{
 			return ApplicationUserBaseUri + applicationUserId!.ToString();
 		}
-		public static string GetApplicationUserByNameUri<T>(T applicationUserName)
-		{
-			return ApplicationUserBaseUri + "byname/" + applicationUserName!.ToString();
-		}
 
 		public static string GetApplicationUsersUri()
 		{
 			return ApplicationUserBaseUri;
 		}
-        #endregion
 
-    }
+		public static string FeedbackBaseUri => "api/feedbacks/";
+
+		public static string GetFeedbackUri<T>(T feedBackId)
+		{
+			return FeedbackBaseUri + feedBackId!.ToString();
+		}
+		public static string GetFeedbackUri<TStudentId, TAssignmentId>(TStudentId studentId, TAssignmentId assignmentId)
+		{
+			return $"{FeedbackBaseUri}students/{studentId}/assignments/{assignmentId}/feedback";
+		}
+
+		public static string GetFeedbacksUri()
+		{
+			return FeedbackBaseUri;
+		}
+		#endregion
+
+	}
 }

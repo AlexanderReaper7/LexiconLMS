@@ -24,7 +24,8 @@ namespace LexiconLMS.Client.Pages
 
         private async Task HandleValidSubmit()
         {
-            ApplicationUserDto.Course = await CourseDataService.GetCourse(Guid.Parse(CourseId));
+            var course = await CourseDataService.GetCourse(Guid.Parse(CourseId));
+            ApplicationUserDto.CourseID = course.Id;
             if (await ApplicationUserDataService.AddApplicationUser(ApplicationUserDto))
                 NavigationManager.NavigateTo($"listofcourses");
         }

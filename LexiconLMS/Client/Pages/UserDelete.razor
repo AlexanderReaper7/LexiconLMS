@@ -27,8 +27,6 @@
 </table>
 <a href="@($"listofcourses")" class="btn btn-outline-primary">Back to Course list</a>
 
-<a class="btn btn-outline-primary" @onclick="@(() => Delete())">Delete</a>
-
 <AuthorizeView Roles="Teacher">
     <Authorized>
         <a class="btn btn-outline-primary" @onclick="@(() => Delete())">Delete</a>

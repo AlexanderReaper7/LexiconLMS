@@ -1,0 +1,2 @@
+﻿@using LexiconLMS.Client.Extensions
+<button class="btn @SubmissionState.GetCSSClass() text-center text-lowercase w-100 p-0" @onclick="@(Download)">@SubmissionState.AsText()</button>

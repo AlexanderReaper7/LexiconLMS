@@ -9,6 +9,9 @@ using LexiconLMS.Server.Data;
 using LexiconLMS.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using LexiconLMS.Shared.Dtos;
+using LexiconLMS.Server.Services;
+using System.Diagnostics;
 
 namespace LexiconLMS.Server.Controllers
 {
@@ -20,14 +23,20 @@ namespace LexiconLMS.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly IMailService _mailService;
+        private MailData _mailData;
+
+        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IMailService mailService)
         {
             _context = context;
             _userManager = userManager;
+            _mailService = mailService;
+            _mailData = new MailData();
         }
 
         // GET: api/Courses
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
             if (_context.Courses == null)
@@ -40,6 +49,7 @@ namespace LexiconLMS.Server.Controllers
 
         // GET: api/Courses/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<Course>> GetCourse(Guid id)
         {
             if (_context.Courses == null)
@@ -84,32 +94,61 @@ namespace LexiconLMS.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCourse(Guid id, Course course)
         {
-            if (id != course.Id)
+			bool Verification = true;
+			if (id != course.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(course).State = EntityState.Modified;
+			var coursesInQuery = _context.Courses.AsNoTracking();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CourseExists(id))
+			if (course.StartDate > course.EndDate) { Verification = false; }
+
+            foreach (var item in coursesInQuery)
+                if (item.Id != id)
                 {
-                    return NotFound();
+                    {
+                        if (course.StartDate > item.StartDate && course.StartDate < item.EndDate) { Verification = false; }
+                        if (course.StartDate < item.StartDate && course.EndDate > item.StartDate) { Verification = false; }
+                    }
                 }
-                else
+
+			_context.Entry(course).State = EntityState.Modified;
+
+            if (Verification)
+            {
+                try
                 {
-                    return BadRequest();
-                    throw;
+                    await _context.SaveChangesAsync();
+
+                    var users = await _context.Users.Where(u => u.CourseId == id).ToListAsync();
+                    foreach (var user in users)
+                    {
+                        _mailData.EmailTo = user.Email;
+                        _mailData.EmailToName = $"{user.FirstName} {user.LastName}";
+                        _mailData.EmailSubject = "Course updated";
+                        _mailData.EmailBody = $"{course.Name} course has been updated.";
+
+                        _mailService.SendMail(_mailData);
+                    }
+                    return Ok();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CourseExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                        throw;
+                    }
                 }
             }
-                       
-        }
+			return Problem("overlapping Courses");
+
+		}
 
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -117,15 +156,43 @@ namespace LexiconLMS.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-            if (_context.Courses == null)
+			bool Verification = true;
+
+			if (_context.Courses == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
-            }
-            _context.Courses.Add(course);
-            await _context.SaveChangesAsync();
+			}
 
-            return CreatedAtAction("GetCourse", new { id = course.Id }, course);
-        }
+			var coursesInQuery = _context.Courses;
+
+			if (course.StartDate > course.EndDate) { Verification = false; }
+			
+			foreach (var item in coursesInQuery)
+			{
+				if (course.StartDate > item.StartDate && course.StartDate < item.EndDate) { Verification = false; }
+				if (course.StartDate < item.StartDate && course.EndDate > item.StartDate) { Verification = false; }
+			}
+
+            if (Verification)
+            {
+                _context.Courses.Add(course);
+                await _context.SaveChangesAsync();
+
+                //var users = await _context.Users.ToListAsync();
+                //foreach (var user in users)
+                //{
+                //    _mailData.EmailTo = user.Email;
+                //    _mailData.EmailToName = $"{user.FirstName} {user.LastName}";
+                //    _mailData.EmailSubject = "New course added";
+                //    _mailData.EmailBody = $"New {course.Name} course has been added.";
+
+                //    _mailService.SendMail(_mailData);
+                //}
+
+                return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+            }
+			return Problem("overlapping Courses");
+		}
 
         // DELETE: api/Courses/5
         [Authorize(Roles = "Teacher")]

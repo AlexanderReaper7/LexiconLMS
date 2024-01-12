@@ -6,6 +6,12 @@
 
 <h3>Add Course</h3>
 
+	@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="alert alert-danger">@ErrorMessage</p>
+}
+
+
 <section class="course-edit">
 
     <EditForm Model="@Course" OnValidSubmit="@HandleValidSubmit">

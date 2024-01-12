@@ -90,7 +90,7 @@ public static class DbInitializer
         }
 
         var startDate = Faker.Date.Between(DateTime.Now, DateTime.Now.AddDays(100));
-        var endDate = startDate.AddDays(Faker.Random.Int(30, 120));
+        var endDate = startDate.AddDays(120);
 
         var modules = GenerateModules(startDate, endDate);
 
@@ -146,7 +146,7 @@ public static class DbInitializer
     private static List<Module> GenerateModules(DateTime start, DateTime end)
     {
         var output = new List<Module>();
-        var moduleCount = Faker.Random.Int(1, 4);
+        var moduleCount = 4;
         for (int i = 0; i < moduleCount; i++)
         {
             // create a module with a start date after the previous module's end date
@@ -167,7 +167,7 @@ public static class DbInitializer
     /// <returns></returns>
     private static Module GenerateModule(DateTime startDate)
     {
-        var endDate = Faker.Date.Soon(4);
+        var endDate = startDate.AddDays(30);
         return new Module
         {
             Name = ModuleNames[Faker.Random.Int(0, ModuleNames.Length - 1)],

@@ -14,28 +14,14 @@ namespace LexiconLMS.Client.Components
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
-        [Inject]
-        public IGenericDataService GenericDataService { get; set; } = default!;
-
-		[Parameter]
-        [EditorRequired]
-        public Guid? ModuleId { get; set; }
-
         [Parameter]
-        [EditorRequired]
-        public Guid? CourseId { get; set; }
-        public IEnumerable<AssigmentDtoForTeachers> Assignments { get; set; } = null;
+		[EditorRequired]
+		public IEnumerable<AssignmentDtoForTeachers> Assignments { get; set; } = default!;
 
-
-        protected override async Task OnInitializedAsync()
+        public string Message { get; set; } = string.Empty;
+        private void ShowMessage(string message)
         {
-            if (ModuleId == null || CourseId == null)
-            {
-                return;
-            }
-            Assignments = (await GenericDataService.GetAsync<IEnumerable<AssigmentDtoForTeachers>>(UriHelper.GetAssignmentsTeachersUri(CourseId, ModuleId)))!;
-
-            await base.OnInitializedAsync();
+            Message = message;
         }
     }
 }
